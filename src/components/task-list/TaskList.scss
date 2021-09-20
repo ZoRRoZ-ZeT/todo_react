@@ -1,0 +1,22 @@
+@import "./list-item/ListItem.scss";
+
+.task-list {
+  border-top: 1px solid #e6e6e6;
+
+  &__item {
+    position: relative;
+    display: block;
+    padding: 7px 0px 7px 8px;
+    background-color: #fff;
+    border-bottom: 1px solid #ededed;
+    color: #4d4d4d;
+
+    &:hover .destroy{
+        visibility: visible;
+    }
+  }
+
+  li:last-child {
+    border-bottom: none;
+  }
+}
