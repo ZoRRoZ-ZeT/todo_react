@@ -4,23 +4,15 @@ import TodoItem from './TodoItem/TodoItem.jsx';
 class TaskList extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleDeleteItem = this.handleDeleteItem.bind(this);
-  }
-
-  handleDeleteItem(id) {
-    this.props.handleDeleteAction(id);
   }
 
   render() {
     return (
       <ul className="task-list">
         {this.props.tasks.map((task) => (
-          <TodoItem
-            key={task.id}
-            task={task}
-            handleDeleteItem={this.handleDeleteItem}
-          />
+          <li key={task.id} className="task-list__item">
+            <TodoItem task={task} onDelete={this.props.onDeleteItem} />
+          </li>
         ))}
       </ul>
     );

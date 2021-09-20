@@ -4,17 +4,17 @@ class TaskInput extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onValueChanged = this.onValueChanged.bind(this);
-    this.onEnterPress = this.onEnterPress.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  onValueChanged(e) {
-    this.props.handleInputChanged(e.target.value);
+  handleValueChange(e) {
+    this.props.onInputChanged(e.target.value);
   }
 
-  onEnterPress(e) {
+  handleKeyDown(e) {
     if (e.key === 'Enter') {
-      this.props.handleEnterPress();
+      this.props.onEnterPressed();
     }
   }
 
@@ -24,8 +24,8 @@ class TaskInput extends React.Component {
         className="add-form__input form-input"
         placeholder="What needs to be done?"
         value={this.props.value}
-        onChange={this.onValueChanged}
-        onKeyDown={this.onEnterPress}
+        onChange={this.handleValueChange}
+        onKeyDown={this.handleKeyDown}
       />
     );
   }

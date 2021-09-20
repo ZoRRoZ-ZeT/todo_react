@@ -6,24 +6,36 @@ class TaskHeader extends React.Component {
     super(props);
 
     this.handleInputChanged = this.handleInputChanged.bind(this);
-    this.handleEnterPress = this.handleEnterPress.bind(this);
+    this.handleEnterPressed = this.handleEnterPressed.bind(this);
+
+    this.state = {
+      inputValue: '',
+    };
   }
 
   handleInputChanged(value) {
-    this.props.handleValueChange(value);
+    this.setState({
+      inputValue: value,
+    });
   }
 
-  handleEnterPress() {
-    this.props.handleSubmit();
+  handleEnterPressed() {
+    if (this.state.inputValue.trim() === '') {
+      return;
+    }
+    this.props.onAddItem(this.state.inputValue);
+    this.setState({
+      inputValue: '',
+    });
   }
 
   render() {
     return (
       <div className="body__input add-form">
         <TaskInput
-          value={this.props.value}
-          handleInputChanged={this.handleInputChanged}
-          handleEnterPress={this.handleEnterPress}
+          value={this.state.inputValue}
+          onInputChanged={this.handleInputChanged}
+          onEnterPressed={this.handleEnterPressed}
         />
       </div>
     );

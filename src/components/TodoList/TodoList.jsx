@@ -6,38 +6,30 @@ import TaskList from './TaskList/TaskList.jsx';
 class TodoList extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleAddItem = this.handleAddItem.bind(this);
+    this.handleDeleteItem = this.handleDeleteItem.bind(this);
+
     this.state = {
       tasks: [],
       currentId: 0,
-      inputValue: '',
     };
-
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.todoAddItem = this.todoAddItem.bind(this);
-    this.todoDeleteItem = this.todoDeleteItem.bind(this);
   }
 
-  handleValueChange(value) {
-    this.setState({
-      inputValue: value,
-    });
-  }
-
-  todoAddItem() {
+  handleAddItem(value) {
     this.setState((prevState) => ({
       tasks: [
         ...prevState.tasks,
         {
-          value: prevState.inputValue,
+          value,
           id: prevState.currentId,
         },
       ],
       currentId: prevState.currentId + 1,
-      inputValue: '',
     }));
   }
 
-  todoDeleteItem(id) {
+  handleDeleteItem(id) {
     this.setState((prevState) => ({
       tasks: prevState.tasks.filter((task) => task.id !== id),
     }));
@@ -47,14 +39,10 @@ class TodoList extends React.Component {
     return (
       <div className="shadow">
         <div className="body">
-          <TaskHeader
-            value={this.state.inputValue}
-            handleValueChange={this.handleValueChange}
-            handleSubmit={this.todoAddItem}
-          />
+          <TaskHeader onAddItem={this.handleAddItem} />
           <TaskList
             tasks={this.state.tasks}
-            handleDeleteAction={this.todoDeleteItem}
+            onDeleteItem={this.handleDeleteItem}
           />
         </div>
         <TaskFooter />
