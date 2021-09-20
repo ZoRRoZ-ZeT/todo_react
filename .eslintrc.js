@@ -23,5 +23,9 @@ module.exports = {
         props: false,
       },
     ],
+    'class-methods-use-this': 'off',
+    'no-unused-vars': 'off',
+    'no-useless-constructor': 'off',
+    'react/prop-types': 'off',
   },
 };
