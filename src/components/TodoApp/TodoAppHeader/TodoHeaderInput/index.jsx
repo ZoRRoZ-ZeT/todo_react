@@ -1,6 +1,6 @@
 import React from 'react';
 
-class TaskInput extends React.Component {
+class TodoHeaderInput extends React.Component {
   constructor(props) {
     super(props);
 
@@ -31,4 +31,4 @@ class TaskInput extends React.Component {
   }
 }
 
-export default TaskInput;
+export default TodoHeaderInput;

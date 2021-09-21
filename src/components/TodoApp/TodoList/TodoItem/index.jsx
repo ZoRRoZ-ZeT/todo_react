@@ -1,5 +1,7 @@
 import React from 'react';
+import clsx from 'clsx';
 import TodoInput from './TodoInput.jsx';
+import Dropdown from './Dropdown/index.jsx';
 
 class TodoItem extends React.Component {
   constructor(props) {
@@ -10,10 +12,13 @@ class TodoItem extends React.Component {
     this.handleToggleChange = this.handleToggleChange.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleChangePriority = this.handleChangePriority.bind(this);
 
     this.state = {
       isClicked: false,
       isEditing: false,
+      currentValue: this.props.task.value,
     };
   }
 
@@ -21,12 +26,18 @@ class TodoItem extends React.Component {
     this.props.onDelete(this.props.task.id);
   }
 
-  handleSubmit(value) {
-    const updatedTask = this.props.task;
-    updatedTask.value = value;
+  handleInputChange(value) {
+    this.setState({
+      currentValue: value,
+    });
+  }
+
+  handleSubmit() {
     this.setState({
       isEditing: false,
     });
+    const updatedTask = this.props.task;
+    updatedTask.value = this.state.currentValue;
 
     this.props.onSubmit(updatedTask);
   }
@@ -56,17 +67,14 @@ class TodoItem extends React.Component {
     this.props.onSubmit(updatedTask);
   }
 
-  render() {
-    const labelClassNames = `item__label ${
-      this.state.isEditing ? 'clicked' : ''
-    }`;
+  handleChangePriority(value) {
+    const updatedTask = this.props.task;
+    updatedTask.priority = value;
 
-    let input;
-    if (this.state.isEditing) {
-      input = (
-        <TodoInput value={this.props.task.value} onSubmit={this.handleSubmit} />
-      );
-    }
+    this.props.onSubmit(updatedTask);
+  }
+
+  render() {
     return (
       <div className="item">
         <input
@@ -75,10 +83,28 @@ class TodoItem extends React.Component {
           onChange={this.handleToggleChange}
           checked={this.props.task.isChecked}
         />
-        <label className={labelClassNames} onClick={this.handleInputClick}>
+        <label
+          className={clsx({
+            item__label: true,
+            clicked: this.state.isEditing,
+          })}
+          onClick={this.handleInputClick}
+        >
           {this.props.task.value}
         </label>
-        {input}
+        {this.state.isEditing ? (
+          <TodoInput
+            value={this.state.currentValue}
+            onChange={this.handleInputChange}
+            onSubmit={this.handleSubmit}
+          />
+        ) : null}
+        <div className="item__dropdown">
+          <Dropdown
+            priority={this.props.task.priority}
+            onPriorityChanged={this.handleChangePriority}
+          />
+        </div>
         <button
           className="btn btn-empty destroy item__button"
           onClick={this.handleDeleteClick}

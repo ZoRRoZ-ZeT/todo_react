@@ -1,0 +1,33 @@
+@import "./TodoHeaderInput/index.scss";
+
+.add-form {
+  &__toggler {
+    position: absolute;
+    border: none;
+    margin-left: 10px;
+    margin-top: 9px;
+    cursor: pointer;
+  }
+
+  &__input {
+    width: 100%;
+    outline: none;
+    transition: 0.3s all;   
+  }
+}
+
+.form-toggler {
+  transform: rotate(90deg);
+  background-color: white;
+
+  &::before {
+    content: '❯';
+    font-size: 22px;
+    padding: 5px;
+    color: #e6e6e6;
+  }
+
+  &.all-checked::before {
+    color: #737373
+  }
+}
