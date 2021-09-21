@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoItem from './TodoItem/index.jsx';
 
-class TaskList extends React.Component {
+class TodoList extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -23,4 +23,4 @@ class TaskList extends React.Component {
   }
 }
 
-export default TaskList;
+export default TodoList;

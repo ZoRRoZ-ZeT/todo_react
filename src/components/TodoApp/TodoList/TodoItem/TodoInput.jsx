@@ -7,29 +7,23 @@ class TodoInput extends React.Component {
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
     this.handleInputPress = this.handleInputPress.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-
-    this.state = {
-      currentValue: this.props.value,
-    };
   }
 
-  handleInputSubmit(event) {
-    if (this.state.currentValue.trim() === '') {
+  handleInputSubmit() {
+    if (this.props.value.trim() === '') {
       return;
     }
 
-    this.props.onSubmit(this.state.currentValue);
+    this.props.onSubmit();
   }
 
   handleInputChange(event) {
-    this.setState({
-      currentValue: event.target.value,
-    });
+    this.props.onChange(event.target.value);
   }
 
   handleInputPress(event) {
     if (event.key === 'Enter') {
-      this.handleInputSubmit(event);
+      this.handleInputSubmit();
     }
   }
 
@@ -40,7 +34,7 @@ class TodoInput extends React.Component {
         onKeyDown={this.handleInputPress}
         onChange={this.handleInputChange}
         onBlur={this.handleInputSubmit}
-        value={this.state.currentValue}
+        value={this.props.value}
         autoFocus
       />
     );

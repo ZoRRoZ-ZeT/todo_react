@@ -1,19 +1,20 @@
 import React from 'react';
-import TaskFooter from './TaskFooter/index.jsx';
-import TaskHeader from './TaskHeader/index.jsx';
-import TaskList from './TaskList/index.jsx';
+import TodoAppFooter from './TodoAppFooter/index.jsx';
+import TodoAppHeader from './TodoAppHeader/index.jsx';
+import TodoList from './TodoList/index.jsx';
 import STATUSES from '../../constants/statuses';
 
-class TodoList extends React.Component {
+class TodoApp extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
     this.handleChangeItem = this.handleChangeItem.bind(this);
-    this.handleChangeFilter = this.handleChangeFilter.bind(this);
 
+    this.handleChangeFilter = this.handleChangeFilter.bind(this);
     this.handleClear = this.handleClear.bind(this);
+    this.handleToggleItems = this.handleToggleItems.bind(this);
 
     this.mapStatusToFilterPredicate = {
       [STATUSES.ACTIVE]: (item) => item.isChecked === false,
@@ -21,10 +22,15 @@ class TodoList extends React.Component {
       [STATUSES.ALL]: null,
     };
 
+    const mapPath = {
+      '/active': STATUSES.ACTIVE,
+      '/completed': STATUSES.COMPLETED,
+    };
+
     this.state = {
       tasks: [],
       currentId: 0,
-      filter: STATUSES.ALL,
+      filter: mapPath[window.location.pathname] ?? STATUSES.ALL,
     };
   }
 
@@ -33,6 +39,7 @@ class TodoList extends React.Component {
       tasks: [
         ...prevState.tasks,
         {
+          priority: 'none',
           isChecked: false,
           value,
           id: prevState.currentId,
@@ -73,6 +80,19 @@ class TodoList extends React.Component {
     }));
   }
 
+  handleToggleItems() {
+    const fillValue = this.state.tasks.reduce(
+      (result, item) => result && item.isChecked,
+      true
+    );
+    this.setState((prevState) => ({
+      tasks: prevState.tasks.map((task) => {
+        task.isChecked = !fillValue;
+        return task;
+      }),
+    }));
+  }
+
   render() {
     const filterPredicate = this.mapStatusToFilterPredicate[this.state.filter];
     const filteredTasks = filterPredicate
@@ -81,14 +101,18 @@ class TodoList extends React.Component {
     return (
       <div className="shadow">
         <div className="body">
-          <TaskHeader onAddItem={this.handleAddItem} />
-          <TaskList
+          <TodoAppHeader
+            tasks={this.state.tasks}
+            onAddItem={this.handleAddItem}
+            onToggleItems={this.handleToggleItems}
+          />
+          <TodoList
             tasks={filteredTasks}
             onDeleteItem={this.handleDeleteItem}
             onChangeItem={this.handleChangeItem}
           />
         </div>
-        <TaskFooter
+        <TodoAppFooter
           tasks={this.state.tasks}
           onChangeFilter={this.handleChangeFilter}
           onClear={this.handleClear}
@@ -98,4 +122,4 @@ class TodoList extends React.Component {
   }
 }
 
-export default TodoList;
+export default TodoApp;

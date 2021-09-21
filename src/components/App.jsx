@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoList from './TodoList/index.jsx';
+import TodoApp from './TodoApp/index.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -7,7 +7,7 @@ class App extends React.Component {
   }
 
   render() {
-    return <TodoList />;
+    return <TodoApp />;
   }
 }
 
