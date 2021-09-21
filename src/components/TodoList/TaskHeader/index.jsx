@@ -1,5 +1,5 @@
 import React from 'react';
-import TaskInput from './TaskInput/TaskInput.jsx';
+import TaskInput from './TaskInput/index.jsx';
 
 class TaskHeader extends React.Component {
   constructor(props) {
