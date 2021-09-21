@@ -1,0 +1,17 @@
+@import "./TaskInput/TaskInput.scss";
+
+.add-form {
+  &__toggler {
+    position: absolute;
+    border: none;
+    margin-left: 10px;
+    margin-top: 9px;
+    cursor: pointer;
+  }
+
+  &__input {
+    width: 100%;
+    outline: none;
+    transition: 0.3s all;   
+  }
+}

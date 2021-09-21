@@ -3,7 +3,11 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb-base', 'plugin:prettier/recommended'],
+  extends: [
+    'airbnb-base',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+  ],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
@@ -11,6 +15,7 @@ module.exports = {
       jsx: true,
     },
   },
+  plugins: ['react'],
   rules: {
     'no-param-reassign': [
       'error',
@@ -18,12 +23,9 @@ module.exports = {
         props: false,
       },
     ],
-    'prettier/prettier': [
-      'error',
-      {
-        singleQuote: true,
-        parser: 'flow',
-      },
-    ],
+    'class-methods-use-this': 'off',
+    'no-unused-vars': 'off',
+    'no-useless-constructor': 'off',
+    'react/prop-types': 'off',
   },
 };
