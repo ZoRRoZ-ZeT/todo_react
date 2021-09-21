@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoItem from './TodoItem/TodoItem.jsx';
+import TodoItem from './TodoItem/index.jsx';
 
 class TaskList extends React.Component {
   constructor(props) {
@@ -11,7 +11,11 @@ class TaskList extends React.Component {
       <ul className="task-list">
         {this.props.tasks.map((task) => (
           <li key={task.id} className="task-list__item">
-            <TodoItem task={task} onDelete={this.props.onDeleteItem} />
+            <TodoItem
+              task={task}
+              onDelete={this.props.onDeleteItem}
+              onSubmit={this.props.onChangeItem}
+            />
           </li>
         ))}
       </ul>
