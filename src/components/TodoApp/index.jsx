@@ -3,6 +3,7 @@ import TodoAppFooter from './TodoAppFooter/index.jsx';
 import TodoAppHeader from './TodoAppHeader/index.jsx';
 import TodoList from './TodoList/index.jsx';
 import STATUSES from '../../constants/statuses';
+import TodoAPI from '../../api/todos.js';
 
 class TodoApp extends React.Component {
   constructor(props) {
@@ -32,37 +33,43 @@ class TodoApp extends React.Component {
       currentId: 0,
       filter: mapPath[window.location.pathname] ?? STATUSES.ALL,
     };
+
+    this.todoApi = new TodoAPI();
   }
 
-  handleAddItem(value) {
+  async componentDidMount() {
+    const tasks = await this.todoApi.getAll();
+    this.setState({
+      tasks: tasks || [],
+    });
+  }
+
+  async handleAddItem(value) {
+    const createdTask = await this.todoApi.createTask({
+      value,
+    });
     this.setState((prevState) => ({
-      tasks: [
-        ...prevState.tasks,
-        {
-          priority: 'none',
-          isChecked: false,
-          value,
-          id: prevState.currentId,
-        },
-      ],
+      tasks: [...prevState.tasks, createdTask],
       currentId: prevState.currentId + 1,
     }));
   }
 
-  handleDeleteItem(id) {
+  async handleDeleteItem(id) {
+    const deletedTask = await this.todoApi.deleteTask(id);
     this.setState((prevState) => ({
-      tasks: prevState.tasks.filter((task) => task.id !== id),
+      tasks: prevState.tasks.filter((task) => task.id !== deletedTask.id),
     }));
   }
 
-  handleChangeItem(task) {
+  async handleChangeItem(task) {
+    const updatedTask = await this.todoApi.updateTask(task);
     const index = this.state.tasks.findIndex(
-      (searchTask) => searchTask.id === task.id
+      (searchTask) => searchTask.id === updatedTask.id
     );
     this.setState((prevState) => ({
       tasks: [
         ...prevState.tasks.slice(0, index),
-        task,
+        updatedTask,
         ...prevState.tasks.slice(index + 1),
       ],
     }));
@@ -74,23 +81,20 @@ class TodoApp extends React.Component {
     });
   }
 
-  handleClear() {
+  async handleClear() {
+    const clearedTasks = await this.todoApi.deleteCompleted();
+    const filterIds = clearedTasks.map((task) => task.id);
     this.setState((prevState) => ({
-      tasks: prevState.tasks.filter((task) => task.isChecked === false),
+      tasks: prevState.tasks.filter((task) => !filterIds.includes(task.id)),
     }));
   }
 
-  handleToggleItems() {
-    const fillValue = this.state.tasks.reduce(
-      (result, item) => result && item.isChecked,
-      true
-    );
-    this.setState((prevState) => ({
-      tasks: prevState.tasks.map((task) => {
-        task.isChecked = !fillValue;
-        return task;
-      }),
-    }));
+  async handleToggleItems() {
+    const toggledTasks = await this.todoApi.toggleTasks();
+
+    this.setState({
+      tasks: toggledTasks,
+    });
   }
 
   render() {
@@ -113,6 +117,7 @@ class TodoApp extends React.Component {
           />
         </div>
         <TodoAppFooter
+          currentFilter={this.state.filter}
           tasks={this.state.tasks}
           onChangeFilter={this.handleChangeFilter}
           onClear={this.handleClear}
