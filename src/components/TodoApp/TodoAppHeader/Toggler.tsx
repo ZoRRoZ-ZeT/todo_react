@@ -1,14 +1,23 @@
 import React from 'react';
 import clsx from 'clsx';
 
-class Toggler extends React.Component {
-  constructor(props) {
+interface IProps {
+  onToggle: () => void,
+  isActive: boolean
+}
+interface IState {
+  inputValue: string
+}
+
+
+class Toggler extends React.Component<IProps,IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(event) {
+  handleClick() {
     this.props.onToggle();
   }
 

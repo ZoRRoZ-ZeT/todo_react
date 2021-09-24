@@ -1,8 +1,10 @@
 import React from 'react';
-import TodoApp from './TodoApp/index.jsx';
+import TodoApp from './TodoApp/index';
+
+interface Props {}
 
 class App extends React.Component {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
   }
 

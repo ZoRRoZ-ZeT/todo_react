@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 
-class TodoInput extends React.Component {
-  constructor(props) {
+interface IProps {
+  value: string,
+  onChange: (value: string) => void,
+  onSubmit: () => void
+}
+interface IState {}
+
+
+class TodoInput extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.handleInputSubmit = this.handleInputSubmit.bind(this);
@@ -17,11 +25,11 @@ class TodoInput extends React.Component {
     this.props.onSubmit();
   }
 
-  handleInputChange(event) {
+  handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     this.props.onChange(event.target.value);
   }
 
-  handleInputPress(event) {
+  handleInputPress(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
       this.handleInputSubmit();
     }

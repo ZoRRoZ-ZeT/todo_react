@@ -1,9 +1,19 @@
 import React from 'react';
-import TodoHeaderInput from './TodoHeaderInput/index.jsx';
-import Toggler from './Toggler.jsx';
+import { Task } from '../../../types/todo.types';
+import TodoHeaderInput from './TodoHeaderInput/index';
+import Toggler from './Toggler';
 
-class TodoAppHeader extends React.Component {
-  constructor(props) {
+interface IProps {
+  tasks: Task[],
+  onAddItem: (value: string) => Promise<void>,
+  onToggleItems: () => Promise<void>
+}
+interface IState {
+  inputValue: string
+}
+
+class TodoAppHeader extends React.Component<IProps, IState>{
+  constructor(props: IProps) {
     super(props);
 
     this.handleInputChanged = this.handleInputChanged.bind(this);
@@ -16,7 +26,7 @@ class TodoAppHeader extends React.Component {
     };
   }
 
-  handleInputChanged(value) {
+  handleInputChanged(value: string) {
     this.setState({
       inputValue: value,
     });

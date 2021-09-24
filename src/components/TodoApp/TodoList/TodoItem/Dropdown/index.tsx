@@ -1,12 +1,21 @@
 import React from 'react';
 
 import clsx from 'clsx';
-// eslint-disable-next-line import/extensions
 import PRIORITIES from '../../../../../constants/priorities.js';
-import DropdownItem from './DropdownItem.jsx';
+import DropdownItem from './DropdownItem';
 
-class Dropdown extends React.Component {
-  constructor(props) {
+interface IProps {
+  priority: string,
+  onPriorityChanged: (value: string) => void,
+}
+interface IState {
+  isShowList: boolean
+}
+
+class Dropdown extends React.Component<IProps, IState> {
+  dropdownRef: React.RefObject<HTMLDivElement>;
+
+  constructor(props: IProps) {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
@@ -28,10 +37,10 @@ class Dropdown extends React.Component {
     document.removeEventListener('click', this.handleClickOutside);
   }
 
-  handleClickOutside(event) {
+  handleClickOutside(event: MouseEvent) {
     if (
       this.state.isShowList &&
-      !this.dropdownRef.current.contains(event.target)
+      !this.dropdownRef.current.contains(event.target as HTMLElement)
     ) {
       this.setState((prevState) => ({
         isShowList: !prevState.isShowList,
@@ -39,13 +48,13 @@ class Dropdown extends React.Component {
     }
   }
 
-  handleClick(event) {
+  handleClick() {
     this.setState((prevState) => ({
       isShowList: !prevState.isShowList,
     }));
   }
 
-  handleItemClick(value) {
+  handleItemClick(value: string) {
     this.props.onPriorityChanged(value);
     this.setState({
       isShowList: false,

@@ -1,8 +1,18 @@
 import React from 'react';
 import clsx from 'clsx';
 
-class FilterButton extends React.Component {
-  constructor(props) {
+
+interface IProps {
+  filter: string,
+  isActive: boolean,
+  name: string,
+  onFilterChange: (value:string) => void
+}
+interface IState {}
+
+
+class FilterButton extends React.Component<IProps,IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);

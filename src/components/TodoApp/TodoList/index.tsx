@@ -1,8 +1,16 @@
 import React from 'react';
-import TodoItem from './TodoItem/index.jsx';
+import { Task } from '../../../types/todo.types';
+import TodoItem from './TodoItem/index';
 
-class TodoList extends React.Component {
-  constructor(props) {
+interface IProps {
+  tasks: Task[],
+  onDeleteItem: (id: string) => void,
+  onChangeItem: (task: Task) => void
+}
+interface IState {}
+
+class TodoList extends React.Component<IProps,IState> {
+  constructor(props: IProps) {
     super(props);
   }
 
