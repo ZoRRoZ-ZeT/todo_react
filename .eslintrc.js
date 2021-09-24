@@ -27,5 +27,6 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-useless-constructor': 'off',
     'react/prop-types': 'off',
+    'import/extensions': 'off',
   },
 };

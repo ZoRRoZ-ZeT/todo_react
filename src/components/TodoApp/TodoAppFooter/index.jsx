@@ -37,22 +37,19 @@ class TodoAppFooter extends React.Component {
             onFilterChange={this.handleFilterChange}
             filter={STATUSES.ALL}
             name="All"
-            isActive={
-              window.location.pathname !== '/active' &&
-              window.location.pathname !== '/completed'
-            }
+            isActive={this.props.currentFilter === STATUSES.ALL}
           />
           <FilterButton
             onFilterChange={this.handleFilterChange}
             filter={STATUSES.ACTIVE}
             name="Active"
-            isActive={window.location.pathname === '/active'}
+            isActive={this.props.currentFilter === STATUSES.ACTIVE}
           />
           <FilterButton
             onFilterChange={this.handleFilterChange}
             filter={STATUSES.COMPLETED}
             name="Completed"
-            isActive={window.location.pathname === '/completed'}
+            isActive={this.props.currentFilter === STATUSES.COMPLETED}
           />
         </div>
         <span
