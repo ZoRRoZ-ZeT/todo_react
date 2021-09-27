@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import clsx from 'clsx';
-import TodoInput from './TodoInput.jsx';
-import Dropdown from './Dropdown/index.jsx';
+import TodoInput from './TodoInput';
+import Dropdown from './Dropdown/index';
+import { Task } from '../../../../types/todo.types';
 
-class TodoItem extends React.Component {
-  constructor(props) {
+interface IProps {
+  task: Task,
+  onDelete: (id: string) => void,
+  onSubmit: (task: Task) => void
+}
+interface IState {
+  isClicked: boolean,
+  isEditing: boolean,
+  currentValue: string
+}
+
+class TodoItem extends React.Component<IProps,IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
@@ -22,11 +34,11 @@ class TodoItem extends React.Component {
     };
   }
 
-  handleDeleteClick(event) {
+  handleDeleteClick() {
     this.props.onDelete(this.props.task.id);
   }
 
-  handleInputChange(value) {
+  handleInputChange(value: string) {
     this.setState({
       currentValue: value,
     });
@@ -42,7 +54,7 @@ class TodoItem extends React.Component {
     this.props.onSubmit(updatedTask);
   }
 
-  handleInputClick(event) {
+  handleInputClick() {
     if (this.state.isClicked) {
       this.setState({
         isClicked: false,
@@ -60,14 +72,14 @@ class TodoItem extends React.Component {
     }, 200);
   }
 
-  handleToggleChange(event) {
+  handleToggleChange(event: ChangeEvent<HTMLInputElement>) {
     const updatedTask = this.props.task;
     updatedTask.isChecked = event.target.checked;
 
     this.props.onSubmit(updatedTask);
   }
 
-  handleChangePriority(value) {
+  handleChangePriority(value: string) {
     const updatedTask = this.props.task;
     updatedTask.priority = value;
 

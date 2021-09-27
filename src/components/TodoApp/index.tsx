@@ -1,12 +1,23 @@
 import React from 'react';
-import TodoAppFooter from './TodoAppFooter/index.jsx';
-import TodoAppHeader from './TodoAppHeader/index.jsx';
-import TodoList from './TodoList/index.jsx';
+import TodoAppFooter from './TodoAppFooter/index';
+import TodoAppHeader from './TodoAppHeader/index';
+import TodoList from './TodoList/index';
 import STATUSES from '../../constants/statuses';
-import TodoAPI from '../../api/todos.js';
+import TodoAPI from '../../api/todos';
+import { Task } from '../../types/todo.types';
 
-class TodoApp extends React.Component {
-  constructor(props) {
+interface IProps {}
+interface IState {
+  tasks: Task[],
+  filter: string
+}
+
+
+class TodoApp extends React.Component<IProps,IState> {
+  mapStatusToFilterPredicate: { [x: string]: (item: any) => boolean; };
+  todoApi: TodoAPI;
+
+  constructor(props: IProps) {
     super(props);
 
     this.handleAddItem = this.handleAddItem.bind(this);
@@ -30,71 +41,74 @@ class TodoApp extends React.Component {
 
     this.state = {
       tasks: [],
-      currentId: 0,
-      filter: mapPath[window.location.pathname] ?? STATUSES.ALL,
+      filter: STATUSES.ALL,
     };
 
     this.todoApi = new TodoAPI();
   }
 
-  async componentDidMount() {
-    const tasks = await this.todoApi.getAll();
-    this.setState({
-      tasks: tasks || [],
-    });
+  componentDidMount() {
+    const fetch = async () => {
+      const tasks = await this.todoApi.getAll();
+      this.setState({
+        tasks: tasks || [],
+      });
+    };
+
+    fetch();
   }
 
-  async handleAddItem(value) {
+  async handleAddItem(value: string) {
     const createdTask = await this.todoApi.createTask({
       value,
     });
     this.setState((prevState) => ({
       tasks: [...prevState.tasks, createdTask],
-      currentId: prevState.currentId + 1,
     }));
   }
 
-  async handleDeleteItem(id) {
+  async handleDeleteItem(id: string) {
     const deletedTask = await this.todoApi.deleteTask(id);
     this.setState((prevState) => ({
       tasks: prevState.tasks.filter((task) => task.id !== deletedTask.id),
     }));
   }
 
-  async handleChangeItem(task) {
+  async handleChangeItem(task: Task) {
     const updatedTask = await this.todoApi.updateTask(task);
-    const index = this.state.tasks.findIndex(
-      (searchTask) => searchTask.id === updatedTask.id
-    );
+
     this.setState((prevState) => ({
-      tasks: [
-        ...prevState.tasks.slice(0, index),
-        updatedTask,
-        ...prevState.tasks.slice(index + 1),
-      ],
+      tasks: prevState.tasks.map((taskElem) =>
+        taskElem.id === updatedTask.id ? updatedTask : taskElem
+      ),
     }));
   }
 
-  handleChangeFilter(filterToApply) {
+  handleChangeFilter(filterToApply: string) {
     this.setState({
       filter: filterToApply,
     });
   }
 
   async handleClear() {
-    const clearedTasks = await this.todoApi.deleteCompleted();
-    const filterIds = clearedTasks.map((task) => task.id);
+    const clearedTasks = await this.todoApi.deleteCompleted(true);
+
     this.setState((prevState) => ({
-      tasks: prevState.tasks.filter((task) => !filterIds.includes(task.id)),
+      tasks: prevState.tasks.filter(
+        (task) => !clearedTasks.some((cleared: Task) => cleared.id === task.id)
+      ),
     }));
   }
 
   async handleToggleItems() {
-    const toggledTasks = await this.todoApi.toggleTasks();
+    const fillValue = await this.todoApi.toggleTasks();
 
-    this.setState({
-      tasks: toggledTasks,
-    });
+    this.setState((prevState) => ({
+      tasks: prevState.tasks.map((task) => ({
+        ...task,
+        isChecked: fillValue,
+      })),
+    }));
   }
 
   render() {

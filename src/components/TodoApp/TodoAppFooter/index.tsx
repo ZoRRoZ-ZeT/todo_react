@@ -2,22 +2,31 @@ import React from 'react';
 import clsx from 'clsx';
 import STATUSES from '../../../constants/statuses';
 
-import FilterButton from './FilterButton.jsx';
+import FilterButton from './FilterButton';
+import { Task } from '../../../types/todo.types';
 
-class TodoAppFooter extends React.Component {
-  constructor(props) {
+interface IProps {
+  tasks: Task[],
+  currentFilter: string,
+  onChangeFilter: (value:string) => void,
+  onClear: () => void,
+}
+interface IState {}
+
+class TodoAppFooter extends React.Component<IProps,IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
   }
 
-  handleFilterChange(value) {
+  handleFilterChange(value: string) {
     this.props.onChangeFilter(value);
     window.history.pushState('', '', `/${value.toLowerCase()}`);
   }
 
-  handleClearClick(event) {
+  handleClearClick() {
     this.props.onClear();
   }
 

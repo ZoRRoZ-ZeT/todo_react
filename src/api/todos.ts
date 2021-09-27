@@ -1,7 +1,8 @@
 import 'regenerator-runtime';
+import { Task } from '../types/todo.types';
 
 class TodoAPI {
-  async getSingle(id) {
+  async getSingle(id: string) {
     const response = await fetch(`${process.env.API_URL}/${id}`);
     const data = await this.getDataFromResponse(response);
 
@@ -15,7 +16,7 @@ class TodoAPI {
     return data;
   }
 
-  async createTask(body) {
+  async createTask(body: {value: string}) {
     const response = await fetch(process.env.API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -26,7 +27,7 @@ class TodoAPI {
     return data;
   }
 
-  async updateTask(body) {
+  async updateTask(body: Task) {
     const response = await fetch(process.env.API_URL, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -46,7 +47,7 @@ class TodoAPI {
     return data;
   }
 
-  async deleteCompleted(filter) {
+  async deleteCompleted(filter: boolean) {
     const response = await fetch(`${process.env.API_URL}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
@@ -57,7 +58,7 @@ class TodoAPI {
     return data;
   }
 
-  async deleteTask(id) {
+  async deleteTask(id: string) {
     const response = await fetch(`${process.env.API_URL}/${id}`, {
       method: 'DELETE',
     });
@@ -66,7 +67,7 @@ class TodoAPI {
     return data;
   }
 
-  async getDataFromResponse(response) {
+  async getDataFromResponse(response: Response) {
     const data = await response.json();
     if (data.statusCode === 200) {
       return data.payload;

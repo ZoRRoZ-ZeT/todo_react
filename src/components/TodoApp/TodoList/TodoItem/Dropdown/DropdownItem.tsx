@@ -1,8 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
 
-class DropdownItem extends React.Component {
-  constructor(props) {
+interface IProps {
+  value: string,
+  name: string,
+  onItemClick: (value: string) => void
+}
+interface IState {}
+
+class DropdownItem extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
