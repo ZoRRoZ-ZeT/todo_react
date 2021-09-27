@@ -1,41 +1,25 @@
 {
   "parser": "@typescript-eslint/parser",
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
+  "root": true,
   "extends": [
-    "airbnb-base",
-    "plugin:react/recommended",
+    "eslint:recommended",
     "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
+  "plugins": ["@typescript-eslint"],
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 12,
-    "sourceType": "module"
+    "ecmaVersion": 2017
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
+  "env": {
+    "es6": true,
+    "node": true
   },
-  "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "no-param-reassign": [
-      "error",
-      {
-        "props": false
-      }
-    ],
-    "class-methods-use-this": "off",
-    "no-unused-vars": "off",
-    "no-useless-constructor": "off",
+    "no-console": "off",
     "react/prop-types": "off",
-    "import/extensions": "off",
-    "no-var-requires": "off",
-    "@typescript-eslint/no-var-requires": 0
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }

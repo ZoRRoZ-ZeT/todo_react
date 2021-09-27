@@ -1,44 +1,44 @@
+import { Task } from '@type/todo.types';
 import 'regenerator-runtime';
-import { Task } from '../types/todo.types';
 
 class TodoAPI {
-  async getSingle(id: string) {
+  async getSingle(id: string): Promise<Task> {
     const response = await fetch(`${process.env.API_URL}/${id}`);
     const data = await this.getDataFromResponse(response);
 
     return data;
   }
 
-  async getAll() {
+  async getAll(): Promise<Task[]> {
     const response = await fetch(process.env.API_URL);
     const data = await this.getDataFromResponse(response);
 
     return data;
   }
 
-  async createTask(body: {value: string}) {
+  async createTask(value: string): Promise<Task> {
     const response = await fetch(process.env.API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ value }),
     });
     const data = await this.getDataFromResponse(response);
 
     return data;
   }
 
-  async updateTask(body: Task) {
+  async updateTask(task: Task): Promise<Task> {
     const response = await fetch(process.env.API_URL, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify(task),
     });
     const data = await this.getDataFromResponse(response);
 
     return data;
   }
 
-  async toggleTasks() {
+  async toggleTasks(): Promise<boolean> {
     const response = await fetch(`${process.env.API_URL}/toggle`, {
       method: 'PUT',
     });
@@ -47,7 +47,7 @@ class TodoAPI {
     return data;
   }
 
-  async deleteCompleted(filter: boolean) {
+  async deleteCompleted(filter: boolean): Promise<Task[]> {
     const response = await fetch(`${process.env.API_URL}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
@@ -58,7 +58,7 @@ class TodoAPI {
     return data;
   }
 
-  async deleteTask(id: string) {
+  async deleteTask(id: string): Promise<Task> {
     const response = await fetch(`${process.env.API_URL}/${id}`, {
       method: 'DELETE',
     });
@@ -67,12 +67,16 @@ class TodoAPI {
     return data;
   }
 
-  async getDataFromResponse(response: Response) {
-    const data = await response.json();
-    if (data.statusCode === 200) {
+  async getDataFromResponse(
+    response: Response
+  ): Promise<boolean & Task & Task[]> {
+    if (response.ok) {
+      const data = await response.json();
+
       return data.payload;
     }
-    throw new Error(JSON.stringify(data));
+    const error = await response.text();
+    throw new Error(error);
   }
 }
 

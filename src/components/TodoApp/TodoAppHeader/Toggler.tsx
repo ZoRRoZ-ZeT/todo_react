@@ -2,15 +2,14 @@ import React from 'react';
 import clsx from 'clsx';
 
 interface IProps {
-  onToggle: () => void,
-  isActive: boolean
+  onToggle: () => void;
+  isActive: boolean;
 }
 interface IState {
-  inputValue: string
+  inputValue: string;
 }
 
-
-class Toggler extends React.Component<IProps,IState> {
+class Toggler extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 

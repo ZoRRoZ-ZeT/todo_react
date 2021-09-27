@@ -1,15 +1,15 @@
-import React, { ChangeEvent, KeyboardEvent} from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 
 interface IProps {
-  value: string,
-  onInputChanged: (value:string) => void,
-  onEnterPressed: () => void
+  value: string;
+  onInputChanged: (value: string) => void;
+  onEnterPressed: () => void;
 }
 interface IState {
-  inputValue: string
+  inputValue: string;
 }
 
-class TodoHeaderInput extends React.Component<IProps,IState> {
+class TodoHeaderInput extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 

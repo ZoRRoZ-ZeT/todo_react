@@ -1,19 +1,20 @@
 import React from 'react';
 import clsx from 'clsx';
-import STATUSES from '../../../constants/statuses';
 
 import FilterButton from './FilterButton';
 import { Task } from '../../../types/todo.types';
+import { Status } from '../../../types/index.types';
 
 interface IProps {
-  tasks: Task[],
-  currentFilter: string,
-  onChangeFilter: (value:string) => void,
-  onClear: () => void,
+  tasks: Task[];
+  currentFilter: string;
+  onChangeFilter: (value: string) => void;
+  onClear: () => void;
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IState {}
 
-class TodoAppFooter extends React.Component<IProps,IState> {
+class TodoAppFooter extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -21,7 +22,7 @@ class TodoAppFooter extends React.Component<IProps,IState> {
     this.handleClearClick = this.handleClearClick.bind(this);
   }
 
-  handleFilterChange(value: string) {
+  handleFilterChange(value: Status) {
     this.props.onChangeFilter(value);
     window.history.pushState('', '', `/${value.toLowerCase()}`);
   }
@@ -44,21 +45,21 @@ class TodoAppFooter extends React.Component<IProps,IState> {
         <div className="filters">
           <FilterButton
             onFilterChange={this.handleFilterChange}
-            filter={STATUSES.ALL}
+            filter={Status.ALL}
             name="All"
-            isActive={this.props.currentFilter === STATUSES.ALL}
+            isActive={this.props.currentFilter === Status.ALL}
           />
           <FilterButton
             onFilterChange={this.handleFilterChange}
-            filter={STATUSES.ACTIVE}
+            filter={Status.ACTIVE}
             name="Active"
-            isActive={this.props.currentFilter === STATUSES.ACTIVE}
+            isActive={this.props.currentFilter === Status.ACTIVE}
           />
           <FilterButton
             onFilterChange={this.handleFilterChange}
-            filter={STATUSES.COMPLETED}
+            filter={Status.COMPLETED}
             name="Completed"
-            isActive={this.props.currentFilter === STATUSES.COMPLETED}
+            isActive={this.props.currentFilter === Status.COMPLETED}
           />
         </div>
         <span

@@ -1,12 +1,16 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const Dotenv = require('dotenv-webpack')
-
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 module.exports = {
   mode: 'development',
   entry: './src/index.tsx',
   resolve: {
     extensions: ['.ts', '.js', '.tsx', '.jsx', '.json'],
+    alias: {
+      Type: path.resolve(__dirname, '../src/types/*'),
+      Constants: path.resolve(__dirname, '../src/constants/*'),
+      Apis: path.resolve(__dirname, '../src/api/*'),
+    },
   },
   module: {
     rules: [
@@ -15,7 +19,7 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
-        test: /\.m?t(s|sx)$/,
+        test: /\.t(s|sx)$/,
         exclude: /(node_modules|bower_components)/,
         use: 'ts-loader',
       },
@@ -40,4 +44,4 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
-}
+};

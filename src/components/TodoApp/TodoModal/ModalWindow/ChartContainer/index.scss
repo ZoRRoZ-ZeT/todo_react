@@ -1,0 +1,9 @@
+@import './PieChart/index.scss';
+@import './Legend/index.scss';
+
+.chart-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}

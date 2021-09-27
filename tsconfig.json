@@ -6,6 +6,12 @@
     "module": "es6",
     "target": "es5",
     "jsx": "react",
+    "baseUrl": "./src/",
+    "paths": {
+      "@type/*": ["./types/*"],
+      "@apis/*": ["./api/*"],
+      "@constants/*": ["./constants/*"]
+    },
     "allowJs": true,
     "moduleResolution": "node",
     "noImplicitAny": true,

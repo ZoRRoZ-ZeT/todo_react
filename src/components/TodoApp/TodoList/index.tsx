@@ -3,13 +3,15 @@ import { Task } from '../../../types/todo.types';
 import TodoItem from './TodoItem/index';
 
 interface IProps {
-  tasks: Task[],
-  onDeleteItem: (id: string) => void,
-  onChangeItem: (task: Task) => void
+  tasks: Task[];
+  onDeleteItem: (id: string) => void;
+  onChangeItem: (task: Task) => void;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IState {}
 
-class TodoList extends React.Component<IProps,IState> {
+class TodoList extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
   }
