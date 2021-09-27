@@ -3,9 +3,10 @@ import TodoAppFooter from './TodoAppFooter/index';
 import TodoAppHeader from './TodoAppHeader/index';
 import TodoList from './TodoList/index';
 import TodoModal from './TodoModal/index';
-import { Status } from '../../types/index.types';
+import { Method, Status } from '../../types/index.types';
 import { Task } from '@type/todo.types';
-import TodoAPI from '../../api/todos';
+import { mapPath } from '@constants/index';
+import { callApi } from '@apis/todos';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
@@ -16,7 +17,6 @@ interface IState {
 
 class TodoApp extends React.Component<IProps, IState> {
   mapStatusToFilterPredicate: { [x: string]: (item: Task) => boolean };
-  todoApi: TodoAPI;
 
   constructor(props: IProps) {
     super(props);
@@ -35,24 +35,15 @@ class TodoApp extends React.Component<IProps, IState> {
       [Status.ALL]: null,
     };
 
-    const mapPath: {
-      [path: string]: Status;
-    } = {
-      '/active': Status.ACTIVE,
-      '/completed': Status.COMPLETED,
-    };
-
     this.state = {
       tasks: [],
       filter: mapPath[window.location.pathname] ?? Status.ALL,
     };
-
-    this.todoApi = new TodoAPI();
   }
 
   componentDidMount() {
     const fetch = async () => {
-      const tasks = await this.todoApi.getAll();
+      const tasks = await callApi<Task[]>('');
       this.setState({
         tasks: tasks || [],
       });
@@ -62,21 +53,30 @@ class TodoApp extends React.Component<IProps, IState> {
   }
 
   async handleAddItem(value: string) {
-    const createdTask = await this.todoApi.createTask(value);
+    const createdTask = await callApi<Task>('', {
+      method: Method.POST,
+      body: JSON.stringify({ value }),
+    });
     this.setState((prevState) => ({
       tasks: [...prevState.tasks, createdTask],
     }));
   }
 
   async handleDeleteItem(id: string) {
-    const deletedTask = await this.todoApi.deleteTask(id);
+    const deletedTask = await callApi<Task>(`/${id}`, {
+      method: Method.DELETE,
+    });
     this.setState((prevState) => ({
       tasks: prevState.tasks.filter((task) => task.id !== deletedTask.id),
     }));
   }
 
   async handleChangeItem(task: Task) {
-    const updatedTask = await this.todoApi.updateTask(task);
+    const updatedTask = await callApi<Task>('', {
+      method: Method.PUT,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(task),
+    });
 
     this.setState((prevState) => ({
       tasks: prevState.tasks.map((taskElem) =>
@@ -92,7 +92,10 @@ class TodoApp extends React.Component<IProps, IState> {
   }
 
   async handleClear() {
-    const clearedTasks = await this.todoApi.deleteCompleted(true);
+    const clearedTasks = await callApi<Task[]>('', {
+      method: Method.DELETE,
+      body: JSON.stringify(true),
+    });
 
     this.setState((prevState) => ({
       tasks: prevState.tasks.filter(
@@ -102,7 +105,9 @@ class TodoApp extends React.Component<IProps, IState> {
   }
 
   async handleToggleItems() {
-    const fillValue = await this.todoApi.toggleTasks();
+    const fillValue = await callApi<boolean>('/toggle', {
+      method: Method.PUT,
+    });
 
     this.setState((prevState) => ({
       tasks: prevState.tasks.map((task) => ({
@@ -119,10 +124,14 @@ class TodoApp extends React.Component<IProps, IState> {
       : this.state.tasks;
     return (
       <div className="application">
-        <TodoModal tasks={this.state.tasks} />
+        <TodoModal tasks={filteredTasks} />
         <div className="shadow">
           <div className="body">
             <TodoAppHeader
+              isTasksExist={!!this.state.tasks.length}
+              isTasksCompleted={
+                !this.state.tasks.filter((task) => !task.isChecked).length
+              }
               tasks={this.state.tasks}
               onAddItem={this.handleAddItem}
               onToggleItems={this.handleToggleItems}
@@ -135,7 +144,10 @@ class TodoApp extends React.Component<IProps, IState> {
           </div>
           <TodoAppFooter
             currentFilter={this.state.filter}
-            tasks={this.state.tasks}
+            count={this.state.tasks.length}
+            completedCount={
+              this.state.tasks.filter((task) => task.isChecked).length
+            }
             onChangeFilter={this.handleChangeFilter}
             onClear={this.handleClear}
           />

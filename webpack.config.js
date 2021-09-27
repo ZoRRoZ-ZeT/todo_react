@@ -7,9 +7,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.tsx', '.jsx', '.json'],
     alias: {
-      Type: path.resolve(__dirname, '../src/types/*'),
-      Constants: path.resolve(__dirname, '../src/constants/*'),
-      Apis: path.resolve(__dirname, '../src/api/*'),
+      '@type': path.resolve(__dirname, './src/types/'),
+      '@constants': path.resolve(__dirname, './src/constants/'),
+      '@apis': path.resolve(__dirname, './src/api/'),
     },
   },
   module: {

@@ -22,3 +22,10 @@ export enum Priority {
   LOW = 'low',
   NONE = 'none',
 }
+
+export enum Method {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}

@@ -12,7 +12,7 @@ body {
 }
 
 #root {
-  margin: 100px auto 0;
+  margin: 100px auto 50px;
   position: relative;
 
   @include respond-to(sm) {

@@ -6,7 +6,8 @@ import { Task } from '../../../types/todo.types';
 import { Status } from '../../../types/index.types';
 
 interface IProps {
-  tasks: Task[];
+  count: number;
+  completedCount: number;
   currentFilter: string;
   onChangeFilter: (value: string) => void;
   onClear: () => void;
@@ -32,15 +33,10 @@ class TodoAppFooter extends React.Component<IProps, IState> {
   }
 
   render() {
-    const count = this.props.tasks.length;
-    const checkedCount = this.props.tasks.filter(
-      (task) => task.isChecked
-    ).length;
-
-    return count > 0 ? (
+    return this.props.count > 0 ? (
       <div className="footer" id="footer">
         <span className="footer__count" id="count">
-          {count - checkedCount} items
+          {this.props.count - this.props.completedCount} items
         </span>
         <div className="filters">
           <FilterButton
@@ -65,7 +61,7 @@ class TodoAppFooter extends React.Component<IProps, IState> {
         <span
           className={clsx({
             footer__clear: true,
-            hidden: checkedCount === 0,
+            hidden: !this.props.completedCount,
           })}
           onClick={this.handleClearClick}
         >

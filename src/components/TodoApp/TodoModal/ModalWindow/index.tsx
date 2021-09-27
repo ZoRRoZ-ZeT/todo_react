@@ -1,7 +1,8 @@
-import { ChartData, Priority } from '../../../../types/index.types';
+import { ChartData, Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
 import React from 'react';
 import ChartContainer from './ChartContainer';
+import { mapPriorities } from '@constants/index';
 
 interface IProps {
   tasks: Task[];
@@ -12,44 +13,45 @@ interface IProps {
 interface IState {}
 
 class TodoModalWindow extends React.Component<IProps, IState> {
-  mapPriorities: { [x: string]: string };
+  chartData: ChartData;
   constructor(props: IProps) {
     super(props);
 
     this.handleCloseClick = this.handleCloseClick.bind(this);
-    this.convertToPieChartData = this.convertToPieChartData.bind(this);
-
-    this.mapPriorities = {
-      [Priority.HIGH]: '#ff110099',
-      [Priority.MEDIUM]: '#ffe50080',
-      [Priority.LOW]: '#89ff00d9',
-      [Priority.NONE]: '#ffffff',
-    };
   }
 
   handleCloseClick() {
     this.props.onToggleModal();
   }
 
-  convertToPieChartData(): ChartData {
+  componentDidUpdate() {
     const chartData = this.props.tasks.reduce((resultData, task) => {
       return {
         ...resultData,
         [task.priority]: (resultData[task.priority] ?? 0) + 1,
       };
-    }, {} as { [name in Priority]: number });
+    }, {} as Record<Priority, number>);
 
-    console.log(chartData);
+    const orderedData = Object.keys(Priority).reduce(
+      (result, key: keyof typeof Priority) => {
+        if (chartData[Priority[key]]) {
+          return {
+            ...result,
+            [Priority[key]]: chartData[Priority[key]],
+          };
+        }
+        return result;
+      },
+      {} as Record<Priority, number>
+    );
 
-    const pieChartArray = Array.from(
-      Object.entries(chartData),
+    this.chartData = Array.from(
+      Object.entries(orderedData),
       ([dataName, dataValue]) => ({
         dataName,
         dataValue,
       })
     );
-
-    return pieChartArray;
   }
 
   render() {
@@ -69,8 +71,13 @@ class TodoModalWindow extends React.Component<IProps, IState> {
           <hr />
           <div className="content-window__body">
             <ChartContainer
-              data={this.convertToPieChartData()}
-              palette={['#ff110099', '#ffe50080', '#89ff00d9', '#ffffff']}
+              data={this.chartData}
+              palette={[
+                mapPriorities[Priority.HIGH],
+                mapPriorities[Priority.MEDIUM],
+                mapPriorities[Priority.LOW],
+                mapPriorities[Priority.NONE],
+              ]}
             />
           </div>
           <hr />

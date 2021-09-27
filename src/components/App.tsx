@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import React from 'react';
 import TodoApp from './TodoApp/index';
 
-interface Props {}
+interface IProps {}
+interface IState {}
 
-class App extends React.Component {
-  constructor(props: Props) {
+class App extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
   }
 
