@@ -1,11 +1,12 @@
 import React from 'react';
-import { Task } from '../../../types/todo.types';
+import { connect } from 'react-redux';
+import { Task } from '@type/todo.types';
 import TodoItem from './TodoItem/index';
+import { ApplicationState } from '@store/index';
 
 interface IProps {
   tasks: Task[];
-  onDeleteItem: (id: string) => void;
-  onChangeItem: (task: Task) => void;
+  filtering: (item: Task) => boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -13,15 +14,14 @@ interface IState {}
 
 class TodoList extends React.Component<IProps, IState> {
   render() {
+    const filteredTasks = this.props.filtering
+      ? this.props.tasks.filter(this.props.filtering)
+      : this.props.tasks;
     return (
       <ul className="task-list">
-        {this.props.tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <li key={task.id} className="task-list__item">
-            <TodoItem
-              task={task}
-              onDelete={this.props.onDeleteItem}
-              onSubmit={this.props.onChangeItem}
-            />
+            <TodoItem task={task} />
           </li>
         ))}
       </ul>
@@ -29,4 +29,8 @@ class TodoList extends React.Component<IProps, IState> {
   }
 }
 
-export default TodoList;
+const mapStateToProps = (state: ApplicationState) => ({
+  tasks: state.tasks.list,
+});
+
+export default connect(mapStateToProps)(TodoList);

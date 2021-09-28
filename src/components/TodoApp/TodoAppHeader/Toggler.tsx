@@ -1,8 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
+import { callApi } from '@apis/todos';
+import { Method } from '@type/index.types';
+import { connect } from 'react-redux';
+import { toggleTasks } from '@store/actions/tasks';
 
 interface IProps {
-  onToggle: () => void;
+  toggleTasks: (fillValue: boolean) => void;
   isActive: boolean;
 }
 interface IState {
@@ -16,8 +20,11 @@ class Toggler extends React.Component<IProps, IState> {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
-    this.props.onToggle();
+  async handleClick() {
+    const fillValue = await callApi<boolean>('/toggle', {
+      method: Method.PUT,
+    });
+    this.props.toggleTasks(fillValue);
   }
 
   render() {
@@ -35,4 +42,4 @@ class Toggler extends React.Component<IProps, IState> {
   }
 }
 
-export default Toggler;
+export default connect(null, { toggleTasks })(Toggler);

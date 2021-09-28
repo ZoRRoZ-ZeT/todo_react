@@ -6,3 +6,7 @@ export interface Task {
   isChecked: boolean;
   priority: Priority;
 }
+
+export interface TodoState {
+  list: Task[];
+}

@@ -1,9 +1,12 @@
+import { ApplicationState } from '@store/index';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Task } from '../../../types/todo.types';
 import TodoModalWindow from './ModalWindow/index';
 
 interface IProps {
   tasks: Task[];
+  filtering: (item: Task) => boolean;
 }
 interface IState {
   isShowModal: boolean;
@@ -27,6 +30,9 @@ class TodoModal extends React.Component<IProps, IState> {
   }
 
   render() {
+    const filteredTasks = this.props.filtering
+      ? this.props.tasks.filter(this.props.filtering)
+      : this.props.tasks;
     return (
       <div className="modal">
         <button
@@ -36,7 +42,7 @@ class TodoModal extends React.Component<IProps, IState> {
           Open Modal
         </button>
         <TodoModalWindow
-          tasks={this.props.tasks}
+          tasks={filteredTasks}
           isActive={this.state.isShowModal}
           onToggleModal={this.handleToggleModal}
         />
@@ -45,4 +51,8 @@ class TodoModal extends React.Component<IProps, IState> {
   }
 }
 
-export default TodoModal;
+const mapStateToProps = (state: ApplicationState) => ({
+  tasks: state.tasks.list,
+});
+
+export default connect(mapStateToProps)(TodoModal);

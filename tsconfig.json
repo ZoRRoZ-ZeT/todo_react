@@ -10,7 +10,8 @@
     "paths": {
       "@type/*": ["./types/*"],
       "@apis/*": ["./api/*"],
-      "@constants/*": ["./constants/*"]
+      "@constants/*": ["./constants/*"],
+      "@store/*": ["./store/*"]
     },
     "allowJs": true,
     "moduleResolution": "node",
