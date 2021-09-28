@@ -1,15 +1,15 @@
 import React from 'react';
 
 import clsx from 'clsx';
-import PRIORITIES from '../../../../../constants/priorities.js';
 import DropdownItem from './DropdownItem';
+import { Priority } from '../../../../../types/index.types';
 
 interface IProps {
-  priority: string,
-  onPriorityChanged: (value: string) => void,
+  priority: string;
+  onPriorityChanged: (value: string) => void;
 }
 interface IState {
-  isShowList: boolean
+  isShowList: boolean;
 }
 
 class Dropdown extends React.Component<IProps, IState> {
@@ -54,7 +54,7 @@ class Dropdown extends React.Component<IProps, IState> {
     }));
   }
 
-  handleItemClick(value: string) {
+  handleItemClick(value: Priority) {
     this.props.onPriorityChanged(value);
     this.setState({
       isShowList: false,
@@ -74,22 +74,22 @@ class Dropdown extends React.Component<IProps, IState> {
         {this.state.isShowList ? (
           <div className="dropdown-block__content content-list">
             <DropdownItem
-              value={PRIORITIES.HIGH}
+              value={Priority.HIGH}
               name="High priority"
               onItemClick={this.handleItemClick}
             />
             <DropdownItem
-              value={PRIORITIES.MEDIUM}
+              value={Priority.MEDIUM}
               name="Medium priority"
               onItemClick={this.handleItemClick}
             />
             <DropdownItem
-              value={PRIORITIES.LOW}
+              value={Priority.LOW}
               name="Low priority"
               onItemClick={this.handleItemClick}
             />
             <DropdownItem
-              value={PRIORITIES.NONE}
+              value={Priority.NONE}
               name="None priority"
               onItemClick={this.handleItemClick}
             />

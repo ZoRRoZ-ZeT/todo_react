@@ -1,5 +1,5 @@
-@import "./mixins/breakpoints";
-@import "./components/TodoApp/index.scss";
+@import './mixins/breakpoints';
+@import './components/TodoApp/index.scss';
 
 * {
   margin: 0;
@@ -12,7 +12,7 @@ body {
 }
 
 #root {
-  margin: 130px auto;
+  margin: 100px auto 50px;
   position: relative;
 
   @include respond-to(sm) {
@@ -45,28 +45,28 @@ body {
   cursor: pointer;
 
   &-blue {
-      background-color: rgb(var(--blue));
-      border: 2px solid rgba(var(--blue), 0.63);
+    background-color: rgb(var(--blue));
+    border: 2px solid rgba(var(--blue), 0.63);
 
-      &:active {
-          background-color: rgb(var(--darkblue));
-      }
+    &:active {
+      background-color: rgb(var(--darkblue));
+    }
   }
-  
-  &-red {
-      background-color: rgb(var(--red));
-      border: 2px solid rgb(var(--red), 0.63);
 
-      &:active {
-          background-color: rgb(var(--darkred));
-      }
+  &-red {
+    background-color: rgb(var(--red));
+    border: 2px solid rgb(var(--red), 0.63);
+
+    &:active {
+      background-color: rgb(var(--darkred));
+    }
   }
 
   &-empty {
-      background: none;
-      border: none;
-      font-weight: 100;
-      font-size: 30px;
-      color: #cc9a9a;
+    background: none;
+    border: none;
+    font-weight: 100;
+    font-size: 30px;
+    color: #cc9a9a;
   }
 }

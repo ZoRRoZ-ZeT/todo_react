@@ -4,15 +4,17 @@ import TodoHeaderInput from './TodoHeaderInput/index';
 import Toggler from './Toggler';
 
 interface IProps {
-  tasks: Task[],
-  onAddItem: (value: string) => Promise<void>,
-  onToggleItems: () => Promise<void>
+  isTasksExist: boolean;
+  isTasksCompleted: boolean;
+  tasks: Task[];
+  onAddItem: (value: string) => Promise<void>;
+  onToggleItems: () => Promise<void>;
 }
 interface IState {
-  inputValue: string
+  inputValue: string;
 }
 
-class TodoAppHeader extends React.Component<IProps, IState>{
+class TodoAppHeader extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -49,13 +51,10 @@ class TodoAppHeader extends React.Component<IProps, IState>{
   render() {
     return (
       <div className="body__input add-form">
-        {this.props.tasks.length > 0 ? (
+        {this.props.isTasksExist ? (
           <Toggler
             onToggle={this.handleToggle}
-            isActive={this.props.tasks.reduce(
-              (result, task) => result && task.isChecked,
-              true
-            )}
+            isActive={this.props.isTasksCompleted}
           />
         ) : null}
         <TodoHeaderInput

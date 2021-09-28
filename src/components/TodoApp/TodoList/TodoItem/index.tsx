@@ -2,20 +2,21 @@ import React, { ChangeEvent } from 'react';
 import clsx from 'clsx';
 import TodoInput from './TodoInput';
 import Dropdown from './Dropdown/index';
-import { Task } from '../../../../types/todo.types';
+import { Task } from '@type/todo.types';
+import { Priority } from '@type/index.types';
 
 interface IProps {
-  task: Task,
-  onDelete: (id: string) => void,
-  onSubmit: (task: Task) => void
+  task: Task;
+  onDelete: (id: string) => void;
+  onSubmit: (task: Task) => void;
 }
 interface IState {
-  isClicked: boolean,
-  isEditing: boolean,
-  currentValue: string
+  isClicked: boolean;
+  isEditing: boolean;
+  currentValue: string;
 }
 
-class TodoItem extends React.Component<IProps,IState> {
+class TodoItem extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -79,7 +80,7 @@ class TodoItem extends React.Component<IProps,IState> {
     this.props.onSubmit(updatedTask);
   }
 
-  handleChangePriority(value: string) {
+  handleChangePriority(value: Priority) {
     const updatedTask = this.props.task;
     updatedTask.priority = value;
 

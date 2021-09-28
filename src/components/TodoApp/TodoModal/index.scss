@@ -1,0 +1,56 @@
+@import './ModalWindow/index.scss';
+
+.modal {
+  margin-top: 100px;
+  text-align: center;
+  &__button {
+    padding: 10px 25px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    outline: none !important;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+  }
+
+  &__content {
+    width: 80%;
+    height: 80vh;
+  }
+}
+
+.button-animate {
+  border: 2px solid black;
+  z-index: 1;
+  color: black;
+
+  &:after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    direction: rtl;
+    z-index: -1;
+    background: black;
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    color: white;
+
+    &:after {
+      left: auto;
+      right: 0;
+      width: 100%;
+    }
+  }
+
+  &:active {
+    top: 2px;
+  }
+}

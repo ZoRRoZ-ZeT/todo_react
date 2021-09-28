@@ -2,20 +2,21 @@ import React from 'react';
 import TodoAppFooter from './TodoAppFooter/index';
 import TodoAppHeader from './TodoAppHeader/index';
 import TodoList from './TodoList/index';
-import STATUSES from '../../constants/statuses';
-import TodoAPI from '../../api/todos';
-import { Task } from '../../types/todo.types';
+import TodoModal from './TodoModal/index';
+import { Method, Status } from '@type/index.types';
+import { Task } from '@type/todo.types';
+import { mapPath } from '@constants/index';
+import { callApi } from '@apis/todos';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {}
 interface IState {
-  tasks: Task[],
-  filter: string
+  tasks: Task[];
+  filter: string;
 }
 
-
-class TodoApp extends React.Component<IProps,IState> {
-  mapStatusToFilterPredicate: { [x: string]: (item: any) => boolean; };
-  todoApi: TodoAPI;
+class TodoApp extends React.Component<IProps, IState> {
+  mapStatusToFilterPredicate: { [x: string]: (item: Task) => boolean };
 
   constructor(props: IProps) {
     super(props);
@@ -29,27 +30,20 @@ class TodoApp extends React.Component<IProps,IState> {
     this.handleToggleItems = this.handleToggleItems.bind(this);
 
     this.mapStatusToFilterPredicate = {
-      [STATUSES.ACTIVE]: (item) => item.isChecked === false,
-      [STATUSES.COMPLETED]: (item) => item.isChecked === true,
-      [STATUSES.ALL]: null,
-    };
-
-    const mapPath = {
-      '/active': STATUSES.ACTIVE,
-      '/completed': STATUSES.COMPLETED,
+      [Status.ACTIVE]: (item) => item.isChecked === false,
+      [Status.COMPLETED]: (item) => item.isChecked === true,
+      [Status.ALL]: null,
     };
 
     this.state = {
       tasks: [],
-      filter: STATUSES.ALL,
+      filter: mapPath[window.location.pathname] ?? Status.ALL,
     };
-
-    this.todoApi = new TodoAPI();
   }
 
   componentDidMount() {
     const fetch = async () => {
-      const tasks = await this.todoApi.getAll();
+      const tasks = await callApi<Task[]>('');
       this.setState({
         tasks: tasks || [],
       });
@@ -59,8 +53,9 @@ class TodoApp extends React.Component<IProps,IState> {
   }
 
   async handleAddItem(value: string) {
-    const createdTask = await this.todoApi.createTask({
-      value,
+    const createdTask = await callApi<Task>('', {
+      method: Method.POST,
+      body: { value },
     });
     this.setState((prevState) => ({
       tasks: [...prevState.tasks, createdTask],
@@ -68,14 +63,19 @@ class TodoApp extends React.Component<IProps,IState> {
   }
 
   async handleDeleteItem(id: string) {
-    const deletedTask = await this.todoApi.deleteTask(id);
+    const deletedTask = await callApi<Task>(`/${id}`, {
+      method: Method.DELETE,
+    });
     this.setState((prevState) => ({
       tasks: prevState.tasks.filter((task) => task.id !== deletedTask.id),
     }));
   }
 
   async handleChangeItem(task: Task) {
-    const updatedTask = await this.todoApi.updateTask(task);
+    const updatedTask = await callApi<Task>('', {
+      method: Method.PUT,
+      body: { ...task },
+    });
 
     this.setState((prevState) => ({
       tasks: prevState.tasks.map((taskElem) =>
@@ -91,7 +91,10 @@ class TodoApp extends React.Component<IProps,IState> {
   }
 
   async handleClear() {
-    const clearedTasks = await this.todoApi.deleteCompleted(true);
+    const clearedTasks = await callApi<Task[]>('', {
+      method: Method.DELETE,
+      body: { filter: true },
+    });
 
     this.setState((prevState) => ({
       tasks: prevState.tasks.filter(
@@ -101,7 +104,9 @@ class TodoApp extends React.Component<IProps,IState> {
   }
 
   async handleToggleItems() {
-    const fillValue = await this.todoApi.toggleTasks();
+    const fillValue = await callApi<boolean>('/toggle', {
+      method: Method.PUT,
+    });
 
     this.setState((prevState) => ({
       tasks: prevState.tasks.map((task) => ({
@@ -117,25 +122,35 @@ class TodoApp extends React.Component<IProps,IState> {
       ? this.state.tasks.filter(filterPredicate)
       : this.state.tasks;
     return (
-      <div className="shadow">
-        <div className="body">
-          <TodoAppHeader
-            tasks={this.state.tasks}
-            onAddItem={this.handleAddItem}
-            onToggleItems={this.handleToggleItems}
-          />
-          <TodoList
-            tasks={filteredTasks}
-            onDeleteItem={this.handleDeleteItem}
-            onChangeItem={this.handleChangeItem}
+      <div className="application">
+        <TodoModal tasks={filteredTasks} />
+        <div className="shadow">
+          <div className="body">
+            <TodoAppHeader
+              isTasksExist={!!this.state.tasks.length}
+              isTasksCompleted={
+                !this.state.tasks.filter((task) => !task.isChecked).length
+              }
+              tasks={this.state.tasks}
+              onAddItem={this.handleAddItem}
+              onToggleItems={this.handleToggleItems}
+            />
+            <TodoList
+              tasks={filteredTasks}
+              onDeleteItem={this.handleDeleteItem}
+              onChangeItem={this.handleChangeItem}
+            />
+          </div>
+          <TodoAppFooter
+            currentFilter={this.state.filter}
+            count={this.state.tasks.length}
+            completedCount={
+              this.state.tasks.filter((task) => task.isChecked).length
+            }
+            onChangeFilter={this.handleChangeFilter}
+            onClear={this.handleClear}
           />
         </div>
-        <TodoAppFooter
-          currentFilter={this.state.filter}
-          tasks={this.state.tasks}
-          onChangeFilter={this.handleChangeFilter}
-          onClear={this.handleClear}
-        />
       </div>
     );
   }

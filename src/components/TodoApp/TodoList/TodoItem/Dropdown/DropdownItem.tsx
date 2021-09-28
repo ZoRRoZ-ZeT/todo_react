@@ -1,11 +1,13 @@
 import React from 'react';
 import clsx from 'clsx';
+import { Priority } from '../../../../../types/index.types';
 
 interface IProps {
-  value: string,
-  name: string,
-  onItemClick: (value: string) => void
+  value: Priority;
+  name: string;
+  onItemClick: (value: string) => void;
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IState {}
 
 class DropdownItem extends React.Component<IProps, IState> {

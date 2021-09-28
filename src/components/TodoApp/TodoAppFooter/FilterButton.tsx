@@ -1,17 +1,17 @@
 import React from 'react';
 import clsx from 'clsx';
-
+import { Status } from '@type/index.types';
 
 interface IProps {
-  filter: string,
-  isActive: boolean,
-  name: string,
-  onFilterChange: (value:string) => void
+  filter: Status;
+  isActive: boolean;
+  name: string;
+  onFilterChange: (value: string) => void;
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IState {}
 
-
-class FilterButton extends React.Component<IProps,IState> {
+class FilterButton extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 

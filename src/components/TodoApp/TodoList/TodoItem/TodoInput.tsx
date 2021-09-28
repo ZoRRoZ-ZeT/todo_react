@@ -1,12 +1,12 @@
 import React, { ChangeEvent, KeyboardEvent } from 'react';
 
 interface IProps {
-  value: string,
-  onChange: (value: string) => void,
-  onSubmit: () => void
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IState {}
-
 
 class TodoInput extends React.Component<IProps, IState> {
   constructor(props: IProps) {
