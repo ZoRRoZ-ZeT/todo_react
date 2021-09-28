@@ -11,3 +11,10 @@ export const mapPath: Record<string, Status> = {
   '/active': Status.ACTIVE,
   '/completed': Status.COMPLETED,
 };
+
+export const mapPrioritiesOrder: Record<Priority, number> = {
+  [Priority.HIGH]: 0,
+  [Priority.MEDIUM]: 1,
+  [Priority.LOW]: 2,
+  [Priority.NONE]: 3,
+};

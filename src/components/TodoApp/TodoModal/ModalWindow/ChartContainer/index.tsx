@@ -11,10 +11,6 @@ interface IProps {
 interface IState {}
 
 class ChartContainer extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="chart-container">

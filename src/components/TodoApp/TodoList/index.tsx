@@ -12,10 +12,6 @@ interface IProps {
 interface IState {}
 
 class TodoList extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   render() {
     return (
       <ul className="task-list">

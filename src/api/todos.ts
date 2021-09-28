@@ -6,18 +6,20 @@ export async function callApi<Type>(
   options?: {
     method?: Method;
     headers?: Record<string, string>;
-    body?: BodyInit;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    body?: {};
   }
 ): Promise<Type> {
   const response = await fetch(`${process.env.API_URL}${url}`, {
     method: Method.GET,
     headers: { 'Content-Type': 'application/json' },
     ...options,
+    ...(options?.body && { body: JSON.stringify(options.body) }),
   });
   if (response.ok) {
     const data = await response.json();
     return data.payload as Type;
   }
-  const error = await response.text();
-  throw new Error(error);
+  const error = await response.json();
+  throw error;
 }

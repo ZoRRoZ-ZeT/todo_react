@@ -2,14 +2,7 @@
 import React from 'react';
 import TodoApp from './TodoApp/index';
 
-interface IProps {}
-interface IState {}
-
-class App extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
+class App extends React.Component {
   render() {
     return <TodoApp />;
   }

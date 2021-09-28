@@ -3,7 +3,7 @@ import TodoAppFooter from './TodoAppFooter/index';
 import TodoAppHeader from './TodoAppHeader/index';
 import TodoList from './TodoList/index';
 import TodoModal from './TodoModal/index';
-import { Method, Status } from '../../types/index.types';
+import { Method, Status } from '@type/index.types';
 import { Task } from '@type/todo.types';
 import { mapPath } from '@constants/index';
 import { callApi } from '@apis/todos';
@@ -55,7 +55,7 @@ class TodoApp extends React.Component<IProps, IState> {
   async handleAddItem(value: string) {
     const createdTask = await callApi<Task>('', {
       method: Method.POST,
-      body: JSON.stringify({ value }),
+      body: { value },
     });
     this.setState((prevState) => ({
       tasks: [...prevState.tasks, createdTask],
@@ -74,8 +74,7 @@ class TodoApp extends React.Component<IProps, IState> {
   async handleChangeItem(task: Task) {
     const updatedTask = await callApi<Task>('', {
       method: Method.PUT,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(task),
+      body: { ...task },
     });
 
     this.setState((prevState) => ({
@@ -94,7 +93,7 @@ class TodoApp extends React.Component<IProps, IState> {
   async handleClear() {
     const clearedTasks = await callApi<Task[]>('', {
       method: Method.DELETE,
-      body: JSON.stringify(true),
+      body: { filter: true },
     });
 
     this.setState((prevState) => ({

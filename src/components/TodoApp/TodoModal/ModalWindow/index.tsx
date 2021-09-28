@@ -2,7 +2,7 @@ import { ChartData, Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
 import React from 'react';
 import ChartContainer from './ChartContainer';
-import { mapPriorities } from '@constants/index';
+import { mapPriorities, mapPrioritiesOrder } from '@constants/index';
 
 interface IProps {
   tasks: Task[];
@@ -14,6 +14,7 @@ interface IState {}
 
 class TodoModalWindow extends React.Component<IProps, IState> {
   chartData: ChartData;
+  palette: Array<string>;
   constructor(props: IProps) {
     super(props);
 
@@ -25,28 +26,24 @@ class TodoModalWindow extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate() {
-    const chartData = this.props.tasks.reduce((resultData, task) => {
+    const sortedTasks = [...this.props.tasks];
+    sortedTasks.sort(
+      (a, b) => mapPrioritiesOrder[a.priority] - mapPrioritiesOrder[b.priority]
+    );
+
+    this.palette = [];
+    const chartData = sortedTasks.reduce((resultData, task) => {
+      if (!this.palette.includes(mapPriorities[task.priority])) {
+        this.palette.push(mapPriorities[task.priority]);
+      }
       return {
         ...resultData,
         [task.priority]: (resultData[task.priority] ?? 0) + 1,
       };
     }, {} as Record<Priority, number>);
 
-    const orderedData = Object.keys(Priority).reduce(
-      (result, key: keyof typeof Priority) => {
-        if (chartData[Priority[key]]) {
-          return {
-            ...result,
-            [Priority[key]]: chartData[Priority[key]],
-          };
-        }
-        return result;
-      },
-      {} as Record<Priority, number>
-    );
-
     this.chartData = Array.from(
-      Object.entries(orderedData),
+      Object.entries(chartData),
       ([dataName, dataValue]) => ({
         dataName,
         dataValue,
@@ -70,15 +67,7 @@ class TodoModalWindow extends React.Component<IProps, IState> {
           </div>
           <hr />
           <div className="content-window__body">
-            <ChartContainer
-              data={this.chartData}
-              palette={[
-                mapPriorities[Priority.HIGH],
-                mapPriorities[Priority.MEDIUM],
-                mapPriorities[Priority.LOW],
-                mapPriorities[Priority.NONE],
-              ]}
-            />
+            <ChartContainer data={this.chartData} palette={this.palette} />
           </div>
           <hr />
           <div className="content-window__footer">

@@ -2,8 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 import FilterButton from './FilterButton';
-import { Task } from '../../../types/todo.types';
-import { Status } from '../../../types/index.types';
+import { Status } from '@type/index.types';
 
 interface IProps {
   count: number;
