@@ -1,4 +1,9 @@
+import { callApi } from '@apis/todos';
+import { addTask } from '@store/actions/tasks';
+import { ApplicationState } from '@store/index';
+import { Method } from '@type/index.types';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Task } from '../../../types/todo.types';
 import TodoHeaderInput from './TodoHeaderInput/index';
 import Toggler from './Toggler';
@@ -6,9 +11,7 @@ import Toggler from './Toggler';
 interface IProps {
   isTasksExist: boolean;
   isTasksCompleted: boolean;
-  tasks: Task[];
-  onAddItem: (value: string) => Promise<void>;
-  onToggleItems: () => Promise<void>;
+  addTask: (task: Task) => void;
 }
 interface IState {
   inputValue: string;
@@ -21,8 +24,6 @@ class TodoAppHeader extends React.Component<IProps, IState> {
     this.handleInputChanged = this.handleInputChanged.bind(this);
     this.handleEnterPressed = this.handleEnterPressed.bind(this);
 
-    this.handleToggle = this.handleToggle.bind(this);
-
     this.state = {
       inputValue: '',
     };
@@ -34,28 +35,25 @@ class TodoAppHeader extends React.Component<IProps, IState> {
     });
   }
 
-  handleEnterPressed() {
+  async handleEnterPressed() {
     if (this.state.inputValue.trim() === '') {
       return;
     }
-    this.props.onAddItem(this.state.inputValue);
+    const createdTask = await callApi<Task>('', {
+      method: Method.POST,
+      body: { value: this.state.inputValue },
+    });
+    this.props.addTask(createdTask);
     this.setState({
       inputValue: '',
     });
-  }
-
-  handleToggle() {
-    this.props.onToggleItems();
   }
 
   render() {
     return (
       <div className="body__input add-form">
         {this.props.isTasksExist ? (
-          <Toggler
-            onToggle={this.handleToggle}
-            isActive={this.props.isTasksCompleted}
-          />
+          <Toggler isActive={this.props.isTasksCompleted} />
         ) : null}
         <TodoHeaderInput
           value={this.state.inputValue}
@@ -67,4 +65,12 @@ class TodoAppHeader extends React.Component<IProps, IState> {
   }
 }
 
-export default TodoAppHeader;
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    isTasksExist: !!state.tasks.list.length,
+    isTasksCompleted: !state.tasks.list.filter((task) => !task.isChecked)
+      .length,
+  };
+};
+
+export default connect(mapStateToProps, { addTask })(TodoAppHeader);

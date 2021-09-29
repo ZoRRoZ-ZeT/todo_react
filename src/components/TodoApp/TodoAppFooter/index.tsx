@@ -2,14 +2,19 @@ import React from 'react';
 import clsx from 'clsx';
 
 import FilterButton from './FilterButton';
-import { Status } from '@type/index.types';
+import { Method, Status } from '@type/index.types';
+import { connect } from 'react-redux';
+import { deleteMultipleTasks } from '@store/actions/tasks';
+import { Task } from '@type/todo.types';
+import { callApi } from '@apis/todos';
+import { ApplicationState } from '@store/index';
 
 interface IProps {
   count: number;
   completedCount: number;
   currentFilter: string;
   onChangeFilter: (value: string) => void;
-  onClear: () => void;
+  deleteMultipleTasks: (tasks: Task[]) => void;
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IState {}
@@ -27,8 +32,12 @@ class TodoAppFooter extends React.Component<IProps, IState> {
     window.history.pushState('', '', `/${value.toLowerCase()}`);
   }
 
-  handleClearClick() {
-    this.props.onClear();
+  async handleClearClick() {
+    const clearedTasks = await callApi<Task[]>('', {
+      method: Method.DELETE,
+      body: { filter: true },
+    });
+    this.props.deleteMultipleTasks(clearedTasks);
   }
 
   render() {
@@ -71,4 +80,10 @@ class TodoAppFooter extends React.Component<IProps, IState> {
   }
 }
 
-export default TodoAppFooter;
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    count: state.tasks.list.length,
+    completedCount: state.tasks.list.filter((task) => task.isChecked).length,
+  };
+};
+export default connect(mapStateToProps, { deleteMultipleTasks })(TodoAppFooter);

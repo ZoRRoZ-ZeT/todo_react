@@ -10,6 +10,7 @@ module.exports = {
       '@type': path.resolve(__dirname, './src/types/'),
       '@constants': path.resolve(__dirname, './src/constants/'),
       '@apis': path.resolve(__dirname, './src/api/'),
+      '@store': path.resolve(__dirname, './src/store/'),
     },
   },
   module: {

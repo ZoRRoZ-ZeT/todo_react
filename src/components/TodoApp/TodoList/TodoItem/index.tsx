@@ -3,12 +3,15 @@ import clsx from 'clsx';
 import TodoInput from './TodoInput';
 import Dropdown from './Dropdown/index';
 import { Task } from '@type/todo.types';
-import { Priority } from '@type/index.types';
+import { Method, Priority } from '@type/index.types';
+import { connect } from 'react-redux';
+import { deleteTask, updateTask } from '@store/actions/tasks';
+import { callApi } from '@apis/todos';
 
 interface IProps {
   task: Task;
-  onDelete: (id: string) => void;
-  onSubmit: (task: Task) => void;
+  updateTask: (task: Task) => void;
+  deleteTask: (id: string) => void;
 }
 interface IState {
   isClicked: boolean;
@@ -35,8 +38,11 @@ class TodoItem extends React.Component<IProps, IState> {
     };
   }
 
-  handleDeleteClick() {
-    this.props.onDelete(this.props.task.id);
+  async handleDeleteClick() {
+    const deletedTask = await callApi<Task>(`/${this.props.task.id}`, {
+      method: Method.DELETE,
+    });
+    this.props.deleteTask(deletedTask.id);
   }
 
   handleInputChange(value: string) {
@@ -45,14 +51,18 @@ class TodoItem extends React.Component<IProps, IState> {
     });
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     this.setState({
       isEditing: false,
     });
-    const updatedTask = this.props.task;
-    updatedTask.value = this.state.currentValue;
-
-    this.props.onSubmit(updatedTask);
+    const updatedTaskFromApi = await callApi<Task>('', {
+      method: Method.PUT,
+      body: {
+        ...this.props.task,
+        value: this.state.currentValue,
+      },
+    });
+    this.props.updateTask(updatedTaskFromApi);
   }
 
   handleInputClick() {
@@ -73,18 +83,26 @@ class TodoItem extends React.Component<IProps, IState> {
     }, 200);
   }
 
-  handleToggleChange(event: ChangeEvent<HTMLInputElement>) {
-    const updatedTask = this.props.task;
-    updatedTask.isChecked = event.target.checked;
-
-    this.props.onSubmit(updatedTask);
+  async handleToggleChange(event: ChangeEvent<HTMLInputElement>) {
+    const updatedTaskFromApi = await callApi<Task>('', {
+      method: Method.PUT,
+      body: {
+        ...this.props.task,
+        isChecked: event.target.checked,
+      },
+    });
+    this.props.updateTask(updatedTaskFromApi);
   }
 
-  handleChangePriority(value: Priority) {
-    const updatedTask = this.props.task;
-    updatedTask.priority = value;
-
-    this.props.onSubmit(updatedTask);
+  async handleChangePriority(value: Priority) {
+    const updatedTaskFromApi = await callApi<Task>('', {
+      method: Method.PUT,
+      body: {
+        ...this.props.task,
+        priority: value,
+      },
+    });
+    this.props.updateTask(updatedTaskFromApi);
   }
 
   render() {
@@ -129,4 +147,4 @@ class TodoItem extends React.Component<IProps, IState> {
   }
 }
 
-export default TodoItem;
+export default connect(null, { deleteTask, updateTask })(TodoItem);
