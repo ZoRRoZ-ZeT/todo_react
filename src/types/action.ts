@@ -1,6 +1,6 @@
 import { Task } from './todo.types';
 
-export enum TodoAction {
+export enum TodoActionType {
   ADD_TASK = 'ADD_TASK',
   DELETE_TASK = 'DELETE_TASK',
   DELETE_MULTIPLE = 'DELETE_MULTIPLE',
@@ -9,43 +9,34 @@ export enum TodoAction {
   SET_TASK_LIST = 'SET_TASK_LIST',
 }
 
-interface IAction<Type> {
-  type: Type;
-}
+export type IAction<TType extends TodoActionType, TPayload extends unknown> = {
+  type: TType;
+  payload?: TPayload;
+};
 
-export interface AddTaskAction extends IAction<TodoAction.ADD_TASK> {
-  payload: {
-    task: Task;
-  };
-}
-export interface DeleteTaskAction extends IAction<TodoAction.DELETE_TASK> {
-  payload: {
-    id: string;
-  };
-}
-export interface DeleteMultipleTasksAction
-  extends IAction<TodoAction.DELETE_MULTIPLE> {
-  payload: {
-    tasks: Task[];
-  };
-}
-export interface ToggleTasksAction extends IAction<TodoAction.TOGGLE_TASKS> {
-  payload: {
-    fillValue: boolean;
-  };
-}
-export interface UpdateTaskAction extends IAction<TodoAction.UPDATE_TASK> {
-  payload: {
-    task: Task;
-  };
-}
-export interface SetTaskListAction extends IAction<TodoAction.SET_TASK_LIST> {
-  payload: {
-    tasks: Task[];
-  };
-}
+export type AddTaskAction = IAction<TodoActionType.ADD_TASK, { task: Task }>;
+export type DeleteTaskAction = IAction<
+  TodoActionType.DELETE_TASK,
+  { id: string }
+>;
+export type DeleteMultipleTasksAction = IAction<
+  TodoActionType.DELETE_MULTIPLE,
+  { tasks: Task[] }
+>;
+export type ToggleTasksAction = IAction<
+  TodoActionType.TOGGLE_TASKS,
+  { fillValue: boolean }
+>;
+export type UpdateTaskAction = IAction<
+  TodoActionType.UPDATE_TASK,
+  { task: Task }
+>;
+export type SetTaskListAction = IAction<
+  TodoActionType.SET_TASK_LIST,
+  { tasks: Task[] }
+>;
 
-export type Action =
+export type TodoAction =
   | AddTaskAction
   | DeleteTaskAction
   | DeleteMultipleTasksAction

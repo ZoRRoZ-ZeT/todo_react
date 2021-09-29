@@ -1,4 +1,4 @@
-import { Action, TodoAction } from '@type/action';
+import { TodoAction, TodoActionType } from '@type/action';
 import { Task, TodoState } from '@type/todo.types';
 import { Reducer } from 'redux';
 
@@ -6,12 +6,12 @@ const initialState: TodoState = {
   list: [],
 };
 
-const reducer: Reducer<TodoState, Action> = (
+const reducer: Reducer<TodoState, TodoAction> = (
   state: TodoState = initialState,
-  action: Action
+  action: TodoAction
 ) => {
   switch (action.type) {
-    case TodoAction.ADD_TASK: {
+    case TodoActionType.ADD_TASK: {
       return {
         list: [
           ...state.list,
@@ -21,12 +21,12 @@ const reducer: Reducer<TodoState, Action> = (
         ],
       };
     }
-    case TodoAction.DELETE_TASK: {
+    case TodoActionType.DELETE_TASK: {
       return {
         list: state.list.filter((task) => task.id !== action.payload.id),
       };
     }
-    case TodoAction.DELETE_MULTIPLE: {
+    case TodoActionType.DELETE_MULTIPLE: {
       return {
         list: state.list.filter(
           (task) =>
@@ -36,7 +36,7 @@ const reducer: Reducer<TodoState, Action> = (
         ),
       };
     }
-    case TodoAction.TOGGLE_TASKS: {
+    case TodoActionType.TOGGLE_TASKS: {
       return {
         list: [
           ...state.list.map((task) => ({
@@ -46,7 +46,7 @@ const reducer: Reducer<TodoState, Action> = (
         ],
       };
     }
-    case TodoAction.UPDATE_TASK: {
+    case TodoActionType.UPDATE_TASK: {
       return {
         list: [
           ...state.list.map((task) =>
@@ -59,7 +59,7 @@ const reducer: Reducer<TodoState, Action> = (
         ],
       };
     }
-    case TodoAction.SET_TASK_LIST: {
+    case TodoActionType.SET_TASK_LIST: {
       return {
         list: [...action.payload.tasks],
       };
