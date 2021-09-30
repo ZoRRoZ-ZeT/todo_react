@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { Status } from '@type/index.types';
+import Tooltip from '@components/Tooltip';
 
 interface IProps {
   filter: Status;
@@ -24,15 +25,17 @@ class FilterButton extends React.Component<IProps, IState> {
 
   render() {
     return (
-      <button
-        className={clsx({
-          filters__button: true,
-          active: this.props.isActive,
-        })}
-        onClick={this.handleClick}
-      >
-        {this.props.name}
-      </button>
+      <Tooltip title={`Show ${this.props.name.toLocaleLowerCase()} tasks`}>
+        <button
+          className={clsx({
+            filters__button: true,
+            active: this.props.isActive,
+          })}
+          onClick={this.handleClick}
+        >
+          {this.props.name}
+        </button>
+      </Tooltip>
     );
   }
 }

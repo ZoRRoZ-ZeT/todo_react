@@ -1,4 +1,4 @@
-@import "./TodoItem/index.scss";
+@import './TodoItem/index.scss';
 
 .task-list {
   border-top: 1px solid #e6e6e6;
@@ -10,9 +10,15 @@
     background-color: #fff;
     border-bottom: 1px solid #ededed;
     color: #4d4d4d;
+    transition: 0.2s box-shadow;
 
-    &:hover .destroy{
-        visibility: visible;
+    &:hover .destroy {
+      visibility: visible;
+    }
+
+    &:active {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+      z-index: 3;
     }
   }
 

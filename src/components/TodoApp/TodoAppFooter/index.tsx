@@ -8,6 +8,7 @@ import { deleteMultipleTasks } from '@store/actions/tasks';
 import { Task } from '@type/todo.types';
 import { callApi } from '@apis/todos';
 import { ApplicationState } from '@store/index';
+import Tooltip from '@components/Tooltip';
 
 interface IProps {
   count: number;
@@ -66,15 +67,17 @@ class TodoAppFooter extends React.Component<IProps, IState> {
             isActive={this.props.currentFilter === Status.COMPLETED}
           />
         </div>
-        <span
-          className={clsx({
-            footer__clear: true,
-            hidden: !this.props.completedCount,
-          })}
-          onClick={this.handleClearClick}
-        >
-          Clear completed
-        </span>
+        <Tooltip title="Clear completed tasks">
+          <span
+            className={clsx({
+              footer__clear: true,
+              hidden: !this.props.completedCount,
+            })}
+            onClick={this.handleClearClick}
+          >
+            Clear completed
+          </span>
+        </Tooltip>
       </div>
     ) : null;
   }

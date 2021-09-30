@@ -4,6 +4,7 @@ import { callApi } from '@apis/todos';
 import { Method } from '@type/index.types';
 import { connect } from 'react-redux';
 import { toggleTasks } from '@store/actions/tasks';
+import Tooltip from '@components/Tooltip';
 
 interface IProps {
   toggleTasks: (fillValue: boolean) => void;
@@ -29,15 +30,17 @@ class Toggler extends React.Component<IProps, IState> {
 
   render() {
     return (
-      <button
-        type="button"
-        className={clsx({
-          'add-form__toggler': true,
-          'form-toggler': true,
-          'all-checked': this.props.isActive,
-        })}
-        onClick={this.handleClick}
-      ></button>
+      <Tooltip title="Toggle all tasks">
+        <button
+          type="button"
+          className={clsx({
+            'add-form__toggler': true,
+            'form-toggler': true,
+            'all-checked': this.props.isActive,
+          })}
+          onClick={this.handleClick}
+        ></button>
+      </Tooltip>
     );
   }
 }

@@ -1,8 +1,8 @@
-@import "./TodoHeaderInput/index.scss";
+@import './TodoHeaderInput/index.scss';
 
 .add-form {
   &__toggler {
-    position: absolute;
+    position: relative;
     border: none;
     margin-left: 10px;
     margin-top: 9px;
@@ -12,7 +12,7 @@
   &__input {
     width: 100%;
     outline: none;
-    transition: 0.3s all;   
+    transition: 0.3s all;
   }
 }
 
@@ -28,6 +28,6 @@
   }
 
   &.all-checked::before {
-    color: #737373
+    color: #737373;
   }
 }

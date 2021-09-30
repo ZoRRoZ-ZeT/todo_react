@@ -64,6 +64,14 @@ const reducer: Reducer<TodoState, TodoAction> = (
         list: [...action.payload.tasks],
       };
     }
+    case TodoActionType.CHANGE_ORDER: {
+      const newOrderList = [...state.list];
+      const [removed] = newOrderList.splice(action.payload.sourceId, 1);
+      newOrderList.splice(action.payload.destionationId, 0, removed);
+      return {
+        list: [...newOrderList],
+      };
+    }
     default:
       return state;
   }

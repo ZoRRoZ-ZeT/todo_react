@@ -5,6 +5,7 @@ export interface Task {
   value: string;
   isChecked: boolean;
   priority: Priority;
+  sort: number;
 }
 
 export interface TodoState {
