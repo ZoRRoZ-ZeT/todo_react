@@ -1,17 +1,28 @@
-import { TodoAction, TodoActionType } from '@type/action';
-import { Task, TodoState } from '@type/todo.types';
+import {
+  addTaskAction,
+  deleteMultipleTasksAction,
+  deleteTaskAction,
+  fetchTasksAction,
+  reorderTaskAction,
+  toggleTasksAction,
+  updateTaskAction,
+} from '@store/actions/tasks';
+import { FailedType, SuccessType } from '@type/action';
+import { TodoState } from '@type/todo.types';
 import { Reducer } from 'redux';
 
 const initialState: TodoState = {
   list: [],
 };
 
-const reducer: Reducer<TodoState, TodoAction> = (
+type ActionType = SuccessType | FailedType;
+
+const reducer: Reducer<TodoState, ActionType> = (
   state: TodoState = initialState,
-  action: TodoAction
+  action: ActionType
 ) => {
   switch (action.type) {
-    case TodoActionType.ADD_TASK: {
+    case addTaskAction.types.SUCCESS: {
       return {
         list: [
           ...state.list,
@@ -21,22 +32,31 @@ const reducer: Reducer<TodoState, TodoAction> = (
         ],
       };
     }
-    case TodoActionType.DELETE_TASK: {
+    case updateTaskAction.types.SUCCESS: {
       return {
-        list: state.list.filter((task) => task.id !== action.payload.id),
+        list: [
+          ...state.list.map((task) =>
+            task.id === action.payload.task.id ? action.payload.task : task
+          ),
+        ],
       };
     }
-    case TodoActionType.DELETE_MULTIPLE: {
+    case deleteTaskAction.types.SUCCESS: {
+      return {
+        list: state.list.filter((task) => task.id !== action.payload.task.id),
+      };
+    }
+    case deleteMultipleTasksAction.types.SUCCESS: {
       return {
         list: state.list.filter(
           (task) =>
             !action.payload.tasks.some(
-              (clearedTask: Task) => clearedTask.id === task.id
+              (clearedTask) => clearedTask.id === task.id
             )
         ),
       };
     }
-    case TodoActionType.TOGGLE_TASKS: {
+    case toggleTasksAction.types.SUCCESS: {
       return {
         list: [
           ...state.list.map((task) => ({
@@ -46,31 +66,39 @@ const reducer: Reducer<TodoState, TodoAction> = (
         ],
       };
     }
-    case TodoActionType.UPDATE_TASK: {
-      return {
-        list: [
-          ...state.list.map((task) =>
-            task.id === action.payload.task.id
-              ? {
-                  ...action.payload.task,
-                }
-              : task
-          ),
-        ],
-      };
-    }
-    case TodoActionType.SET_TASK_LIST: {
+    case fetchTasksAction.types.SUCCESS: {
       return {
         list: [...action.payload.tasks],
       };
     }
-    case TodoActionType.CHANGE_ORDER: {
-      const newOrderList = [...state.list];
-      const [removed] = newOrderList.splice(action.payload.sourceId, 1);
-      newOrderList.splice(action.payload.destionationId, 0, removed);
-      return {
-        list: [...newOrderList],
-      };
+
+    case addTaskAction.types.FAILED: {
+      console.log(`ERROR:TASK_ADD -> ${action.payload.error}`);
+      return state;
+    }
+    case updateTaskAction.types.FAILED: {
+      console.log(`ERROR:UPDATE_ADD -> ${action.payload.error}`);
+      return state;
+    }
+    case deleteTaskAction.types.FAILED: {
+      console.log(`ERROR:UPDATE_ADD -> ${action.payload.error}`);
+      return state;
+    }
+    case deleteMultipleTasksAction.types.FAILED: {
+      console.log(`ERROR:UPDATE_ADD -> ${action.payload.error}`);
+      return state;
+    }
+    case toggleTasksAction.types.FAILED: {
+      console.log(`ERROR:UPDATE_ADD -> ${action.payload.error}`);
+      return state;
+    }
+    case fetchTasksAction.types.FAILED: {
+      console.log(`ERROR:UPDATE_ADD -> ${action.payload.error}`);
+      return state;
+    }
+    case reorderTaskAction.types.FAILED: {
+      console.log(`ERROR:UPDATE_ADD -> ${action.payload.error}`);
+      return state;
     }
     default:
       return state;

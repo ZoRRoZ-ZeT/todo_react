@@ -1,66 +1,56 @@
-import {
-  AddTaskAction,
-  ChangeOrderAction,
-  DeleteMultipleTasksAction,
-  DeleteTaskAction,
-  SetTaskListAction,
-  TodoActionType,
-  ToggleTasksAction,
-  UpdateTaskAction,
-} from '@type/action';
+import { createAsyncAction } from '@type/action';
+import { Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
 
-export const addTask = (task: Task): AddTaskAction => ({
-  type: TodoActionType.ADD_TASK,
-  payload: {
-    task,
-  },
-});
+export const addTaskAction = createAsyncAction<
+  'ADD_TASK',
+  { value: string },
+  { task: Task },
+  { error: string }
+>('ADD_TASK');
 
-export const deleteTask = (id: string): DeleteTaskAction => ({
-  type: TodoActionType.DELETE_TASK,
-  payload: {
-    id,
-  },
-});
+export const updateTaskAction = createAsyncAction<
+  'UPDATE_TASK',
+  { [key in keyof Task]: Task[`${key}`] },
+  { task: Task },
+  { error: string }
+>('UPDATE_TASK');
 
-export const deleteMultipleTasks = (
-  tasks: Task[]
-): DeleteMultipleTasksAction => ({
-  type: TodoActionType.DELETE_MULTIPLE,
-  payload: {
-    tasks,
-  },
-});
+export const deleteTaskAction = createAsyncAction<
+  'DELETE_TASK',
+  { id: string },
+  { task: Task },
+  { error: string }
+>('DELETE_TASK');
 
-export const toggleTasks = (fillValue: boolean): ToggleTasksAction => ({
-  type: TodoActionType.TOGGLE_TASKS,
-  payload: {
-    fillValue,
-  },
-});
+export const deleteMultipleTasksAction = createAsyncAction<
+  'DELETE_MULTIPLE_TASKS',
+  { filter: true },
+  { tasks: Task[] },
+  { error: string }
+>('DELETE_MULTIPLE_TASKS');
 
-export const updateTask = (task: Task): UpdateTaskAction => ({
-  type: TodoActionType.UPDATE_TASK,
-  payload: {
-    task,
-  },
-});
+export const toggleTasksAction = createAsyncAction<
+  'TOGGLE_TASKS',
+  null,
+  { fillValue: boolean },
+  { error: string }
+>('TOGGLE_TASKS');
 
-export const setTaskList = (tasks: Task[]): SetTaskListAction => ({
-  type: TodoActionType.SET_TASK_LIST,
-  payload: {
-    tasks,
-  },
-});
+export const fetchTasksAction = createAsyncAction<
+  'FETCH_TASKS',
+  null,
+  { tasks: Task[] },
+  { error: string }
+>('FETCH_TASKS');
 
-export const changeOrderList = (
-  sourceId: number,
-  destionationId: number
-): ChangeOrderAction => ({
-  type: TodoActionType.CHANGE_ORDER,
-  payload: {
-    sourceId,
-    destionationId,
+export const reorderTaskAction = createAsyncAction<
+  'REORDER_TASK',
+  {
+    draggedIndex: number;
+    droppedIndex: number;
+    onFailure?: (oldTask: Task) => void;
   },
-});
+  null,
+  { error: string }
+>('REORDER_TASK');

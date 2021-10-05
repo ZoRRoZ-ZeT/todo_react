@@ -7,36 +7,23 @@ interface IProps {
   name: string;
   onItemClick: (value: string) => void;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
 
-class DropdownItem extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+const DropdownItem = React.memo(function DropdownItem(props: IProps) {
+  const handleClick = () => {
+    props.onItemClick(props.value);
+  };
 
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.props.onItemClick(this.props.value);
-  }
-
-  render() {
-    return (
+  return (
+    <div className="content-list__item dropdown-item" onClick={handleClick}>
       <div
-        className="content-list__item dropdown-item"
-        onClick={this.handleClick}
-      >
-        <div
-          className={clsx({
-            'dropdown-item__marker': true,
-            [`mark-${this.props.value}`]: true,
-          })}
-        ></div>
-        <span className="dropdown-item__caption">{this.props.name}</span>
-      </div>
-    );
-  }
-}
+        className={clsx({
+          'dropdown-item__marker': true,
+          [`mark-${props.value}`]: true,
+        })}
+      ></div>
+      <span className="dropdown-item__caption">{props.name}</span>
+    </div>
+  );
+});
 
 export default DropdownItem;

@@ -1,58 +1,46 @@
 import Tooltip from '@components/Tooltip';
 import { ApplicationState } from '@store/index';
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Task } from '../../../types/todo.types';
 import TodoModalWindow from './ModalWindow/index';
+import './index.scss';
 
 interface IProps {
   tasks: Task[];
   filtering: (item: Task) => boolean;
 }
-interface IState {
-  isShowModal: boolean;
-}
 
-class TodoModal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+const TodoModal = React.memo(function TodoModal(props: IProps) {
+  const [isShowModal, setShowModal] = useState(false);
 
-    this.handleToggleModal = this.handleToggleModal.bind(this);
+  const filteredTasks = useMemo(
+    () => (props.filtering ? props.tasks.filter(props.filtering) : props.tasks),
+    [props.tasks, props.filtering]
+  );
 
-    this.state = {
-      isShowModal: false,
-    };
-  }
+  const handleToggleModal = useCallback(() => {
+    setShowModal(!isShowModal);
+  }, [isShowModal]);
 
-  handleToggleModal() {
-    this.setState((prevState) => ({
-      isShowModal: !prevState.isShowModal,
-    }));
-  }
-
-  render() {
-    const filteredTasks = this.props.filtering
-      ? this.props.tasks.filter(this.props.filtering)
-      : this.props.tasks;
-    return (
-      <div className="modal">
-        <Tooltip title="Open modal with Pie-Chart">
-          <button
-            className="modal__button button-animate"
-            onClick={this.handleToggleModal}
-          >
-            Open Modal
-          </button>
-        </Tooltip>
-        <TodoModalWindow
-          tasks={filteredTasks}
-          isActive={this.state.isShowModal}
-          onToggleModal={this.handleToggleModal}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="modal">
+      <Tooltip title="Open modal with Pie-Chart">
+        <button
+          className="modal__button button-animate"
+          onClick={handleToggleModal}
+        >
+          Open Modal
+        </button>
+      </Tooltip>
+      <TodoModalWindow
+        tasks={filteredTasks}
+        isActive={isShowModal}
+        onToggleModal={handleToggleModal}
+      />
+    </div>
+  );
+});
 
 const mapStateToProps = (state: ApplicationState) => ({
   tasks: state.tasks.list,

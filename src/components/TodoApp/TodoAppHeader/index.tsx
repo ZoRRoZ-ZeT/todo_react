@@ -1,69 +1,41 @@
-import { callApi } from '@apis/todos';
-import { addTask } from '@store/actions/tasks';
+import { addTaskAction } from '@store/actions/tasks';
 import { ApplicationState } from '@store/index';
-import { Method } from '@type/index.types';
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Task } from '../../../types/todo.types';
 import TodoHeaderInput from './TodoHeaderInput/index';
 import Toggler from './Toggler';
+import './index.scss';
 
 interface IProps {
   isTasksExist: boolean;
   isTasksCompleted: boolean;
-  addTask: (task: Task) => void;
-}
-interface IState {
-  inputValue: string;
+  addTask: typeof addTaskAction.request;
 }
 
-class TodoAppHeader extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+const TodoAppHeader = React.memo(function TodoAppHeader(props: IProps) {
+  const [inputValue, setValue] = useState<string>('');
 
-    this.handleInputChanged = this.handleInputChanged.bind(this);
-    this.handleEnterPressed = this.handleEnterPressed.bind(this);
-
-    this.state = {
-      inputValue: '',
-    };
-  }
-
-  handleInputChanged(value: string) {
-    this.setState({
-      inputValue: value,
-    });
-  }
-
-  async handleEnterPressed() {
-    if (this.state.inputValue.trim() === '') {
+  const handleEnterPressed = () => {
+    if (inputValue.trim() === '') {
       return;
     }
-    const createdTask = await callApi<Task>('', {
-      method: Method.POST,
-      body: { value: this.state.inputValue },
-    });
-    this.props.addTask(createdTask);
-    this.setState({
-      inputValue: '',
-    });
-  }
+    props.addTask({ value: inputValue });
+    setValue('');
+  };
 
-  render() {
-    return (
-      <div className="body__input add-form">
-        {this.props.isTasksExist ? (
-          <Toggler isActive={this.props.isTasksCompleted} />
-        ) : null}
-        <TodoHeaderInput
-          value={this.state.inputValue}
-          onInputChanged={this.handleInputChanged}
-          onEnterPressed={this.handleEnterPressed}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="body__input add-form">
+      {props.isTasksExist ? (
+        <Toggler isActive={props.isTasksCompleted} />
+      ) : null}
+      <TodoHeaderInput
+        value={inputValue}
+        onInputChanged={(value: string) => setValue(value)}
+        onEnterPressed={handleEnterPressed}
+      />
+    </div>
+  );
+});
 
 const mapStateToProps = (state: ApplicationState) => {
   return {
@@ -73,4 +45,6 @@ const mapStateToProps = (state: ApplicationState) => {
   };
 };
 
-export default connect(mapStateToProps, { addTask })(TodoAppHeader);
+export default connect(mapStateToProps, {
+  addTask: addTaskAction.request,
+})(TodoAppHeader);

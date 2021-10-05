@@ -1,31 +1,28 @@
 import React from 'react';
 import { ChartData } from '@type/index.types';
+import './index.scss';
 
 interface IProps {
   data: ChartData;
   palette: Array<string>;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
 
-class ChartLegend extends React.Component<IProps, IState> {
-  render() {
-    return (
-      <div className="legend">
-        {this.props.data.map((chartData, index) => (
-          <div key={`${chartData}/${index}`} className="legend__item">
-            <div
-              className="item-mark"
-              style={{
-                background: this.props.palette[index],
-              }}
-            ></div>
-            <span>{chartData.dataName}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-}
+const ChartLegend = React.memo(function ChartLegend(props: IProps) {
+  return (
+    <div className="legend">
+      {props.data.map((chartData, index) => (
+        <div key={`${chartData}/${index}`} className="legend__item">
+          <div
+            className="item-mark"
+            style={{
+              background: props.palette[index],
+            }}
+          ></div>
+          <span>{chartData.dataName}</span>
+        </div>
+      ))}
+    </div>
+  );
+});
 
 export default ChartLegend;

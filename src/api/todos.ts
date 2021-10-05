@@ -21,5 +21,6 @@ export async function callApi<Type>(
     return data.payload as Type;
   }
   const error = await response.json();
+  console.log(error);
   throw error;
 }

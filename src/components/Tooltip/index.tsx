@@ -1,68 +1,57 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import './index.scss';
 
 interface IProps {
   title: string;
 }
 
-interface IState {
-  isHovered: boolean;
-  isClosing: boolean;
-}
+const Tooltip: React.FunctionComponent<IProps> = React.memo(function Tooltip(
+  props
+) {
+  const [isHovered, setHovered] = useState(false);
 
-class Tooltip extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+  const closing = useRef(false);
+  const closingTimer = useRef(null);
 
-    this.handleHover = this.handleHover.bind(this);
-    this.handleUnhover = this.handleUnhover.bind(this);
-
-    this.state = {
-      isHovered: false,
-      isClosing: false,
+  const handleHover = () => {
+    setHovered(true);
+    closing.current = false;
+  };
+  useEffect(() => {
+    return () => {
+      clearTimeout(closingTimer.current);
     };
-  }
+  }, []);
 
-  handleHover() {
-    this.setState({
-      isHovered: true,
-      isClosing: false,
-    });
-  }
-
-  handleUnhover() {
-    this.setState({
-      isClosing: true,
-    });
-    setTimeout(() => {
-      if (this.state.isClosing) {
-        this.setState({
-          isHovered: false,
-        });
+  const handleUnhover = () => {
+    closing.current = true;
+    closingTimer.current = setTimeout(() => {
+      if (closing && closing.current) {
+        setHovered(false);
+        closing.current = false;
       }
     }, 100);
-  }
+  };
 
-  render() {
-    return (
-      <div className="tooltip-wrapper" onMouseLeave={this.handleUnhover}>
-        <div className="content" onMouseEnter={this.handleHover}>
-          {this.props.children}
-        </div>
-        <div
-          className={clsx({
-            'tooltip-content': true,
-            hovered: this.state.isHovered,
-          })}
-          onMouseEnter={this.handleHover}
-          onMouseLeave={this.handleUnhover}
-        >
-          {this.props.title}
-        </div>
+  return (
+    <div className="tooltip-wrapper" onMouseLeave={handleUnhover}>
+      <div className="content" onMouseEnter={handleHover}>
+        {props.children}
       </div>
-    );
-  }
-}
+      <div
+        className={clsx({
+          'tooltip-content': true,
+          hovered: isHovered,
+        })}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleUnhover}
+      >
+        {props.title}
+      </div>
+    </div>
+  );
+});
 
 export default Tooltip;

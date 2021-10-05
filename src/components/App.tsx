@@ -2,10 +2,8 @@
 import React from 'react';
 import TodoApp from './TodoApp/index';
 
-class App extends React.Component {
-  render() {
-    return <TodoApp />;
-  }
-}
+const App = () => {
+  return <TodoApp />;
+};
 
 export default App;

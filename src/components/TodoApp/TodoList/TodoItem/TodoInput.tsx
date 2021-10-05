@@ -5,48 +5,32 @@ interface IProps {
   onChange: (value: string) => void;
   onSubmit: () => void;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
 
-class TodoInput extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.handleInputSubmit = this.handleInputSubmit.bind(this);
-    this.handleInputPress = this.handleInputPress.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  handleInputSubmit() {
-    if (this.props.value.trim() === '') {
+const TodoInput = React.memo(function TodoInput(props: IProps) {
+  const handleInputSubmit = () => {
+    if (props.value.trim() === '') {
       return;
     }
 
-    this.props.onSubmit();
-  }
+    props.onSubmit();
+  };
 
-  handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    this.props.onChange(event.target.value);
-  }
-
-  handleInputPress(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Enter') {
-      this.handleInputSubmit();
-    }
-  }
-
-  render() {
-    return (
-      <input
-        className="item__edit"
-        onKeyDown={this.handleInputPress}
-        onChange={this.handleInputChange}
-        onBlur={this.handleInputSubmit}
-        value={this.props.value}
-        autoFocus
-      />
-    );
-  }
-}
+  return (
+    <input
+      className="item__edit"
+      onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+          handleInputSubmit();
+        }
+      }}
+      onChange={(event: ChangeEvent<HTMLInputElement>) =>
+        props.onChange(event.target.value)
+      }
+      onBlur={handleInputSubmit}
+      value={props.value}
+      autoFocus
+    />
+  );
+});
 
 export default TodoInput;

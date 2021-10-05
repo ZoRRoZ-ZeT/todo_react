@@ -1,31 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChartData, Sector } from 'types/index.types';
+import './index.scss';
 
 interface IProps {
   data: ChartData;
   palette: Array<string>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {
-  gradientColor: string;
-}
+const PieChart = React.memo(function PieChart(props: IProps) {
+  const [gradientColor, setGradientColor] = useState('conic-gradient(white)');
 
-class PieChart extends React.Component<IProps, IState> {
-  sectors: Sector[];
-
-  constructor(props: IProps) {
-    super(props);
-
-    this.sectors = [];
-
-    this.state = {
-      gradientColor: 'conic-gradient(white)',
-    };
-  }
-
-  componentDidMount() {
-    const totalCount = this.props.data.reduce(
+  useEffect(() => {
+    const totalCount = props.data.reduce(
       (result, item) => result + item.dataValue,
       0
     );
@@ -33,12 +19,12 @@ class PieChart extends React.Component<IProps, IState> {
     let currentFill = 0;
     let paletteIndex = 0;
 
-    this.sectors = this.props.data.reduce((resultSectors, dataSector) => {
+    const sectors = props.data.reduce((resultSectors, dataSector) => {
       const filling = (dataSector.dataValue / totalCount) * 100;
       const sectors = [
         ...resultSectors,
         {
-          color: this.props.palette[paletteIndex++],
+          color: props.palette[paletteIndex++],
           name: dataSector.dataName,
           start: currentFill,
           end: currentFill + (dataSector.dataValue / totalCount) * 100,
@@ -46,33 +32,31 @@ class PieChart extends React.Component<IProps, IState> {
       ];
       currentFill += filling;
       return sectors;
-    }, []);
+    }, [] as Sector[]);
 
-    const gradient = this.sectors.reduce(
+    const gradient = sectors.reduce(
       (result, sector) =>
         result + `${sector.color} ${sector.start}% ${sector.end}%, `,
       ''
     );
+    const color = gradient
+      ? `conic-gradient(${gradient.slice(0, -2)})`
+      : 'none';
+    setGradientColor(color);
+  }, [props.data, props.palette]);
 
-    this.setState({
-      gradientColor: `conic-gradient(${gradient.slice(0, -2)})`,
-    });
-  }
-
-  render() {
-    return (
-      <div className="wrapper">
-        <div
-          className="pie-chart"
-          style={{
-            background: this.state.gradientColor,
-          }}
-        ></div>
-        <div className="pie-chart-hover"></div>
-        <div className="tooltip"></div>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="wrapper">
+      <div
+        className="pie-chart"
+        style={{
+          background: gradientColor,
+        }}
+      ></div>
+      <div className="pie-chart-hover"></div>
+      <div className="tooltip"></div>
+    </div>
+  );
+});
 
 export default PieChart;
