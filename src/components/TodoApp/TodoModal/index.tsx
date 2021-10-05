@@ -1,3 +1,4 @@
+import Tooltip from '@components/Tooltip';
 import { ApplicationState } from '@store/index';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -35,12 +36,14 @@ class TodoModal extends React.Component<IProps, IState> {
       : this.props.tasks;
     return (
       <div className="modal">
-        <button
-          className="modal__button button-animate"
-          onClick={this.handleToggleModal}
-        >
-          Open Modal
-        </button>
+        <Tooltip title="Open modal with Pie-Chart">
+          <button
+            className="modal__button button-animate"
+            onClick={this.handleToggleModal}
+          >
+            Open Modal
+          </button>
+        </Tooltip>
         <TodoModalWindow
           tasks={filteredTasks}
           isActive={this.state.isShowModal}

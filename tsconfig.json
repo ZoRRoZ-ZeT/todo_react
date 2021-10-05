@@ -11,7 +11,8 @@
       "@type/*": ["./types/*"],
       "@apis/*": ["./api/*"],
       "@constants/*": ["./constants/*"],
-      "@store/*": ["./store/*"]
+      "@store/*": ["./store/*"],
+      "@components/*": ["./components/*"]
     },
     "allowJs": true,
     "moduleResolution": "node",

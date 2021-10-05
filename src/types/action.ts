@@ -7,6 +7,7 @@ export enum TodoActionType {
   TOGGLE_TASKS = 'TOGGLE_TASKS',
   UPDATE_TASK = 'UPDATE_TASK',
   SET_TASK_LIST = 'SET_TASK_LIST',
+  CHANGE_ORDER = 'CHANGE_ORDER',
 }
 
 export type IAction<TType extends TodoActionType, TPayload extends unknown> = {
@@ -35,11 +36,18 @@ export type SetTaskListAction = IAction<
   TodoActionType.SET_TASK_LIST,
   { tasks: Task[] }
 >;
-
+export type ChangeOrderAction = IAction<
+  TodoActionType.CHANGE_ORDER,
+  {
+    sourceId: number;
+    destionationId: number;
+  }
+>;
 export type TodoAction =
   | AddTaskAction
   | DeleteTaskAction
   | DeleteMultipleTasksAction
   | ToggleTasksAction
   | UpdateTaskAction
-  | SetTaskListAction;
+  | SetTaskListAction
+  | ChangeOrderAction;

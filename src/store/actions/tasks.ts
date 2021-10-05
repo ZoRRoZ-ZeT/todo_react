@@ -1,5 +1,6 @@
 import {
   AddTaskAction,
+  ChangeOrderAction,
   DeleteMultipleTasksAction,
   DeleteTaskAction,
   SetTaskListAction,
@@ -50,5 +51,16 @@ export const setTaskList = (tasks: Task[]): SetTaskListAction => ({
   type: TodoActionType.SET_TASK_LIST,
   payload: {
     tasks,
+  },
+});
+
+export const changeOrderList = (
+  sourceId: number,
+  destionationId: number
+): ChangeOrderAction => ({
+  type: TodoActionType.CHANGE_ORDER,
+  payload: {
+    sourceId,
+    destionationId,
   },
 });

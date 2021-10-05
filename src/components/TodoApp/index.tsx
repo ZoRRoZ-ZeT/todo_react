@@ -8,10 +8,11 @@ import { Task } from '@type/todo.types';
 import { mapPath } from '@constants/index';
 import { callApi } from '@apis/todos';
 import { connect } from 'react-redux';
-import { setTaskList } from '@store/actions/tasks';
+import { changeOrderList, setTaskList } from '@store/actions/tasks';
 
 interface IProps {
   setTaskList: (tasks: Task[]) => void;
+  changeOrderList: (sourceId: number, destionationId: number) => void;
 }
 interface IState {
   filter: string;
@@ -70,4 +71,4 @@ class TodoApp extends React.Component<IProps, IState> {
     );
   }
 }
-export default connect(null, { setTaskList })(TodoApp);
+export default connect(null, { setTaskList, changeOrderList })(TodoApp);
