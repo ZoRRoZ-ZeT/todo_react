@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import clsx from 'clsx';
 import FilterButton from './FilterButton';
 import { connect } from 'react-redux';
@@ -16,51 +16,70 @@ interface IProps {
   deleteMultipleTasks: typeof deleteMultipleTasksAction.request;
 }
 
-const TodoAppFooter = React.memo(function TodoAppFooter(props: IProps) {
-  const handleFilterChange = (value: Status) => {
-    props.onChangeFilter(value);
-    window.history.pushState('', '', `/${value.toLowerCase()}`);
-  };
+const TodoAppFooter = ({
+  count,
+  completedCount,
+  currentFilter,
+  onChangeFilter,
+  deleteMultipleTasks,
+}: IProps) => {
+  const itemsLeft = useMemo(
+    () => count - completedCount,
+    [count, completedCount]
+  );
 
-  return props.count > 0 ? (
+  const handleFilterChange = useCallback(
+    (value: Status) => {
+      onChangeFilter(value);
+      window.history.pushState('', '', `/${value.toLowerCase()}`);
+    },
+    [onChangeFilter]
+  );
+
+  const handleDeleteMultiple = useCallback(
+    () => deleteMultipleTasks({ filter: true }),
+    [deleteMultipleTasks]
+  );
+
+  return count > 0 ? (
     <div className="footer" id="footer">
       <span className="footer__count" id="count">
-        {props.count - props.completedCount} items
+        {itemsLeft} items
       </span>
       <div className="filters">
         <FilterButton
           onFilterChange={handleFilterChange}
           filter={Status.ALL}
           name="All"
-          isActive={props.currentFilter === Status.ALL}
+          isActive={currentFilter === Status.ALL}
         />
         <FilterButton
           onFilterChange={handleFilterChange}
           filter={Status.ACTIVE}
           name="Active"
-          isActive={props.currentFilter === Status.ACTIVE}
+          isActive={currentFilter === Status.ACTIVE}
         />
         <FilterButton
           onFilterChange={handleFilterChange}
           filter={Status.COMPLETED}
           name="Completed"
-          isActive={props.currentFilter === Status.COMPLETED}
+          isActive={currentFilter === Status.COMPLETED}
         />
       </div>
       <Tooltip title="Clear completed tasks">
         <span
           className={clsx({
             footer__clear: true,
-            hidden: !props.completedCount,
+            hidden: !completedCount,
           })}
-          onClick={() => props.deleteMultipleTasks({ filter: true })}
+          onClick={handleDeleteMultiple}
         >
           Clear completed
         </span>
       </Tooltip>
     </div>
   ) : null;
-});
+};
 
 const mapStateToProps = (state: ApplicationState) => {
   return {
@@ -70,4 +89,4 @@ const mapStateToProps = (state: ApplicationState) => {
 };
 export default connect(mapStateToProps, {
   deleteMultipleTasks: deleteMultipleTasksAction.request,
-})(TodoAppFooter);
+})(React.memo(TodoAppFooter));

@@ -1,6 +1,6 @@
 import { addTaskAction } from '@store/actions/tasks';
 import { ApplicationState } from '@store/index';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import TodoHeaderInput from './TodoHeaderInput/index';
 import Toggler from './Toggler';
@@ -12,30 +12,32 @@ interface IProps {
   addTask: typeof addTaskAction.request;
 }
 
-const TodoAppHeader = React.memo(function TodoAppHeader(props: IProps) {
+const TodoAppHeader = ({ isTasksExist, isTasksCompleted, addTask }: IProps) => {
   const [inputValue, setValue] = useState<string>('');
 
-  const handleEnterPressed = () => {
+  const handleEnterPressed = useCallback(() => {
     if (inputValue.trim() === '') {
       return;
     }
-    props.addTask({ value: inputValue });
+    addTask({ value: inputValue });
     setValue('');
-  };
+  }, [addTask, inputValue]);
+
+  const handleInputChange = useCallback((value: string) => {
+    setValue(value);
+  }, []);
 
   return (
     <div className="body__input add-form">
-      {props.isTasksExist ? (
-        <Toggler isActive={props.isTasksCompleted} />
-      ) : null}
+      {isTasksExist ? <Toggler isActive={isTasksCompleted} /> : null}
       <TodoHeaderInput
         value={inputValue}
-        onInputChanged={(value: string) => setValue(value)}
+        onInputChanged={handleInputChange}
         onEnterPressed={handleEnterPressed}
       />
     </div>
   );
-});
+};
 
 const mapStateToProps = (state: ApplicationState) => {
   return {
@@ -47,4 +49,4 @@ const mapStateToProps = (state: ApplicationState) => {
 
 export default connect(mapStateToProps, {
   addTask: addTaskAction.request,
-})(TodoAppHeader);
+})(React.memo(TodoAppHeader));

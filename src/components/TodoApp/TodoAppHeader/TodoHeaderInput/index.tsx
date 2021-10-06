@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 import './index.scss';
 
 interface IProps {
@@ -7,20 +7,27 @@ interface IProps {
   onEnterPressed: () => void;
 }
 
-const TodoHeaderInput = React.memo(function TodoHeaderInput(props: IProps) {
+const TodoHeaderInput = ({ value, onInputChanged, onEnterPressed }: IProps) => {
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) =>
+      onInputChanged(event.target.value),
+    [onInputChanged]
+  );
+
+  const handleEnterPress = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) =>
+      event.key === 'Enter' && onEnterPressed(),
+    [onEnterPressed]
+  );
   return (
     <input
       className="add-form__input form-input"
       placeholder="What needs to be done?"
-      value={props.value}
-      onChange={(event: ChangeEvent<HTMLInputElement>) =>
-        props.onInputChanged(event.target.value)
-      }
-      onKeyDown={(event: KeyboardEvent<HTMLInputElement>) =>
-        event.key === 'Enter' && props.onEnterPressed()
-      }
+      value={value}
+      onChange={handleChange}
+      onKeyDown={handleEnterPress}
     />
   );
-});
+};
 
-export default TodoHeaderInput;
+export default React.memo(TodoHeaderInput);

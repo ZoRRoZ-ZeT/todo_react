@@ -8,15 +8,15 @@ import './index.scss';
 
 interface IProps {
   tasks: Task[];
-  filtering: (item: Task) => boolean;
+  filterPredicate: (item: Task) => boolean;
 }
 
-const TodoModal = React.memo(function TodoModal(props: IProps) {
+const TodoModal = ({ tasks, filterPredicate }: IProps) => {
   const [isShowModal, setShowModal] = useState(false);
 
   const filteredTasks = useMemo(
-    () => (props.filtering ? props.tasks.filter(props.filtering) : props.tasks),
-    [props.tasks, props.filtering]
+    () => (filterPredicate ? tasks.filter(filterPredicate) : tasks),
+    [tasks, filterPredicate]
   );
 
   const handleToggleModal = useCallback(() => {
@@ -40,10 +40,10 @@ const TodoModal = React.memo(function TodoModal(props: IProps) {
       />
     </div>
   );
-});
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   tasks: state.tasks.list,
 });
 
-export default connect(mapStateToProps)(TodoModal);
+export default connect(mapStateToProps)(React.memo(TodoModal));

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 
 interface IProps {
   value: string;
@@ -6,31 +6,41 @@ interface IProps {
   onSubmit: () => void;
 }
 
-const TodoInput = React.memo(function TodoInput(props: IProps) {
-  const handleInputSubmit = () => {
-    if (props.value.trim() === '') {
+const TodoInput = ({ value, onChange, onSubmit }: IProps) => {
+  const handleInputSubmit = useCallback(() => {
+    if (value.trim() === '') {
       return;
     }
 
-    props.onSubmit();
-  };
+    onSubmit();
+  }, [onSubmit, value]);
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+    },
+    [onChange]
+  );
+
+  const handleEnterPress = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        handleInputSubmit();
+      }
+    },
+    [handleInputSubmit]
+  );
 
   return (
     <input
       className="item__edit"
-      onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-          handleInputSubmit();
-        }
-      }}
-      onChange={(event: ChangeEvent<HTMLInputElement>) =>
-        props.onChange(event.target.value)
-      }
+      onKeyDown={handleEnterPress}
+      onChange={handleChange}
       onBlur={handleInputSubmit}
-      value={props.value}
+      value={value}
       autoFocus
     />
   );
-});
+};
 
-export default TodoInput;
+export default React.memo(TodoInput);

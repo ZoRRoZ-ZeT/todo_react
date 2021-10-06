@@ -1,6 +1,6 @@
 import { Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ChartContainer from './ChartContainer';
 import { mapPriorities, mapPrioritiesOrder } from '@constants/index';
 import './index.scss';
@@ -11,15 +11,12 @@ interface IProps {
   onToggleModal: () => void;
 }
 
-const TodoModalWindow = React.memo(function TodoModalWindow(props: IProps) {
-  const sortedTasks = useMemo(
-    () =>
-      [...props.tasks].sort(
-        (a, b) =>
-          mapPrioritiesOrder[a.priority] - mapPrioritiesOrder[b.priority]
-      ),
-    [props.tasks]
-  );
+const TodoModalWindow = ({ tasks, isActive, onToggleModal }: IProps) => {
+  const sortedTasks = useMemo(() => {
+    return [...tasks].sort(
+      (a, b) => mapPrioritiesOrder[a.priority] - mapPrioritiesOrder[b.priority]
+    );
+  }, [tasks]);
 
   const palette = useMemo(() => {
     return sortedTasks.reduce((resultData, task) => {
@@ -42,13 +39,17 @@ const TodoModalWindow = React.memo(function TodoModalWindow(props: IProps) {
     }));
   }, [sortedTasks]);
 
-  return props.isActive ? (
+  const handleCloseClick = useCallback(() => {
+    onToggleModal();
+  }, [onToggleModal]);
+
+  return isActive ? (
     <div className="modal-block">
       <div className="modal-shadow"></div>
       <div className="modal__content content-window">
         <div className="content-window__header">
           <span>My modal window</span>
-          <button className="btn btn-empty close" onClick={props.onToggleModal}>
+          <button className="btn btn-empty close" onClick={handleCloseClick}>
             ×
           </button>
         </div>
@@ -64,6 +65,6 @@ const TodoModalWindow = React.memo(function TodoModalWindow(props: IProps) {
       </div>
     </div>
   ) : null;
-});
+};
 
-export default TodoModalWindow;
+export default React.memo(TodoModalWindow);

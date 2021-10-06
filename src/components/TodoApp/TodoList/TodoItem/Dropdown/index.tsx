@@ -10,20 +10,23 @@ interface IProps {
   onPriorityChanged: (value: string) => void;
 }
 
-const Dropdown = React.memo(function Dropdown(props: IProps) {
+const Dropdown = ({ priority, onPriorityChanged }: IProps) => {
   const [isShowList, setShowList] = useState(false);
   const dropdownRef: React.RefObject<HTMLDivElement> = useRef();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
       if (
         isShowList &&
         !dropdownRef.current.contains(event.target as HTMLElement)
       ) {
         setShowList(false);
       }
-    };
+    },
+    [isShowList]
+  );
 
+  useEffect(() => {
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
@@ -32,20 +35,24 @@ const Dropdown = React.memo(function Dropdown(props: IProps) {
 
   const handleItemClick = useCallback(
     (value: Priority) => {
-      props.onPriorityChanged(value);
+      onPriorityChanged(value);
       setShowList(false);
     },
-    [props]
+    [onPriorityChanged]
   );
+
+  const handleDropdownClick = useCallback(() => {
+    setShowList(!isShowList);
+  }, [isShowList]);
 
   return (
     <div className="dropdown-block" ref={dropdownRef}>
       <button
         className={clsx({
           'dropdown-block__button': true,
-          [`mark-${props.priority}`]: true,
+          [`mark-${priority}`]: true,
         })}
-        onClick={() => setShowList(!isShowList)}
+        onClick={handleDropdownClick}
       ></button>
       {isShowList ? (
         <div className="dropdown-block__content content-list">
@@ -73,6 +80,6 @@ const Dropdown = React.memo(function Dropdown(props: IProps) {
       ) : null}
     </div>
   );
-});
+};
 
-export default Dropdown;
+export default React.memo(Dropdown);

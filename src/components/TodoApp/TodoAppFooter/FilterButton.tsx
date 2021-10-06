@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
 import { Status } from '@type/index.types';
 import Tooltip from '@components/Tooltip';
@@ -10,20 +10,23 @@ interface IProps {
   onFilterChange: (value: string) => void;
 }
 
-const FilterButton = React.memo(function FilterButton(props: IProps) {
+const FilterButton = ({ filter, isActive, name, onFilterChange }: IProps) => {
+  const handleClick = useCallback(() => {
+    onFilterChange(filter);
+  }, [filter, onFilterChange]);
   return (
-    <Tooltip title={`Show ${props.name.toLocaleLowerCase()} tasks`}>
+    <Tooltip title={`Show ${name.toLocaleLowerCase()} tasks`}>
       <button
         className={clsx({
           filters__button: true,
-          active: props.isActive,
+          active: isActive,
         })}
-        onClick={() => props.onFilterChange(props.filter)}
+        onClick={handleClick}
       >
-        {props.name}
+        {name}
       </button>
     </Tooltip>
   );
-});
+};
 
-export default FilterButton;
+export default React.memo(FilterButton);

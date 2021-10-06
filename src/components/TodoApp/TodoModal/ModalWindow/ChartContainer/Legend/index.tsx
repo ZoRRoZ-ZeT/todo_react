@@ -7,15 +7,15 @@ interface IProps {
   palette: Array<string>;
 }
 
-const ChartLegend = React.memo(function ChartLegend(props: IProps) {
+const ChartLegend = ({ data, palette }: IProps) => {
   return (
     <div className="legend">
-      {props.data.map((chartData, index) => (
+      {data.map((chartData, index) => (
         <div key={`${chartData}/${index}`} className="legend__item">
           <div
             className="item-mark"
             style={{
-              background: props.palette[index],
+              background: palette[index],
             }}
           ></div>
           <span>{chartData.dataName}</span>
@@ -23,6 +23,6 @@ const ChartLegend = React.memo(function ChartLegend(props: IProps) {
       ))}
     </div>
   );
-});
+};
 
-export default ChartLegend;
+export default React.memo(ChartLegend);

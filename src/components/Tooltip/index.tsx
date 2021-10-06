@@ -1,24 +1,23 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './index.scss';
 
 interface IProps {
   title: string;
 }
 
-const Tooltip: React.FunctionComponent<IProps> = React.memo(function Tooltip(
-  props
-) {
+const Tooltip = ({ title, children }: React.PropsWithChildren<IProps>) => {
   const [isHovered, setHovered] = useState(false);
 
-  const closing = useRef(false);
+  const isClosing = useRef(false);
   const closingTimer = useRef(null);
 
-  const handleHover = () => {
+  const handleHover = useCallback(() => {
     setHovered(true);
-    closing.current = false;
-  };
+    isClosing.current = false;
+  }, []);
+
   useEffect(() => {
     return () => {
       clearTimeout(closingTimer.current);
@@ -26,11 +25,11 @@ const Tooltip: React.FunctionComponent<IProps> = React.memo(function Tooltip(
   }, []);
 
   const handleUnhover = () => {
-    closing.current = true;
+    isClosing.current = true;
     closingTimer.current = setTimeout(() => {
-      if (closing && closing.current) {
+      if (isClosing.current) {
         setHovered(false);
-        closing.current = false;
+        isClosing.current = false;
       }
     }, 100);
   };
@@ -38,20 +37,20 @@ const Tooltip: React.FunctionComponent<IProps> = React.memo(function Tooltip(
   return (
     <div className="tooltip-wrapper" onMouseLeave={handleUnhover}>
       <div className="content" onMouseEnter={handleHover}>
-        {props.children}
+        {children}
       </div>
       <div
         className={clsx({
           'tooltip-content': true,
           hovered: isHovered,
         })}
-        onMouseEnter={handleHover}
+        onMouseEnter={isHovered ? handleHover : null}
         onMouseLeave={handleUnhover}
       >
-        {props.title}
+        {title}
       </div>
     </div>
   );
-});
+};
 
-export default Tooltip;
+export default React.memo(Tooltip);

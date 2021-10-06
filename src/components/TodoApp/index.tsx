@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import TodoAppFooter from './TodoAppFooter/index';
 import TodoAppHeader from './TodoAppHeader/index';
 import TodoList from './TodoList/index';
@@ -13,7 +13,7 @@ interface IProps {
   fetchTasks: typeof fetchTasksAction.request;
 }
 
-const TodoApp = React.memo(function TodoApp(props: IProps) {
+const TodoApp = ({ fetchTasks }: IProps) => {
   const [filter, setFilter] = useState(
     mapPath[window.location.pathname] ?? Status.ALL
   );
@@ -21,11 +21,15 @@ const TodoApp = React.memo(function TodoApp(props: IProps) {
   const filterPredicate = mapStatusToFilterPredicate[filter];
 
   useEffect(() => {
-    props.fetchTasks();
-  }, [props]);
+    fetchTasks();
+  }, [fetchTasks]);
+
+  const handleChangeFilter = useCallback((filterToApply: Status) => {
+    setFilter(filterToApply);
+  }, []);
   return (
     <div className="application">
-      <TodoModal filtering={filterPredicate} />
+      <TodoModal filterPredicate={filterPredicate} />
       <div className="shadow">
         <div className="body">
           <TodoAppHeader />
@@ -33,13 +37,13 @@ const TodoApp = React.memo(function TodoApp(props: IProps) {
         </div>
         <TodoAppFooter
           currentFilter={filter}
-          onChangeFilter={(filterToApply: Status) => setFilter(filterToApply)}
+          onChangeFilter={handleChangeFilter}
         />
       </div>
     </div>
   );
-});
+};
 
 export default connect(null, {
   fetchTasks: fetchTasksAction.request,
-})(TodoApp);
+})(React.memo(TodoApp));

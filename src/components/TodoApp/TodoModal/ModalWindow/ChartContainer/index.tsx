@@ -9,13 +9,13 @@ interface IProps {
   palette: Array<string>;
 }
 
-const ChartContainer = React.memo(function ChartContainer(props: IProps) {
+const ChartContainer = ({ data, palette }: IProps) => {
   return (
     <div className="chart-container">
-      <PieChart data={props.data} palette={props.palette} />
-      <ChartLegend data={props.data} palette={props.palette} />
+      <PieChart data={data} palette={palette} />
+      <ChartLegend data={data} palette={palette} />
     </div>
   );
-});
+};
 
-export default ChartContainer;
+export default React.memo(ChartContainer);

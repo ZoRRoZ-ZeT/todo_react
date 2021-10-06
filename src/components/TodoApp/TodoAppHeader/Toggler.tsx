@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { toggleTasksAction } from '@store/actions/tasks';
@@ -9,7 +9,10 @@ interface IProps {
   isActive: boolean;
 }
 
-const Toggler = React.memo(function Toggler(props: IProps) {
+const Toggler = ({ toggleTasks, isActive }: IProps) => {
+  const handleToggle = useCallback(() => {
+    toggleTasks();
+  }, [toggleTasks]);
   return (
     <Tooltip title="Toggle all tasks">
       <button
@@ -17,14 +20,14 @@ const Toggler = React.memo(function Toggler(props: IProps) {
         className={clsx({
           'add-form__toggler': true,
           'form-toggler': true,
-          'all-checked': props.isActive,
+          'all-checked': isActive,
         })}
-        onClick={() => props.toggleTasks()}
+        onClick={handleToggle}
       ></button>
     </Tooltip>
   );
-});
+};
 
 export default connect(null, { toggleTasks: toggleTasksAction.request })(
-  Toggler
+  React.memo(Toggler)
 );

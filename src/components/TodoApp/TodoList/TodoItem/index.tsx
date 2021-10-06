@@ -14,12 +14,12 @@ interface IProps {
   updateTask: typeof updateTaskAction.request;
 }
 
-const TodoItem = React.memo(function TodoItem(props: IProps) {
+const TodoItem = ({ task, deleteTask, updateTask }: IProps) => {
   const [isClicked, setClicked] = useState(false);
   const [isEditing, setEditing] = useState(false);
-  const [currentValue, setValue] = useState(props.task.value);
+  const [currentValue, setValue] = useState(task.value);
 
-  const handleInputClick = () => {
+  const handleInputClick = useCallback(() => {
     if (isClicked) {
       setClicked(false);
       setEditing(true);
@@ -31,24 +31,43 @@ const TodoItem = React.memo(function TodoItem(props: IProps) {
         setClicked(false);
       }
     }, 200);
-  };
+  }, [isClicked, isEditing]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     setEditing(false);
-    props.updateTask({
-      ...props.task,
+    updateTask({
+      ...task,
       value: currentValue,
     });
-  };
+  }, [updateTask, task, currentValue]);
 
   const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) =>
-      props.updateTask({
-        ...props.task,
+    (event: ChangeEvent<HTMLInputElement>) => {
+      updateTask({
+        ...task,
         isChecked: event.target.checked,
-      }),
-    [props]
+      });
+    },
+    [task, updateTask]
   );
+
+  const handlePriorityChange = useCallback(
+    (value: Priority) => {
+      updateTask({
+        ...task,
+        priority: value,
+      });
+    },
+    [task, updateTask]
+  );
+
+  const handleTodoInputChange = useCallback((value: string) => {
+    setValue(value);
+  }, []);
+
+  const handleDelete = useCallback(() => {
+    deleteTask({ id: task.id });
+  }, [deleteTask, task]);
 
   return (
     <div className="item">
@@ -56,7 +75,7 @@ const TodoItem = React.memo(function TodoItem(props: IProps) {
         type="checkbox"
         className="item__toggle"
         onChange={handleChange}
-        checked={props.task.isChecked}
+        checked={task.isChecked}
       />
       <label
         className={clsx({
@@ -65,39 +84,32 @@ const TodoItem = React.memo(function TodoItem(props: IProps) {
         })}
         onClick={handleInputClick}
       >
-        {props.task.value}
+        {task.value}
       </label>
       {isEditing ? (
         <TodoInput
           value={currentValue}
-          onChange={(value: string) => setValue(value)}
+          onChange={handleTodoInputChange}
           onSubmit={handleSubmit}
         />
       ) : null}
       <div className="item__dropdown">
         <Dropdown
-          priority={props.task.priority}
-          onPriorityChanged={(value: Priority) =>
-            props.updateTask({
-              ...props.task,
-              priority: value,
-            })
-          }
+          priority={task.priority}
+          onPriorityChanged={handlePriorityChange}
         />
       </div>
       <button
         className="btn btn-empty destroy item__button"
-        onClick={() => {
-          props.deleteTask({ id: props.task.id });
-        }}
+        onClick={handleDelete}
       >
         ×
       </button>
     </div>
   );
-});
+};
 
 export default connect(null, {
   deleteTask: deleteTaskAction.request,
   updateTask: updateTaskAction.request,
-})(TodoItem);
+})(React.memo(TodoItem));

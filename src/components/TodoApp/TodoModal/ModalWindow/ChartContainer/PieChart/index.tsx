@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ChartData, Sector } from 'types/index.types';
 import './index.scss';
 
@@ -7,24 +7,23 @@ interface IProps {
   palette: Array<string>;
 }
 
-const PieChart = React.memo(function PieChart(props: IProps) {
+const PieChart = ({ data, palette }: IProps) => {
   const [gradientColor, setGradientColor] = useState('conic-gradient(white)');
 
-  useEffect(() => {
-    const totalCount = props.data.reduce(
-      (result, item) => result + item.dataValue,
-      0
-    );
+  const totalCount = useMemo(() => {
+    return data.reduce((result, item) => result + item.dataValue, 0);
+  }, [data]);
 
+  const sectors = useMemo(() => {
     let currentFill = 0;
     let paletteIndex = 0;
 
-    const sectors = props.data.reduce((resultSectors, dataSector) => {
+    return data.reduce((resultSectors, dataSector) => {
       const filling = (dataSector.dataValue / totalCount) * 100;
       const sectors = [
         ...resultSectors,
         {
-          color: props.palette[paletteIndex++],
+          color: palette[paletteIndex++],
           name: dataSector.dataName,
           start: currentFill,
           end: currentFill + (dataSector.dataValue / totalCount) * 100,
@@ -33,7 +32,9 @@ const PieChart = React.memo(function PieChart(props: IProps) {
       currentFill += filling;
       return sectors;
     }, [] as Sector[]);
+  }, [data, palette, totalCount]);
 
+  useEffect(() => {
     const gradient = sectors.reduce(
       (result, sector) =>
         result + `${sector.color} ${sector.start}% ${sector.end}%, `,
@@ -43,7 +44,7 @@ const PieChart = React.memo(function PieChart(props: IProps) {
       ? `conic-gradient(${gradient.slice(0, -2)})`
       : 'none';
     setGradientColor(color);
-  }, [props.data, props.palette]);
+  }, [sectors]);
 
   return (
     <div className="wrapper">
@@ -57,6 +58,6 @@ const PieChart = React.memo(function PieChart(props: IProps) {
       <div className="tooltip"></div>
     </div>
   );
-});
+};
 
-export default PieChart;
+export default React.memo(PieChart);
