@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ChartData, Sector } from 'types/index.types';
-import './index.scss';
+import useStyles from './styles';
 
 interface IProps {
   data: ChartData;
@@ -9,6 +9,7 @@ interface IProps {
 
 const PieChart = ({ data, palette }: IProps) => {
   const [gradientColor, setGradientColor] = useState('conic-gradient(white)');
+  const classes = useStyles({ backgroundColor: gradientColor });
 
   const totalCount = useMemo(() => {
     return data.reduce((result, item) => result + item.dataValue, 0);
@@ -47,15 +48,8 @@ const PieChart = ({ data, palette }: IProps) => {
   }, [sectors]);
 
   return (
-    <div className="wrapper">
-      <div
-        className="pie-chart"
-        style={{
-          background: gradientColor,
-        }}
-      ></div>
-      <div className="pie-chart-hover"></div>
-      <div className="tooltip"></div>
+    <div className={classes.wrapper}>
+      <div className={classes.chart}></div>
     </div>
   );
 };

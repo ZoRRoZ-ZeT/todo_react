@@ -1,9 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import clsx from 'clsx';
 import DropdownItem from './DropdownItem';
 import { Priority } from '../../../../../types/index.types';
-import './index.scss';
+import useStyles from './styles';
+import { AppContext } from '@context/index';
+import useTranslate from '@hooks/transate';
 
 interface IProps {
   priority: string;
@@ -11,6 +19,10 @@ interface IProps {
 }
 
 const Dropdown = ({ priority, onPriorityChanged }: IProps) => {
+  const { state } = useContext(AppContext);
+  const t = useTranslate(state.language);
+
+  const classes = useStyles();
   const [isShowList, setShowList] = useState(false);
   const dropdownRef: React.RefObject<HTMLDivElement> = useRef();
 
@@ -48,32 +60,36 @@ const Dropdown = ({ priority, onPriorityChanged }: IProps) => {
   return (
     <div className="dropdown-block" ref={dropdownRef}>
       <button
-        className={clsx({
-          'dropdown-block__button': true,
-          [`mark-${priority}`]: true,
-        })}
+        className={clsx(
+          classes.button,
+          classes[priority as keyof typeof classes]
+        )}
         onClick={handleDropdownClick}
       ></button>
       {isShowList ? (
-        <div className="dropdown-block__content content-list">
+        <div className={classes.list}>
           <DropdownItem
             value={Priority.HIGH}
-            name="High priority"
+            name={t('HIGH_PRIORITY')}
+            isSelected={priority === Priority.HIGH}
             onItemClick={handleItemClick}
           />
           <DropdownItem
             value={Priority.MEDIUM}
-            name="Medium priority"
+            name={t('MEDIUM_PRIORITY')}
+            isSelected={priority === Priority.MEDIUM}
             onItemClick={handleItemClick}
           />
           <DropdownItem
             value={Priority.LOW}
-            name="Low priority"
+            name={t('LOW_PRIORITY')}
+            isSelected={priority === Priority.LOW}
             onItemClick={handleItemClick}
           />
           <DropdownItem
             value={Priority.NONE}
-            name="None priority"
+            name={t('NONE_PRIORITY')}
+            isSelected={priority === Priority.NONE}
             onItemClick={handleItemClick}
           />
         </div>

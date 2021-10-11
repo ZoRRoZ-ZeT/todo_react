@@ -1,0 +1,112 @@
+{
+  "ITEMS": {
+    "ru": "элементов",
+    "en": "items",
+    "uk": "елементів"
+  },
+  "ALL": {
+    "ru": "Все",
+    "en": "All",
+    "uk": "Усi"
+  },
+  "ACTIVE": {
+    "ru": "Активные",
+    "en": "Active",
+    "uk": "Активнi"
+  },
+  "COMPLETED": {
+    "ru": "Выполненные",
+    "en": "Completed",
+    "uk": "Виконанi"
+  },
+  "SHOW_$_TASKS": {
+    "ru": "Показать $ задачи",
+    "en": "Show $ tasks",
+    "uk": "Показати $ задачi"
+  },
+  "HIGH_PRIORITY": {
+    "ru": "Высокий приоритет",
+    "en": "High priority",
+    "uk": "Високий прiоритет"
+  },
+  "MEDIUM_PRIORITY": {
+    "ru": "Средний приоритет",
+    "en": "Medium priority",
+    "uk": "Середнiй прiоритет"
+  },
+  "LOW_PRIORITY": {
+    "ru": "Низкий приоритет",
+    "en": "Low priority",
+    "uk": "Низький прiоритет"
+  },
+  "NONE_PRIORITY": {
+    "ru": "Без приоритета",
+    "en": "None priority",
+    "uk": "Без прiоритету"
+  },
+  "CLEAR_COMPLETED": {
+    "ru": "Очистить выполненные",
+    "en": "Clear completed",
+    "uk": "Очистити виконанi"
+  },
+  "CLEAR_COMPLETED_TASKS": {
+    "ru": "Очистить выполненные задачи",
+    "en": "Clear completed tasks",
+    "uk": "Очистити виконанi задачi"
+  },
+  "WHAT_NEEDS_TO_BE_DONE": {
+    "ru": "Что нужно сделать?",
+    "en": "What needs to be done?",
+    "uk": "Що потрібно зробити?"
+  },
+  "TOGGLE_ALL_TASKS": {
+    "ru": "Переключить всё",
+    "en": "Toggle all tasks",
+    "uk": "Переключити всi"
+  },
+  "OPEN_MODAL_WITH_PIE-CHART": {
+    "ru": "Открыть окно с круговой диграммой",
+    "en": "Open modal with Pie-Chart",
+    "uk": "Вiдкрити вiкно з круговою дiаграмою"
+  },
+  "CHART": {
+    "ru": "Диаграмма",
+    "en": "Chart",
+    "uk": "Дiаграма"
+  },
+  "MY_MODAL_WINDOW": {
+    "ru": "Моё модальное окно",
+    "en": "My modal window",
+    "uk": "Моє модальне вiкне"
+  },
+  "THIS_IS_TEST_MODAL_WINDOW": {
+    "ru": "Это тестовое модальное окно",
+    "en": "This is test modal window",
+    "uk": "Це тестове модальне вiкне"
+  },
+  "POWERED_BY_EDUARD_PERETOKIN": {
+    "ru": "Разработанное Эдуардом Перетокиным",
+    "en": "Powered by Eduard Peretokin",
+    "uk": "Розроблене Едуардом Перетокiним"
+  },
+  "high": {
+    "ru": "Высокий",
+    "en": "High",
+    "uk": "Високий"
+  },
+  "medium": {
+    "ru": "Средний",
+    "en": "Medium",
+    "uk": "Середнiй"
+  },
+  "low": {
+    "ru": "Низкий",
+    "en": "Low",
+    "uk": "Низький"
+  },
+  "none": {
+    "ru": "Без",
+    "en": "None",
+    "uk": "Нема"
+  }
+}

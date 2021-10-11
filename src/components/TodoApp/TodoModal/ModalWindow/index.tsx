@@ -1,9 +1,11 @@
 import { Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import ChartContainer from './ChartContainer';
 import { mapPriorities, mapPrioritiesOrder } from '@constants/index';
-import './index.scss';
+import useStyles from './styles';
+import { AppContext } from '@context/index';
+import useTranslate from '@hooks/transate';
 
 interface IProps {
   tasks: Task[];
@@ -12,6 +14,10 @@ interface IProps {
 }
 
 const TodoModalWindow = ({ tasks, isActive, onToggleModal }: IProps) => {
+  const { state } = useContext(AppContext);
+  const t = useTranslate(state.language);
+
+  const classes = useStyles();
   const sortedTasks = useMemo(() => {
     return [...tasks].sort(
       (a, b) => mapPrioritiesOrder[a.priority] - mapPrioritiesOrder[b.priority]
@@ -34,33 +40,33 @@ const TodoModalWindow = ({ tasks, isActive, onToggleModal }: IProps) => {
       };
     }, {} as Record<Priority, number>);
     return Array.from(Object.entries(data), ([dataName, dataValue]) => ({
-      dataName,
+      dataName: t(dataName as never),
       dataValue,
     }));
-  }, [sortedTasks]);
+  }, [sortedTasks, t]);
 
   const handleCloseClick = useCallback(() => {
     onToggleModal();
   }, [onToggleModal]);
 
   return isActive ? (
-    <div className="modal-block">
-      <div className="modal-shadow"></div>
-      <div className="modal__content content-window">
-        <div className="content-window__header">
-          <span>My modal window</span>
-          <button className="btn btn-empty close" onClick={handleCloseClick}>
+    <div>
+      <div className={classes.shadow}></div>
+      <div className={classes.content}>
+        <div className={classes.header}>
+          <span>{t('MY_MODAL_WINDOW')}</span>
+          <button className={classes.close} onClick={handleCloseClick}>
             ×
           </button>
         </div>
-        <hr />
-        <div className="content-window__body">
+        <hr className={classes.line} />
+        <div className={classes.body}>
           <ChartContainer data={charData} palette={palette} />
         </div>
-        <hr />
-        <div className="content-window__footer">
-          <span>This is test modal window</span>
-          <span>Powered by Eduard Peretokin</span>
+        <hr className={classes.line} />
+        <div className={classes.footer}>
+          <span>{t('THIS_IS_TEST_MODAL_WINDOW')}</span>
+          <span>{t('POWERED_BY_EDUARD_PERETOKIN')}</span>
         </div>
       </div>
     </div>

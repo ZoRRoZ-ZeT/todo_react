@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChartData } from '@type/index.types';
-import './index.scss';
+import useStyles from './styles';
 
 interface IProps {
   data: ChartData;
@@ -8,12 +8,13 @@ interface IProps {
 }
 
 const ChartLegend = ({ data, palette }: IProps) => {
+  const classes = useStyles();
   return (
-    <div className="legend">
+    <div className={classes.legend}>
       {data.map((chartData, index) => (
-        <div key={`${chartData}/${index}`} className="legend__item">
+        <div key={`${chartData}/${index}`} className={classes.item}>
           <div
-            className="item-mark"
+            className={classes.mark}
             style={{
               background: palette[index],
             }}

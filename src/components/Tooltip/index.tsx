@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import './index.scss';
+import useStyles from './styles';
 
 interface IProps {
   title: string;
@@ -9,6 +9,7 @@ interface IProps {
 
 const Tooltip = ({ title, children }: React.PropsWithChildren<IProps>) => {
   const [isHovered, setHovered] = useState(false);
+  const classes = useStyles();
 
   const isClosing = useRef(false);
   const closingTimer = useRef(null);
@@ -35,15 +36,10 @@ const Tooltip = ({ title, children }: React.PropsWithChildren<IProps>) => {
   };
 
   return (
-    <div className="tooltip-wrapper" onMouseLeave={handleUnhover}>
-      <div className="content" onMouseEnter={handleHover}>
-        {children}
-      </div>
+    <div className={classes.wrapper} onMouseLeave={handleUnhover}>
+      <div onMouseEnter={handleHover}>{children}</div>
       <div
-        className={clsx({
-          'tooltip-content': true,
-          hovered: isHovered,
-        })}
+        className={clsx(classes.content, isHovered && classes.hovered)}
         onMouseEnter={isHovered ? handleHover : null}
         onMouseLeave={handleUnhover}
       >

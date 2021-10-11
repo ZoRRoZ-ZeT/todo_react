@@ -1,27 +1,28 @@
 import React, { useCallback } from 'react';
 import clsx from 'clsx';
-import { Priority } from '../../../../../types/index.types';
+import { Priority } from '@type/index.types';
+import useStyles from './styles';
 
 interface IProps {
   value: Priority;
   name: string;
+  isSelected: boolean;
   onItemClick: (value: string) => void;
 }
 
-const DropdownItem = ({ value, name, onItemClick }: IProps) => {
+const DropdownItem = ({ value, name, isSelected, onItemClick }: IProps) => {
+  const classes = useStyles();
   const handleClick = useCallback(() => {
     onItemClick(value);
   }, [onItemClick, value]);
 
   return (
-    <div className="content-list__item dropdown-item" onClick={handleClick}>
-      <div
-        className={clsx({
-          'dropdown-item__marker': true,
-          [`mark-${value}`]: true,
-        })}
-      ></div>
-      <span className="dropdown-item__caption">{name}</span>
+    <div
+      className={clsx(classes.item, isSelected && classes.selected)}
+      onClick={handleClick}
+    >
+      <div className={clsx(classes.marker, classes[value])}></div>
+      <span>{name}</span>
     </div>
   );
 };

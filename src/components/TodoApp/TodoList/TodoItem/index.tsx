@@ -6,7 +6,7 @@ import { Task } from '@type/todo.types';
 import { Priority } from '@type/index.types';
 import { connect } from 'react-redux';
 import { deleteTaskAction, updateTaskAction } from '@store/actions/tasks';
-import './index.scss';
+import useStyles from './styles';
 
 interface IProps {
   task: Task;
@@ -15,6 +15,7 @@ interface IProps {
 }
 
 const TodoItem = ({ task, deleteTask, updateTask }: IProps) => {
+  const classes = useStyles();
   const [isClicked, setClicked] = useState(false);
   const [isEditing, setEditing] = useState(false);
   const [currentValue, setValue] = useState(task.value);
@@ -70,18 +71,15 @@ const TodoItem = ({ task, deleteTask, updateTask }: IProps) => {
   }, [deleteTask, task]);
 
   return (
-    <div className="item">
+    <div className={classes.item}>
       <input
         type="checkbox"
-        className="item__toggle"
+        className={classes.toggle}
         onChange={handleChange}
         checked={task.isChecked}
       />
       <label
-        className={clsx({
-          item__label: true,
-          clicked: isEditing,
-        })}
+        className={clsx(classes.label, isEditing && classes.clicked)}
         onClick={handleInputClick}
       >
         {task.value}
@@ -93,16 +91,13 @@ const TodoItem = ({ task, deleteTask, updateTask }: IProps) => {
           onSubmit={handleSubmit}
         />
       ) : null}
-      <div className="item__dropdown">
+      <div className={classes.dropdown}>
         <Dropdown
           priority={task.priority}
           onPriorityChanged={handlePriorityChange}
         />
       </div>
-      <button
-        className="btn btn-empty destroy item__button"
-        onClick={handleDelete}
-      >
+      <button className={classes.button} onClick={handleDelete}>
         ×
       </button>
     </div>
