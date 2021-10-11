@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Task } from '@type/todo.types';
 import TodoItem from './TodoItem/index';
@@ -9,111 +9,107 @@ import {
   DroppableProvided,
   DropResult,
 } from 'react-beautiful-dnd';
+import { reorderTaskAction, updateTaskAction } from '@store/actions/tasks';
+import './index.scss';
 import { ApplicationState } from '@store/index';
-import { Method } from '@type/index.types';
-import { callApi } from '@apis/todos';
-import { updateTask } from '@store/actions/tasks';
 
 interface IProps {
   tasks: Task[];
-  updateTask: (task: Task) => void;
-  filtering: (item: Task) => boolean;
+  updateTask: typeof updateTaskAction.request;
+  reorderTask: typeof reorderTaskAction.request;
+  filterPredicate: (item: Task) => boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
+const TodoList = ({
+  tasks,
+  updateTask,
+  reorderTask,
+  filterPredicate,
+}: IProps) => {
+  const [localTasks, setTasks] = useState([] as Task[]);
 
-class TodoList extends React.Component<IProps, IState> {
-  onDragEnd = async (result: DropResult) => {
-    if (
-      !result.destination ||
-      result.destination.index === result.source.index
-    ) {
-      return;
-    }
+  const filteredTasks = useMemo(
+    () => (filterPredicate ? localTasks.filter(filterPredicate) : localTasks),
+    [localTasks, filterPredicate]
+  );
 
-    const distIndex = result.destination.index;
-    const sourceIndex = result.source.index;
+  useEffect(() => {
+    setTasks(tasks);
+  }, [tasks]);
 
-    const filteredTasks = this.props.filtering
-      ? this.props.tasks.filter(this.props.filtering)
-      : this.props.tasks;
-    const originalSource = this.props.tasks.indexOf(filteredTasks[sourceIndex]);
-    const originalDestination = this.props.tasks.indexOf(
-      filteredTasks[distIndex]
-    );
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      if (
+        !result.destination ||
+        result.destination.index === result.source.index
+      ) {
+        return;
+      }
 
-    const leftNeighbor =
-      distIndex > sourceIndex
-        ? filteredTasks[result.destination.index].sort
-        : originalDestination && this.props.tasks[originalDestination - 1].sort;
+      const distIndex = result.destination.index;
+      const sourceIndex = result.source.index;
 
-    const rightNeighbor =
-      distIndex > sourceIndex
-        ? (originalDestination - this.props.tasks.length + 1 !== 0 &&
-            this.props.tasks[originalDestination + 1].sort) ||
-          this.props.tasks[originalDestination].sort + 1
-        : filteredTasks[result.destination.index].sort;
+      const originalSource = localTasks.indexOf(filteredTasks[sourceIndex]);
+      const originalDestination = localTasks.indexOf(filteredTasks[distIndex]);
 
-    const newAverageSort = (leftNeighbor + rightNeighbor) / 2;
+      const newList = [...localTasks];
+      const [removed] = newList.splice(result.source.index, 1);
+      newList.splice(result.destination.index, 0, removed);
+      setTasks(newList);
 
-    const oldValue = this.props.tasks[originalSource];
-    try {
-      this.props.updateTask({
-        ...this.props.tasks[originalSource],
-        sort: newAverageSort,
-      });
-      await callApi<Task>('', {
-        method: Method.PUT,
-        body: {
-          ...this.props.tasks[originalSource],
-          sort: newAverageSort,
+      reorderTask({
+        draggedIndex: originalSource,
+        droppedIndex: originalDestination,
+        onFailure: (oldTask) => {
+          setTasks(
+            [
+              ...localTasks.map((task) =>
+                task.id === oldTask.id ? oldTask : task
+              ),
+            ].sort((a, b) => a.sort - b.sort)
+          );
         },
       });
-    } catch (error) {
-      this.props.updateTask(oldValue);
-      console.log('Hmmm, something went wrong...');
-    }
-  };
+    },
+    [filteredTasks, localTasks, reorderTask]
+  );
 
-  render() {
-    const filteredTasks = this.props.filtering
-      ? this.props.tasks.filter(this.props.filtering)
-      : this.props.tasks;
-    return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId={'taskList'}>
-          {(dropProvided: DroppableProvided) => (
-            <ul
-              className="task-list"
-              ref={dropProvided.innerRef}
-              {...dropProvided.droppableProps}
-            >
-              {filteredTasks.map((task, index) => (
-                <Draggable key={task.id} draggableId={task.id} index={index}>
-                  {(provided) => (
-                    <li
-                      className="task-list__item"
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                    >
-                      <TodoItem task={task} />
-                    </li>
-                  )}
-                </Draggable>
-              ))}
-              {dropProvided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </DragDropContext>
-    );
-  }
-}
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId={'taskList'}>
+        {(dropProvided: DroppableProvided) => (
+          <ul
+            className="task-list"
+            ref={dropProvided.innerRef}
+            {...dropProvided.droppableProps}
+          >
+            {filteredTasks.map((task, index) => (
+              <Draggable key={task.id} draggableId={task.id} index={index}>
+                {(provided) => (
+                  <li
+                    className="task-list__item"
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                  >
+                    <TodoItem task={task} />
+                  </li>
+                )}
+              </Draggable>
+            ))}
+            {dropProvided.placeholder}
+          </ul>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
-  tasks: state.tasks.list.sort((a, b) => a.sort - b.sort),
+  tasks: state.tasks.list.slice().sort((a, b) => a.sort - b.sort),
 });
 
-export default connect(mapStateToProps, { updateTask })(TodoList);
+export default connect(mapStateToProps, {
+  updateTask: updateTaskAction.request,
+  reorderTask: reorderTaskAction.request,
+})(React.memo(TodoList));

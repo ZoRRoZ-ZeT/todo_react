@@ -1,43 +1,33 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
+import './index.scss';
 
 interface IProps {
   value: string;
   onInputChanged: (value: string) => void;
   onEnterPressed: () => void;
 }
-interface IState {
-  inputValue: string;
-}
 
-class TodoHeaderInput extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+const TodoHeaderInput = ({ value, onInputChanged, onEnterPressed }: IProps) => {
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) =>
+      onInputChanged(event.target.value),
+    [onInputChanged]
+  );
 
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-  }
+  const handleEnterPress = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) =>
+      event.key === 'Enter' && onEnterPressed(),
+    [onEnterPressed]
+  );
+  return (
+    <input
+      className="add-form__input form-input"
+      placeholder="What needs to be done?"
+      value={value}
+      onChange={handleChange}
+      onKeyDown={handleEnterPress}
+    />
+  );
+};
 
-  handleValueChange(event: ChangeEvent<HTMLInputElement>) {
-    this.props.onInputChanged(event.target.value);
-  }
-
-  handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Enter') {
-      this.props.onEnterPressed();
-    }
-  }
-
-  render() {
-    return (
-      <input
-        className="add-form__input form-input"
-        placeholder="What needs to be done?"
-        value={this.props.value}
-        onChange={this.handleValueChange}
-        onKeyDown={this.handleKeyDown}
-      />
-    );
-  }
-}
-
-export default TodoHeaderInput;
+export default React.memo(TodoHeaderInput);

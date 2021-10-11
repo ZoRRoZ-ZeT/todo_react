@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
 import { Priority } from '../../../../../types/index.types';
 
@@ -7,36 +7,23 @@ interface IProps {
   name: string;
   onItemClick: (value: string) => void;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
 
-class DropdownItem extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+const DropdownItem = ({ value, name, onItemClick }: IProps) => {
+  const handleClick = useCallback(() => {
+    onItemClick(value);
+  }, [onItemClick, value]);
 
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.props.onItemClick(this.props.value);
-  }
-
-  render() {
-    return (
+  return (
+    <div className="content-list__item dropdown-item" onClick={handleClick}>
       <div
-        className="content-list__item dropdown-item"
-        onClick={this.handleClick}
-      >
-        <div
-          className={clsx({
-            'dropdown-item__marker': true,
-            [`mark-${this.props.value}`]: true,
-          })}
-        ></div>
-        <span className="dropdown-item__caption">{this.props.name}</span>
-      </div>
-    );
-  }
-}
+        className={clsx({
+          'dropdown-item__marker': true,
+          [`mark-${value}`]: true,
+        })}
+      ></div>
+      <span className="dropdown-item__caption">{name}</span>
+    </div>
+  );
+};
 
-export default DropdownItem;
+export default React.memo(DropdownItem);

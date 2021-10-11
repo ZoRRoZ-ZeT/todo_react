@@ -1,52 +1,46 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 
 interface IProps {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
 
-class TodoInput extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.handleInputSubmit = this.handleInputSubmit.bind(this);
-    this.handleInputPress = this.handleInputPress.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  handleInputSubmit() {
-    if (this.props.value.trim() === '') {
+const TodoInput = ({ value, onChange, onSubmit }: IProps) => {
+  const handleInputSubmit = useCallback(() => {
+    if (value.trim() === '') {
       return;
     }
 
-    this.props.onSubmit();
-  }
+    onSubmit();
+  }, [onSubmit, value]);
 
-  handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    this.props.onChange(event.target.value);
-  }
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+    },
+    [onChange]
+  );
 
-  handleInputPress(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Enter') {
-      this.handleInputSubmit();
-    }
-  }
+  const handleEnterPress = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        handleInputSubmit();
+      }
+    },
+    [handleInputSubmit]
+  );
 
-  render() {
-    return (
-      <input
-        className="item__edit"
-        onKeyDown={this.handleInputPress}
-        onChange={this.handleInputChange}
-        onBlur={this.handleInputSubmit}
-        value={this.props.value}
-        autoFocus
-      />
-    );
-  }
-}
+  return (
+    <input
+      className="item__edit"
+      onKeyDown={handleEnterPress}
+      onChange={handleChange}
+      onBlur={handleInputSubmit}
+      value={value}
+      autoFocus
+    />
+  );
+};
 
-export default TodoInput;
+export default React.memo(TodoInput);

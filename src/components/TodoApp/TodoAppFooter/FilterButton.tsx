@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
 import { Status } from '@type/index.types';
 import Tooltip from '@components/Tooltip';
@@ -9,35 +9,24 @@ interface IProps {
   name: string;
   onFilterChange: (value: string) => void;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
 
-class FilterButton extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+const FilterButton = ({ filter, isActive, name, onFilterChange }: IProps) => {
+  const handleClick = useCallback(() => {
+    onFilterChange(filter);
+  }, [filter, onFilterChange]);
+  return (
+    <Tooltip title={`Show ${name.toLocaleLowerCase()} tasks`}>
+      <button
+        className={clsx({
+          filters__button: true,
+          active: isActive,
+        })}
+        onClick={handleClick}
+      >
+        {name}
+      </button>
+    </Tooltip>
+  );
+};
 
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.props.onFilterChange(this.props.filter);
-  }
-
-  render() {
-    return (
-      <Tooltip title={`Show ${this.props.name.toLocaleLowerCase()} tasks`}>
-        <button
-          className={clsx({
-            filters__button: true,
-            active: this.props.isActive,
-          })}
-          onClick={this.handleClick}
-        >
-          {this.props.name}
-        </button>
-      </Tooltip>
-    );
-  }
-}
-
-export default FilterButton;
+export default React.memo(FilterButton);

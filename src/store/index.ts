@@ -1,13 +1,25 @@
-import { combineReducers, createStore } from '@reduxjs/toolkit';
+import {
+  applyMiddleware,
+  combineReducers,
+  createStore,
+} from '@reduxjs/toolkit';
 import { TodoState } from '@type/todo.types';
-import { devToolsEnhancer } from 'redux-devtools-extension';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import createSagaMiddleware from 'redux-saga';
 import tasks from './reducers/tasks';
+import rootSaga from './sagas';
 
 export interface ApplicationState {
   tasks: TodoState;
 }
+const sagaMiddleware = createSagaMiddleware();
 
-export default createStore(
+const store = createStore(
   combineReducers<ApplicationState>({ tasks }),
-  devToolsEnhancer({})
+  composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
+export const action = (type: any) => store.dispatch({ type });
+
+sagaMiddleware.run(rootSaga);
+
+export default store;

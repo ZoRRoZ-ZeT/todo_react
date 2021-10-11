@@ -2,23 +2,20 @@ import { ChartData } from '@type/index.types';
 import React from 'react';
 import ChartLegend from './Legend';
 import PieChart from './PieChart';
+import './index.scss';
 
 interface IProps {
   data: ChartData;
   palette: Array<string>;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IState {}
 
-class ChartContainer extends React.Component<IProps, IState> {
-  render() {
-    return (
-      <div className="chart-container">
-        <PieChart data={this.props.data} palette={this.props.palette} />
-        <ChartLegend data={this.props.data} palette={this.props.palette} />
-      </div>
-    );
-  }
-}
+const ChartContainer = ({ data, palette }: IProps) => {
+  return (
+    <div className="chart-container">
+      <PieChart data={data} palette={palette} />
+      <ChartLegend data={data} palette={palette} />
+    </div>
+  );
+};
 
-export default ChartContainer;
+export default React.memo(ChartContainer);

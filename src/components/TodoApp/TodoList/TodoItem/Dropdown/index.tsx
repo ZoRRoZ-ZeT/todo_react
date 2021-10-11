@@ -1,103 +1,85 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 import DropdownItem from './DropdownItem';
 import { Priority } from '../../../../../types/index.types';
+import './index.scss';
 
 interface IProps {
   priority: string;
   onPriorityChanged: (value: string) => void;
 }
-interface IState {
-  isShowList: boolean;
-}
 
-class Dropdown extends React.Component<IProps, IState> {
-  dropdownRef: React.RefObject<HTMLDivElement>;
+const Dropdown = ({ priority, onPriorityChanged }: IProps) => {
+  const [isShowList, setShowList] = useState(false);
+  const dropdownRef: React.RefObject<HTMLDivElement> = useRef();
 
-  constructor(props: IProps) {
-    super(props);
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (
+        isShowList &&
+        !dropdownRef.current.contains(event.target as HTMLElement)
+      ) {
+        setShowList(false);
+      }
+    },
+    [isShowList]
+  );
 
-    this.handleClick = this.handleClick.bind(this);
-    this.handleItemClick = this.handleItemClick.bind(this);
-
-    this.dropdownRef = React.createRef();
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-
-    this.state = {
-      isShowList: false,
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
     };
-  }
+  });
 
-  componentDidMount() {
-    document.addEventListener('click', this.handleClickOutside);
-  }
+  const handleItemClick = useCallback(
+    (value: Priority) => {
+      onPriorityChanged(value);
+      setShowList(false);
+    },
+    [onPriorityChanged]
+  );
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside);
-  }
+  const handleDropdownClick = useCallback(() => {
+    setShowList(!isShowList);
+  }, [isShowList]);
 
-  handleClickOutside(event: MouseEvent) {
-    if (
-      this.state.isShowList &&
-      !this.dropdownRef.current.contains(event.target as HTMLElement)
-    ) {
-      this.setState((prevState) => ({
-        isShowList: !prevState.isShowList,
-      }));
-    }
-  }
+  return (
+    <div className="dropdown-block" ref={dropdownRef}>
+      <button
+        className={clsx({
+          'dropdown-block__button': true,
+          [`mark-${priority}`]: true,
+        })}
+        onClick={handleDropdownClick}
+      ></button>
+      {isShowList ? (
+        <div className="dropdown-block__content content-list">
+          <DropdownItem
+            value={Priority.HIGH}
+            name="High priority"
+            onItemClick={handleItemClick}
+          />
+          <DropdownItem
+            value={Priority.MEDIUM}
+            name="Medium priority"
+            onItemClick={handleItemClick}
+          />
+          <DropdownItem
+            value={Priority.LOW}
+            name="Low priority"
+            onItemClick={handleItemClick}
+          />
+          <DropdownItem
+            value={Priority.NONE}
+            name="None priority"
+            onItemClick={handleItemClick}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+};
 
-  handleClick() {
-    this.setState((prevState) => ({
-      isShowList: !prevState.isShowList,
-    }));
-  }
-
-  handleItemClick(value: Priority) {
-    this.props.onPriorityChanged(value);
-    this.setState({
-      isShowList: false,
-    });
-  }
-
-  render() {
-    return (
-      <div className="dropdown-block" ref={this.dropdownRef}>
-        <button
-          className={clsx({
-            'dropdown-block__button': true,
-            [`mark-${this.props.priority}`]: true,
-          })}
-          onClick={this.handleClick}
-        ></button>
-        {this.state.isShowList ? (
-          <div className="dropdown-block__content content-list">
-            <DropdownItem
-              value={Priority.HIGH}
-              name="High priority"
-              onItemClick={this.handleItemClick}
-            />
-            <DropdownItem
-              value={Priority.MEDIUM}
-              name="Medium priority"
-              onItemClick={this.handleItemClick}
-            />
-            <DropdownItem
-              value={Priority.LOW}
-              name="Low priority"
-              onItemClick={this.handleItemClick}
-            />
-            <DropdownItem
-              value={Priority.NONE}
-              name="None priority"
-              onItemClick={this.handleItemClick}
-            />
-          </div>
-        ) : null}
-      </div>
-    );
-  }
-}
-
-export default Dropdown;
+export default React.memo(Dropdown);
