@@ -9,23 +9,18 @@ import {
   DroppableProvided,
   DropResult,
 } from 'react-beautiful-dnd';
-import { reorderTaskAction, updateTaskAction } from '@store/actions/tasks';
-import './index.scss';
+import { reorderTaskAction } from '@store/actions/tasks';
 import { ApplicationState } from '@store/index';
+import useStyles from './styles';
 
 interface IProps {
   tasks: Task[];
-  updateTask: typeof updateTaskAction.request;
   reorderTask: typeof reorderTaskAction.request;
   filterPredicate: (item: Task) => boolean;
 }
 
-const TodoList = ({
-  tasks,
-  updateTask,
-  reorderTask,
-  filterPredicate,
-}: IProps) => {
+const TodoList = ({ tasks, reorderTask, filterPredicate }: IProps) => {
+  const classes = useStyles();
   const [localTasks, setTasks] = useState([] as Task[]);
 
   const filteredTasks = useMemo(
@@ -79,7 +74,7 @@ const TodoList = ({
       <Droppable droppableId={'taskList'}>
         {(dropProvided: DroppableProvided) => (
           <ul
-            className="task-list"
+            className={classes.list}
             ref={dropProvided.innerRef}
             {...dropProvided.droppableProps}
           >
@@ -87,7 +82,7 @@ const TodoList = ({
               <Draggable key={task.id} draggableId={task.id} index={index}>
                 {(provided) => (
                   <li
-                    className="task-list__item"
+                    className={classes.item}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
@@ -110,6 +105,5 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 export default connect(mapStateToProps, {
-  updateTask: updateTaskAction.request,
   reorderTask: reorderTaskAction.request,
 })(React.memo(TodoList));

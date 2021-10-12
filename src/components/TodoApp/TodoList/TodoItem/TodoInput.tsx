@@ -1,4 +1,5 @@
 import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
+import useStyles from './styles';
 
 interface IProps {
   value: string;
@@ -7,6 +8,7 @@ interface IProps {
 }
 
 const TodoInput = ({ value, onChange, onSubmit }: IProps) => {
+  const classes = useStyles();
   const handleInputSubmit = useCallback(() => {
     if (value.trim() === '') {
       return;
@@ -33,7 +35,7 @@ const TodoInput = ({ value, onChange, onSubmit }: IProps) => {
 
   return (
     <input
-      className="item__edit"
+      className={classes.editInput}
       onKeyDown={handleEnterPress}
       onChange={handleChange}
       onBlur={handleInputSubmit}

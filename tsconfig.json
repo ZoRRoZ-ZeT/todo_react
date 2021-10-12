@@ -12,12 +12,15 @@
       "@apis/*": ["./api/*"],
       "@constants/*": ["./constants/*"],
       "@store/*": ["./store/*"],
-      "@components/*": ["./components/*"]
+      "@components/*": ["./components/*"],
+      "@context/*": ["./context/*"],
+      "@hooks/*": ["./hooks/*"]
     },
     "allowJs": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
   "exclude": ["./dist/", "./webpack.config.js"]
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useContext } from 'react';
 import clsx from 'clsx';
 import FilterButton from './FilterButton';
 import { connect } from 'react-redux';
@@ -6,7 +6,9 @@ import { ApplicationState } from '@store/index';
 import { deleteMultipleTasksAction } from '@store/actions/tasks';
 import { Status } from '@type/index.types';
 import Tooltip from '@components/Tooltip';
-import './index.scss';
+import useStyles from './styles';
+import { AppContext } from '@context/index';
+import useTranslate from '@hooks/transate';
 
 interface IProps {
   count: number;
@@ -23,6 +25,10 @@ const TodoAppFooter = ({
   onChangeFilter,
   deleteMultipleTasks,
 }: IProps) => {
+  const { state } = useContext(AppContext);
+  const t = useTranslate(state.language);
+
+  const classes = useStyles();
   const itemsLeft = useMemo(
     () => count - completedCount,
     [count, completedCount]
@@ -42,41 +48,40 @@ const TodoAppFooter = ({
   );
 
   return count > 0 ? (
-    <div className="footer" id="footer">
-      <span className="footer__count" id="count">
-        {itemsLeft} items
+    <div className={classes.footer}>
+      <span className={classes.count}>
+        {itemsLeft} {t('ITEMS')}
       </span>
-      <div className="filters">
+      <div className={classes.filters}>
         <FilterButton
           onFilterChange={handleFilterChange}
           filter={Status.ALL}
-          name="All"
+          name={t('ALL')}
           isActive={currentFilter === Status.ALL}
         />
         <FilterButton
           onFilterChange={handleFilterChange}
           filter={Status.ACTIVE}
-          name="Active"
+          name={t('ACTIVE')}
           isActive={currentFilter === Status.ACTIVE}
         />
         <FilterButton
           onFilterChange={handleFilterChange}
           filter={Status.COMPLETED}
-          name="Completed"
+          name={t('COMPLETED')}
           isActive={currentFilter === Status.COMPLETED}
         />
       </div>
-      <Tooltip title="Clear completed tasks">
-        <span
-          className={clsx({
-            footer__clear: true,
-            hidden: !completedCount,
-          })}
-          onClick={handleDeleteMultiple}
-        >
-          Clear completed
-        </span>
-      </Tooltip>
+      <div className={classes.clearBox}>
+        <Tooltip title={t('CLEAR_COMPLETED_TASKS')}>
+          <span
+            className={clsx(classes.clear, !completedCount && classes.hidden)}
+            onClick={handleDeleteMultiple}
+          >
+            {t('CLEAR_COMPLETED')}
+          </span>
+        </Tooltip>
+      </div>
     </div>
   ) : null;
 };

@@ -1,5 +1,12 @@
-import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
-import './index.scss';
+import { AppContext } from '@context/index';
+import useTranslate from '@hooks/transate';
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  useCallback,
+  useContext,
+} from 'react';
+import useStyles from './styles';
 
 interface IProps {
   value: string;
@@ -8,6 +15,10 @@ interface IProps {
 }
 
 const TodoHeaderInput = ({ value, onInputChanged, onEnterPressed }: IProps) => {
+  const { state } = useContext(AppContext);
+  const t = useTranslate(state.language);
+
+  const classes = useStyles();
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) =>
       onInputChanged(event.target.value),
@@ -21,8 +32,8 @@ const TodoHeaderInput = ({ value, onInputChanged, onEnterPressed }: IProps) => {
   );
   return (
     <input
-      className="add-form__input form-input"
-      placeholder="What needs to be done?"
+      className={classes.input}
+      placeholder={t('WHAT_NEEDS_TO_BE_DONE')}
       value={value}
       onChange={handleChange}
       onKeyDown={handleEnterPress}

@@ -2,7 +2,7 @@ import { ChartData } from '@type/index.types';
 import React from 'react';
 import ChartLegend from './Legend';
 import PieChart from './PieChart';
-import './index.scss';
+import useStyles from './styles';
 
 interface IProps {
   data: ChartData;
@@ -10,8 +10,9 @@ interface IProps {
 }
 
 const ChartContainer = ({ data, palette }: IProps) => {
+  const classes = useStyles();
   return (
-    <div className="chart-container">
+    <div className={classes.container}>
       <PieChart data={data} palette={palette} />
       <ChartLegend data={data} palette={palette} />
     </div>

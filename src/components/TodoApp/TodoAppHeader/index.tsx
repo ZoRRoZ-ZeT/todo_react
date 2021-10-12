@@ -4,7 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import TodoHeaderInput from './TodoHeaderInput/index';
 import Toggler from './Toggler';
-import './index.scss';
+import useStyles from './styles';
 
 interface IProps {
   isTasksExist: boolean;
@@ -14,7 +14,7 @@ interface IProps {
 
 const TodoAppHeader = ({ isTasksExist, isTasksCompleted, addTask }: IProps) => {
   const [inputValue, setValue] = useState<string>('');
-
+  const classes = useStyles();
   const handleEnterPressed = useCallback(() => {
     if (inputValue.trim() === '') {
       return;
@@ -28,7 +28,7 @@ const TodoAppHeader = ({ isTasksExist, isTasksCompleted, addTask }: IProps) => {
   }, []);
 
   return (
-    <div className="body__input add-form">
+    <div className={classes.header}>
       {isTasksExist ? <Toggler isActive={isTasksCompleted} /> : null}
       <TodoHeaderInput
         value={inputValue}
