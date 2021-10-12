@@ -7,7 +7,7 @@ import {
   toggleTasksAction,
   updateTaskAction,
 } from '@store/actions/tasks';
-import { FailedType, SuccessType } from '@type/action';
+import { FailedTodoType, SuccessTodoType } from '@type/action';
 import { TodoState } from '@type/todo.types';
 import { Reducer } from 'redux';
 
@@ -15,11 +15,11 @@ const initialState: TodoState = {
   list: [],
 };
 
-type ActionType = SuccessType | FailedType;
+type ActionTodoType = SuccessTodoType | FailedTodoType;
 
-const reducer: Reducer<TodoState, ActionType> = (
+const reducer: Reducer<TodoState, ActionTodoType> = (
   state: TodoState = initialState,
-  action: ActionType
+  action: ActionTodoType
 ) => {
   switch (action.type) {
     case addTaskAction.types.SUCCESS: {

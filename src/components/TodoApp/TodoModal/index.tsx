@@ -1,13 +1,12 @@
 import Tooltip from '@components/Tooltip';
 import { ApplicationState } from '@store/index';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Task } from '../../../types/todo.types';
 import TodoModalWindow from './ModalWindow/index';
 import Fab from '@material-ui/core/Fab';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import useStyles from './styles';
-import { AppContext } from '@context/index';
 import useTranslate from '@hooks/transate';
 
 interface IProps {
@@ -16,8 +15,7 @@ interface IProps {
 }
 
 const TodoModal = ({ tasks, filterPredicate }: IProps) => {
-  const { state } = useContext(AppContext);
-  const t = useTranslate(state.language);
+  const t = useTranslate();
 
   const classes = useStyles();
   const [isShowModal, setShowModal] = useState(false);

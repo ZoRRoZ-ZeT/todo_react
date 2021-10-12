@@ -7,28 +7,53 @@ import {
   deleteMultipleTasksAction,
   deleteTaskAction,
   fetchTasksAction,
+  loginAction,
+  logoutAction,
+  registerAction,
   reorderTaskAction,
   toggleTasksAction,
   updateTaskAction,
 } from '@store/actions/tasks';
 import store from '..';
 
-function* watchTodoActions() {
-  yield takeEvery(addTaskAction.types.REQUEST, addTaskAsync);
-  yield takeEvery(updateTaskAction.types.REQUEST, updateTaskAsync);
-  yield takeEvery(deleteTaskAction.types.REQUEST, deleteTaskAsync);
-  yield takeEvery(
-    deleteMultipleTasksAction.types.REQUEST,
-    deleteMultipleTasksAsync
-  );
-  yield takeEvery(toggleTasksAction.types.REQUEST, toggleTasksAsync);
-  yield takeEvery(fetchTasksAction.types.REQUEST, fetchTasksAsync);
-  yield takeEvery(reorderTaskAction.types.REQUEST, reorderTaskAsync);
+function* registerAsync(action: ReturnType<typeof registerAction.request>) {
+  try {
+    const response: string = yield call(callApi, '/register', {
+      method: Method.POST,
+      body: { ...action.payload },
+    });
+    yield put(registerAction.success({ response }));
+  } catch (error) {
+    yield put(registerAction.failed({ error }));
+  }
+}
+
+function* loginAsync(action: ReturnType<typeof loginAction.request>) {
+  try {
+    const response: string = yield call(callApi, '/login', {
+      method: Method.POST,
+      body: { ...action.payload },
+    });
+    yield put(loginAction.success({ response }));
+  } catch (error) {
+    yield put(loginAction.failed({ error }));
+  }
+}
+
+function* logoutAsync() {
+  try {
+    yield call(callApi, '/logout', {
+      method: Method.POST,
+    });
+    yield put(logoutAction.success());
+  } catch (error) {
+    yield put(logoutAction.failed({ error }));
+  }
 }
 
 function* addTaskAsync(action: ReturnType<typeof addTaskAction.request>) {
   try {
-    const task: Task = yield call(callApi, '', {
+    const task: Task = yield call(callApi, '/todos', {
       method: Method.POST,
       body: { value: action.payload.value },
     });
@@ -40,7 +65,7 @@ function* addTaskAsync(action: ReturnType<typeof addTaskAction.request>) {
 
 function* updateTaskAsync(action: ReturnType<typeof updateTaskAction.request>) {
   try {
-    const task: Task = yield call(callApi, '', {
+    const task: Task = yield call(callApi, '/todos', {
       method: Method.PUT,
       body: { ...action.payload },
     });
@@ -52,7 +77,7 @@ function* updateTaskAsync(action: ReturnType<typeof updateTaskAction.request>) {
 
 function* deleteTaskAsync(action: ReturnType<typeof deleteTaskAction.request>) {
   try {
-    const task: Task = yield call(callApi, `/${action.payload.id}`, {
+    const task: Task = yield call(callApi, `todos/${action.payload.id}`, {
       method: Method.DELETE,
     });
     yield put(deleteTaskAction.success({ task }));
@@ -65,7 +90,7 @@ function* deleteMultipleTasksAsync(
   action: ReturnType<typeof deleteMultipleTasksAction.request>
 ) {
   try {
-    const tasks: Task[] = yield call(callApi, '', {
+    const tasks: Task[] = yield call(callApi, '/todos', {
       method: Method.DELETE,
       body: action.payload,
     });
@@ -77,9 +102,10 @@ function* deleteMultipleTasksAsync(
 
 function* toggleTasksAsync() {
   try {
-    const fillValue: boolean = yield call(callApi, '/toggle', {
+    const fillValue: boolean = yield call(callApi, '/todos/toggle', {
       method: Method.PUT,
     });
+    console.log(fillValue);
     yield put(toggleTasksAction.success({ fillValue }));
   } catch (error) {
     yield put(toggleTasksAction.failed({ error }));
@@ -88,7 +114,7 @@ function* toggleTasksAsync() {
 
 function* fetchTasksAsync() {
   try {
-    const tasks: Task[] = yield call(callApi, '');
+    const tasks: Task[] = yield call(callApi, '/todos');
     yield put(fetchTasksAction.success({ tasks }));
   } catch (error) {
     yield put(fetchTasksAction.failed({ error }));
@@ -120,7 +146,7 @@ function* reorderTaskAsync(
         : tasks[distIndex].sort;
 
     const newAverageSort = (leftNeighbor + rightNeighbor) / 2;
-    const task: Task = yield call(callApi, '', {
+    const task: Task = yield call(callApi, '/todos', {
       method: Method.PUT,
       body: {
         ...tasks[sourceIndex],
@@ -136,6 +162,25 @@ function* reorderTaskAsync(
   }
 }
 
+function* watchUserActions() {
+  yield takeEvery(registerAction.types.REQUEST, registerAsync);
+  yield takeEvery(loginAction.types.REQUEST, loginAsync);
+  yield takeEvery(logoutAction.types.REQUEST, logoutAsync);
+}
+
+function* watchTodoActions() {
+  yield takeEvery(addTaskAction.types.REQUEST, addTaskAsync);
+  yield takeEvery(updateTaskAction.types.REQUEST, updateTaskAsync);
+  yield takeEvery(deleteTaskAction.types.REQUEST, deleteTaskAsync);
+  yield takeEvery(
+    deleteMultipleTasksAction.types.REQUEST,
+    deleteMultipleTasksAsync
+  );
+  yield takeEvery(toggleTasksAction.types.REQUEST, toggleTasksAsync);
+  yield takeEvery(fetchTasksAction.types.REQUEST, fetchTasksAsync);
+  yield takeEvery(reorderTaskAction.types.REQUEST, reorderTaskAsync);
+}
+
 export default function* rootSaga() {
-  yield all([watchTodoActions()]);
+  yield all([watchUserActions(), watchTodoActions()]);
 }

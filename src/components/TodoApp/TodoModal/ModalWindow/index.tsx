@@ -1,10 +1,9 @@
-import { Priority } from '@type/index.types';
+import { MessageType, Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ChartContainer from './ChartContainer';
 import { mapPriorities, mapPrioritiesOrder } from '@constants/index';
 import useStyles from './styles';
-import { AppContext } from '@context/index';
 import useTranslate from '@hooks/transate';
 
 interface IProps {
@@ -14,8 +13,7 @@ interface IProps {
 }
 
 const TodoModalWindow = ({ tasks, isActive, onToggleModal }: IProps) => {
-  const { state } = useContext(AppContext);
-  const t = useTranslate(state.language);
+  const t = useTranslate();
 
   const classes = useStyles();
   const sortedTasks = useMemo(() => {
@@ -40,7 +38,7 @@ const TodoModalWindow = ({ tasks, isActive, onToggleModal }: IProps) => {
       };
     }, {} as Record<Priority, number>);
     return Array.from(Object.entries(data), ([dataName, dataValue]) => ({
-      dataName: t(dataName as never),
+      dataName: t(dataName as MessageType),
       dataValue,
     }));
   }, [sortedTasks, t]);

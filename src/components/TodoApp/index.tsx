@@ -6,15 +6,17 @@ import TodoModal from './TodoModal/index';
 import { Status } from '@type/index.types';
 import { mapPath, mapStatusToFilterPredicate } from '@constants/index';
 import { connect } from 'react-redux';
-import { fetchTasksAction } from '@store/actions/tasks';
+import { fetchTasksAction, logoutAction } from '@store/actions/tasks';
+import Button from '@material-ui/core/Button';
 import useStyles from './styles';
-import ThemeChanger from '@components/features/ThemeChanger/index';
-import LanguageChanger from '@components/features/LanguageChanger/index';
+import ThemeChanger from '@components/ThemeChanger/index';
+import LanguageChanger from '@components/LanguageChanger/index';
 interface IProps {
+  logout: typeof logoutAction.request;
   fetchTasks: typeof fetchTasksAction.request;
 }
 
-const TodoApp = ({ fetchTasks }: IProps) => {
+const TodoApp = ({ fetchTasks, logout }: IProps) => {
   const [filter, setFilter] = useState(
     mapPath[window.location.pathname] ?? Status.ALL
   );
@@ -47,10 +49,19 @@ const TodoApp = ({ fetchTasks }: IProps) => {
         <LanguageChanger />
         <ThemeChanger />
       </div>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.exit}
+        onClick={logout}
+      >
+        Log Out
+      </Button>
     </div>
   );
 };
 
 export default connect(null, {
+  logout: logoutAction.request,
   fetchTasks: fetchTasksAction.request,
 })(React.memo(TodoApp));

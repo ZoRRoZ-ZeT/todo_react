@@ -1,16 +1,9 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 import DropdownItem from './DropdownItem';
 import { Priority } from '../../../../../types/index.types';
 import useStyles from './styles';
-import { AppContext } from '@context/index';
 import useTranslate from '@hooks/transate';
 
 interface IProps {
@@ -19,8 +12,7 @@ interface IProps {
 }
 
 const Dropdown = ({ priority, onPriorityChanged }: IProps) => {
-  const { state } = useContext(AppContext);
-  const t = useTranslate(state.language);
+  const t = useTranslate();
 
   const classes = useStyles();
   const [isShowList, setShowList] = useState(false);

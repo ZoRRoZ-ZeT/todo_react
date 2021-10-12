@@ -1,9 +1,8 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
 import { Status } from '@type/index.types';
 import Tooltip from '@components/Tooltip';
 import useStyles from './styles';
-import { AppContext } from '@context/index';
 import useTranslate from '@hooks/transate';
 
 interface IProps {
@@ -14,8 +13,7 @@ interface IProps {
 }
 
 const FilterButton = ({ filter, isActive, name, onFilterChange }: IProps) => {
-  const { state } = useContext(AppContext);
-  const t = useTranslate(state.language);
+  const t = useTranslate();
 
   const classes = useStyles();
   const handleClick = useCallback(() => {

@@ -1,5 +1,5 @@
 import { createTheme, Theme } from '@material-ui/core';
-import { Theme as ThemeEnum } from '@type/context';
+import { Theme as ThemeType } from '@type/context';
 import { Priority, Status } from '@type/index.types';
 import { Task } from '@type/todo.types';
 
@@ -114,7 +114,7 @@ const darkTheme = createTheme({
   },
 });
 
-export const mapThemeEnumToTheme: Record<ThemeEnum, Theme> = {
-  [ThemeEnum.LIGHT]: lightTheme,
-  [ThemeEnum.DARK]: darkTheme,
+export const mapThemes: Record<ThemeType, Theme> = {
+  [ThemeType.LIGHT]: lightTheme,
+  [ThemeType.DARK]: darkTheme,
 };

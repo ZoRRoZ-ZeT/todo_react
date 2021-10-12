@@ -3,12 +3,15 @@ import {
   deleteMultipleTasksAction,
   deleteTaskAction,
   fetchTasksAction,
+  loginAction,
+  logoutAction,
+  registerAction,
   reorderTaskAction,
   toggleTasksAction,
   updateTaskAction,
 } from '@store/actions/tasks';
 
-export type TodoAction<TType extends string, TPayload extends unknown> = {
+export type IAction<TType extends string, TPayload extends unknown> = {
   type: TType;
   payload?: TPayload;
 };
@@ -25,9 +28,9 @@ export const createAsyncAction = <
   const ActionSuccess = `${type}__SUCCESS` as `${TType}__SUCCESS`;
   const ActionFailed = `${type}__FAILED` as `${TType}__FAILED`;
 
-  type RequestType = TodoAction<`${TType}__REQUEST`, RPayload>;
-  type SuccessType = TodoAction<`${TType}__SUCCESS`, SPayload>;
-  type FailedType = TodoAction<`${TType}__FAILED`, FPayload>;
+  type RequestType = IAction<`${TType}__REQUEST`, RPayload>;
+  type SuccessType = IAction<`${TType}__SUCCESS`, SPayload>;
+  type FailedType = IAction<`${TType}__FAILED`, FPayload>;
   return {
     request: (payload?: RPayload): RequestType => ({
       type: `${type}__REQUEST`,
@@ -68,31 +71,50 @@ type deleteMultipleTasksActionType = GetActionType<
 >;
 type toggleTasksActionType = GetActionType<typeof toggleTasksAction>;
 type fetchTaskActionType = GetActionType<typeof fetchTasksAction>;
-type reotrderTaskActionType = GetActionType<typeof reorderTaskAction>;
+type reorderTaskActionType = GetActionType<typeof reorderTaskAction>;
 
-export type SuccessType =
+type registerActionType = GetActionType<typeof registerAction>;
+type loginActionType = GetActionType<typeof loginAction>;
+type logoutActionType = GetActionType<typeof logoutAction>;
+
+export type SuccessTodoType =
   | addTaskActionType['success']
   | updateTaskActionType['success']
   | deleteTaskActionType['success']
   | deleteMultipleTasksActionType['success']
   | toggleTasksActionType['success']
   | fetchTaskActionType['success']
-  | reotrderTaskActionType['success'];
+  | reorderTaskActionType['success'];
 
-export type RequestType =
+export type RequestTodoType =
   | addTaskActionType['request']
   | updateTaskActionType['request']
   | deleteTaskActionType['request']
   | deleteMultipleTasksActionType['request']
   | toggleTasksActionType['request']
   | fetchTaskActionType['request']
-  | reotrderTaskActionType['request'];
+  | reorderTaskActionType['request'];
 
-export type FailedType =
+export type FailedTodoType =
   | addTaskActionType['failed']
   | updateTaskActionType['failed']
   | deleteTaskActionType['failed']
   | deleteMultipleTasksActionType['failed']
   | toggleTasksActionType['failed']
   | fetchTaskActionType['failed']
-  | reotrderTaskActionType['failed'];
+  | reorderTaskActionType['failed'];
+
+export type SuccessUserType =
+  | registerActionType['success']
+  | loginActionType['success']
+  | logoutActionType['success'];
+
+export type RequestUserType =
+  | registerActionType['request']
+  | loginActionType['request']
+  | logoutActionType['request'];
+
+export type FailedUserType =
+  | registerActionType['failed']
+  | loginActionType['failed']
+  | logoutActionType['failed'];
