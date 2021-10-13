@@ -19,8 +19,9 @@ export const mapStatusToFilterPredicate: {
 };
 
 export const mapPath: Record<string, Status> = {
-  '/active': Status.ACTIVE,
-  '/completed': Status.COMPLETED,
+  all: Status.ALL,
+  active: Status.ACTIVE,
+  completed: Status.COMPLETED,
 };
 
 export const mapPrioritiesOrder: Record<Priority, number> = {
@@ -114,7 +115,7 @@ const darkTheme = createTheme({
   },
 });
 
-export const mapThemes: Record<ThemeType, Theme> = {
+export const mapTheme: Record<ThemeType, Theme> = {
   [ThemeType.LIGHT]: lightTheme,
   [ThemeType.DARK]: darkTheme,
 };

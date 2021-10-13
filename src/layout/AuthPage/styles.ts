@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '50px',
     background: 'linear-gradient(top, #7579ff, #b224ef)',
     boxShadow: '0 -10px 50px #7579ff, 0 10px 50px #b224ef',
+    textAlign: 'center',
   },
   logo: {
     width: '100%',
@@ -36,22 +37,12 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: '24px',
     color: 'white',
+    textTransform: 'uppercase',
     margin: '30px 0',
     fontWeight: 600,
   },
-  form: {
-    display: 'flex',
-    width: '70%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    margin: '0 auto',
-  },
-  loginButton: {
-    fontWeight: 600,
-    margin: '20px 10px 0 10px',
-  },
-  loginIcon: {
-    marginRight: '10px',
+  error: {
+    color: 'red',
   },
 }));
 

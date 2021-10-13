@@ -36,7 +36,7 @@ function* loginAsync(action: ReturnType<typeof loginAction.request>) {
     });
     yield put(loginAction.success({ response }));
   } catch (error) {
-    yield put(loginAction.failed({ error }));
+    yield put(loginAction.failed({ error: 'Authorization error!' }));
   }
 }
 

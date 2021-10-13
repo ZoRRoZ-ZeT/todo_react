@@ -11,15 +11,16 @@ import Button from '@material-ui/core/Button';
 import useStyles from './styles';
 import ThemeChanger from '@components/ThemeChanger/index';
 import LanguageChanger from '@components/LanguageChanger/index';
+import { useRouteMatch } from 'react-router';
 interface IProps {
   logout: typeof logoutAction.request;
   fetchTasks: typeof fetchTasksAction.request;
 }
 
 const TodoApp = ({ fetchTasks, logout }: IProps) => {
-  const [filter, setFilter] = useState(
-    mapPath[window.location.pathname] ?? Status.ALL
-  );
+  const { params } = useRouteMatch<{ filter: string }>();
+  console.log(params);
+  const [filter, setFilter] = useState(mapPath[params.filter] ?? Status.ALL);
   const classes = useStyles();
 
   const filterPredicate = mapStatusToFilterPredicate[filter];

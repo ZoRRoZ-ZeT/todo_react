@@ -2,30 +2,24 @@ import { AppContext } from '../context/index';
 import React, { useContext, useMemo } from 'react';
 import TodoApp from './TodoApp/index';
 import { ThemeProvider } from '@material-ui/core';
-import { mapThemes } from '@constants/index';
+import { mapTheme } from '@constants/index';
 import { ApplicationState } from '@store/index';
 import { connect } from 'react-redux';
-import LoginForm from './LoginForm';
+import AppRouter from '../routers/AppRouter';
 
-interface IProps {
-  isAuth: boolean;
-}
-
-const App = (props: IProps) => {
+const App = () => {
   const { theme } = useContext(AppContext);
 
   const memoizedTheme = useMemo(() => {
-    return mapThemes[theme];
+    return mapTheme[theme];
   }, [theme]);
 
   return (
     <ThemeProvider theme={memoizedTheme}>
-      {props.isAuth ? <TodoApp /> : <LoginForm />}
+      <AppRouter />
+      {/* <TodoApp /> */}
     </ThemeProvider>
   );
 };
-const mapStateToProps = (state: ApplicationState) => ({
-  isAuth: state.user.isAuth,
-});
 
-export default connect(mapStateToProps)(React.memo(App));
+export default React.memo(App);
