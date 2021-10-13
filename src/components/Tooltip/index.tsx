@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import clsx from 'clsx';
+
 import useStyles from './styles';
 
 interface IProps {

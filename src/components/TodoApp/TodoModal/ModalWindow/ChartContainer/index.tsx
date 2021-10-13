@@ -1,5 +1,7 @@
-import { ChartData } from '@type/index.types';
 import React from 'react';
+
+import { ChartData } from '@type/index.types';
+
 import ChartLegend from './Legend';
 import PieChart from './PieChart';
 import useStyles from './styles';

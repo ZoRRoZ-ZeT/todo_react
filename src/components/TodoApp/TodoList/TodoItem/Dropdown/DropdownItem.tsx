@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import clsx from 'clsx';
+
 import { Priority } from '@type/index.types';
+
 import useStyles from './styles';
 
 interface IProps {

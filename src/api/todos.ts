@@ -1,5 +1,6 @@
-import { Method } from '@type/index.types';
 import 'regenerator-runtime';
+
+import { Method } from '@type/index.types';
 
 export async function callApi<Type>(
   url: string,

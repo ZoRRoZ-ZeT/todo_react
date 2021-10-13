@@ -1,5 +1,3 @@
-import TodoApp from '@components/TodoApp/index';
-import { ApplicationState } from '@store/index';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
@@ -7,8 +5,10 @@ import {
   Switch,
   Route,
   Redirect,
-  useRouteMatch,
 } from 'react-router-dom';
+
+import { ApplicationState } from '@store/index';
+
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import PrivateRoute from './PrivateRoute';

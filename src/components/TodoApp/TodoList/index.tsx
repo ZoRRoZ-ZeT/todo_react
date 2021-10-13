@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
-import { Task } from '@type/todo.types';
-import TodoItem from './TodoItem/index';
 import {
   DragDropContext,
   Draggable,
@@ -9,8 +7,12 @@ import {
   DroppableProvided,
   DropResult,
 } from 'react-beautiful-dnd';
+
 import { reorderTaskAction } from '@store/actions/tasks';
 import { ApplicationState } from '@store/index';
+import { Task } from '@type/todo.types';
+
+import TodoItem from './TodoItem/index';
 import useStyles from './styles';
 
 interface IProps {

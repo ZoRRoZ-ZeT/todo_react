@@ -1,4 +1,5 @@
 import { createTheme, Theme } from '@material-ui/core';
+
 import { Theme as ThemeType } from '@type/context';
 import { Priority, Status } from '@type/index.types';
 import { Task } from '@type/todo.types';

@@ -1,5 +1,7 @@
-import useTranslate from '@hooks/transate';
 import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
+
+import useTranslate from '@hooks/transate';
+
 import useStyles from './styles';
 
 interface IProps {

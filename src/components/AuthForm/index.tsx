@@ -1,12 +1,14 @@
 import React from 'react';
-import Fab from '@material-ui/core/Fab';
-import LoginIcon from '@material-ui/icons/VpnKey';
 import { Form, Field } from 'react-final-form';
-import useStyles from './styles';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { loginAction, registerAction } from '@store/actions/tasks';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
+
+import Fab from '@material-ui/core/Fab';
+import LoginIcon from '@material-ui/icons/VpnKey';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+
+import { loginAction, registerAction } from '@store/actions/user';
+import useStyles from './styles';
 
 interface IProps {
   action: typeof loginAction.request | typeof registerAction.request;

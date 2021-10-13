@@ -1,6 +1,8 @@
+import { useContext } from 'react';
+
 import { AppContext } from '@context/index';
 import { MessageType } from '@type/index.types';
-import { useContext } from 'react';
+
 import messages from '../translations/lang.json';
 
 const useTranslate = () => {

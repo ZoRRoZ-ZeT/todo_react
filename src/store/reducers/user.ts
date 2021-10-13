@@ -1,11 +1,8 @@
-import {
-  loginAction,
-  logoutAction,
-  registerAction,
-} from '@store/actions/tasks';
+import { Reducer } from 'redux';
+
+import { loginAction, logoutAction, registerAction } from '@store/actions/user';
 import { FailedUserType, SuccessUserType } from '@type/action';
 import { UserState } from '@type/user';
-import { Reducer } from 'redux';
 
 const initialState: UserState = {
   isAuth: window.localStorage.getItem('token') ? true : false,

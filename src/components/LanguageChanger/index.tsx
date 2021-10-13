@@ -1,9 +1,12 @@
 import React, { useCallback, useContext } from 'react';
+
 import Button from '@material-ui/core/Button';
+
 import { AppContext } from '@context/index';
-import { Language } from '@type/context';
-import useStyles from './styles';
 import { setLanguage } from '@context/actions';
+import { Language } from '@type/context';
+
+import useStyles from './styles';
 
 const LanguageChanger = () => {
   const { dispatch } = useContext(AppContext);

@@ -1,3 +1,5 @@
+import { Reducer } from 'redux';
+
 import {
   addTaskAction,
   deleteMultipleTasksAction,
@@ -9,7 +11,6 @@ import {
 } from '@store/actions/tasks';
 import { FailedTodoType, SuccessTodoType } from '@type/action';
 import { TodoState } from '@type/todo.types';
-import { Reducer } from 'redux';
 
 const initialState: TodoState = {
   list: [],

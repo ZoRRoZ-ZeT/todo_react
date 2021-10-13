@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import clsx from 'clsx';
+
 import { Status } from '@type/index.types';
-import Tooltip from '@components/Tooltip';
-import useStyles from './styles';
 import useTranslate from '@hooks/transate';
+import Tooltip from '@components/Tooltip';
+
+import useStyles from './styles';
 
 interface IProps {
   filter: Status;

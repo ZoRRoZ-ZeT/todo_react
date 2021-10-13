@@ -1,10 +1,12 @@
+import React, { useCallback, useMemo } from 'react';
+
+import { mapPriorities, mapPrioritiesOrder } from '@constants/index';
 import { MessageType, Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
-import React, { useCallback, useMemo } from 'react';
-import ChartContainer from './ChartContainer';
-import { mapPriorities, mapPrioritiesOrder } from '@constants/index';
-import useStyles from './styles';
 import useTranslate from '@hooks/transate';
+
+import ChartContainer from './ChartContainer';
+import useStyles from './styles';
 
 interface IProps {
   tasks: Task[];

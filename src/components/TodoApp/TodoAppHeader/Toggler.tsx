@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
-import clsx from 'clsx';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
+
 import { toggleTasksAction } from '@store/actions/tasks';
-import Tooltip from '@components/Tooltip';
-import useStyles from './styles';
 import useTranslate from '@hooks/transate';
+import Tooltip from '@components/Tooltip';
+
+import useStyles from './styles';
 
 interface IProps {
   toggleTasks: typeof toggleTasksAction.request;

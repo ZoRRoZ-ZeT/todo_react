@@ -1,8 +1,10 @@
 import React from 'react';
-import AuthPage from '../layout/AuthPage';
-import Form from '@components/Form';
 import { connect } from 'react-redux';
-import { registerAction } from '@store/actions/tasks';
+
+import { registerAction } from '@store/actions/user';
+import Form from '@components/AuthForm';
+
+import AuthPage from '../layout/AuthPage';
 
 interface IProps {
   register: typeof registerAction.request;

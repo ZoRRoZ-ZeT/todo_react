@@ -3,13 +3,11 @@ import {
   deleteMultipleTasksAction,
   deleteTaskAction,
   fetchTasksAction,
-  loginAction,
-  logoutAction,
-  registerAction,
   reorderTaskAction,
   toggleTasksAction,
   updateTaskAction,
 } from '@store/actions/tasks';
+import { loginAction, logoutAction, registerAction } from '@store/actions/user';
 
 export type IAction<TType extends string, TPayload extends unknown> = {
   type: TType;

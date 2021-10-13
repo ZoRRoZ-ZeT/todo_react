@@ -1,5 +1,7 @@
 import React from 'react';
+
 import LandscapeIcon from '@material-ui/icons/Landscape';
+
 import useStyles from './styles';
 
 interface IProps {

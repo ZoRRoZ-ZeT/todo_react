@@ -1,17 +1,22 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { connect } from 'react-redux';
+import { useRouteMatch } from 'react-router';
+
+import Button from '@material-ui/core/Button';
+
+import { Status } from '@type/index.types';
+import { mapPath, mapStatusToFilterPredicate } from '@constants/index';
+import { fetchTasksAction } from '@store/actions/tasks';
+import { logoutAction } from '@store/actions/user';
+import ThemeChanger from '@components/ThemeChanger/index';
+import LanguageChanger from '@components/LanguageChanger/index';
+
 import TodoAppFooter from './TodoAppFooter/index';
 import TodoAppHeader from './TodoAppHeader/index';
 import TodoList from './TodoList/index';
 import TodoModal from './TodoModal/index';
-import { Status } from '@type/index.types';
-import { mapPath, mapStatusToFilterPredicate } from '@constants/index';
-import { connect } from 'react-redux';
-import { fetchTasksAction, logoutAction } from '@store/actions/tasks';
-import Button from '@material-ui/core/Button';
 import useStyles from './styles';
-import ThemeChanger from '@components/ThemeChanger/index';
-import LanguageChanger from '@components/LanguageChanger/index';
-import { useRouteMatch } from 'react-router';
+
 interface IProps {
   logout: typeof logoutAction.request;
   fetchTasks: typeof fetchTasksAction.request;

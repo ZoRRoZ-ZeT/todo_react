@@ -1,14 +1,16 @@
 import React, { useMemo, useCallback } from 'react';
-import clsx from 'clsx';
-import FilterButton from './FilterButton';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
+
 import { ApplicationState } from '@store/index';
 import { deleteMultipleTasksAction } from '@store/actions/tasks';
 import { Status } from '@type/index.types';
-import Tooltip from '@components/Tooltip';
-import useStyles from './styles';
 import useTranslate from '@hooks/transate';
-import { Link, useLocation, useRouteMatch } from 'react-router-dom';
+import Tooltip from '@components/Tooltip';
+
+import FilterButton from './FilterButton';
+import useStyles from './styles';
 
 interface IProps {
   count: number;

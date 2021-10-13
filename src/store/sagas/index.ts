@@ -1,20 +1,20 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
+
 import { callApi } from '@apis/todos';
-import { Method } from '@type/index.types';
-import { Task } from '@type/todo.types';
 import {
   addTaskAction,
   deleteMultipleTasksAction,
   deleteTaskAction,
   fetchTasksAction,
-  loginAction,
-  logoutAction,
-  registerAction,
   reorderTaskAction,
   toggleTasksAction,
   updateTaskAction,
 } from '@store/actions/tasks';
-import store from '..';
+import { loginAction, logoutAction, registerAction } from '@store/actions/user';
+import { Method } from '@type/index.types';
+import { Task } from '@type/todo.types';
+
+import store from '../index';
 
 function* registerAsync(action: ReturnType<typeof registerAction.request>) {
   try {

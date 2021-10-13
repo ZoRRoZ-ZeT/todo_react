@@ -1,12 +1,13 @@
-import useTheme from '@hooks/theme';
+import React, { useReducer } from 'react';
+
 import {
   ContextActions,
   ContextStateType,
   Language,
   Theme,
 } from '@type/context';
-import React from 'react';
-import { useReducer } from 'react';
+import useTheme from '@hooks/theme';
+
 import { contextReducer } from './reducer';
 
 const initialState: ContextStateType = {

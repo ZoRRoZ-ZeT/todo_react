@@ -1,10 +1,12 @@
 import React from 'react';
-import AuthPage from '../layout/AuthPage';
-import Form from '@components/Form';
 import { connect } from 'react-redux';
-import { loginAction } from '@store/actions/tasks';
 import { Link } from 'react-router-dom';
+
+import { loginAction } from '@store/actions/user';
 import { ApplicationState } from '@store/index';
+import Form from '@components/AuthForm';
+
+import AuthPage from '../layout/AuthPage';
 
 interface IProps {
   error: string;

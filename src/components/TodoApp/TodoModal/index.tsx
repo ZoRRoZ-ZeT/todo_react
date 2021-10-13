@@ -1,13 +1,16 @@
-import Tooltip from '@components/Tooltip';
-import { ApplicationState } from '@store/index';
 import React, { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
-import { Task } from '../../../types/todo.types';
-import TodoModalWindow from './ModalWindow/index';
+
 import Fab from '@material-ui/core/Fab';
 import PieChartIcon from '@material-ui/icons/PieChart';
-import useStyles from './styles';
+
+import { ApplicationState } from '@store/index';
 import useTranslate from '@hooks/transate';
+import { Task } from '@type/todo.types';
+import Tooltip from '@components/Tooltip';
+
+import TodoModalWindow from './ModalWindow/index';
+import useStyles from './styles';
 
 interface IProps {
   tasks: Task[];
