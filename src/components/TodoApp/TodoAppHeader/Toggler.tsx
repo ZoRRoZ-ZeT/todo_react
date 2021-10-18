@@ -1,10 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { toggleTasksAction } from '@store/actions/tasks';
 import Tooltip from '@components/Tooltip';
 import useStyles from './styles';
-import { AppContext } from '@context/index';
 import useTranslate from '@hooks/transate';
 
 interface IProps {
@@ -13,8 +12,7 @@ interface IProps {
 }
 
 const Toggler = ({ toggleTasks, isActive }: IProps) => {
-  const { state } = useContext(AppContext);
-  const t = useTranslate(state.language);
+  const t = useTranslate();
 
   const classes = useStyles();
   const handleToggle = useCallback(() => {

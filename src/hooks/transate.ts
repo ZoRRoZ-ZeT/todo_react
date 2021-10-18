@@ -1,13 +1,11 @@
-import { Language } from '@type/context';
-import { useEffect, useState } from 'react';
+import { AppContext } from '@context/index';
+import { MessageType } from '@type/index.types';
+import { useContext } from 'react';
 import messages from '../translations/lang.json';
 
-const useTranslate = (lang: Language) => {
-  const [language, setLanguage] = useState(lang);
-  useEffect(() => {
-    setLanguage(lang);
-  }, [lang]);
-  return (message: keyof typeof messages) => messages[message][language];
+const useTranslate = () => {
+  const { state } = useContext(AppContext);
+  return (message: MessageType) => messages[message][state.language];
 };
 
 export default useTranslate;

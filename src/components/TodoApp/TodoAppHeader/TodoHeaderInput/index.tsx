@@ -1,11 +1,5 @@
-import { AppContext } from '@context/index';
 import useTranslate from '@hooks/transate';
-import React, {
-  ChangeEvent,
-  KeyboardEvent,
-  useCallback,
-  useContext,
-} from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 import useStyles from './styles';
 
 interface IProps {
@@ -15,8 +9,7 @@ interface IProps {
 }
 
 const TodoHeaderInput = ({ value, onInputChanged, onEnterPressed }: IProps) => {
-  const { state } = useContext(AppContext);
-  const t = useTranslate(state.language);
+  const t = useTranslate();
 
   const classes = useStyles();
   const handleChange = useCallback(

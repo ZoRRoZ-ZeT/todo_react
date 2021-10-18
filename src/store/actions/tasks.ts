@@ -1,6 +1,32 @@
 import { createAsyncAction } from '@type/action';
-import { Priority } from '@type/index.types';
 import { Task } from '@type/todo.types';
+
+export const registerAction = createAsyncAction<
+  'REGISTER',
+  {
+    email: string;
+    password: string;
+  },
+  { response: string },
+  { error: string }
+>('REGISTER');
+
+export const loginAction = createAsyncAction<
+  'LOGIN',
+  {
+    email: string;
+    password: string;
+  },
+  { response: string },
+  { error: string }
+>('LOGIN');
+
+export const logoutAction = createAsyncAction<
+  'LOGOUT',
+  null,
+  null,
+  { error: string }
+>('LOGOUT');
 
 export const addTaskAction = createAsyncAction<
   'ADD_TASK',

@@ -2,8 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const color = (color: string) => ({
   border: `1px solid ${color}`,
-  backgroundColor:
-    color === '#000000' || color === '#ffffff' ? 'transparent' : color,
+  backgroundColor: color,
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -91,7 +90,11 @@ const useStyles = makeStyles((theme) => ({
     ...color('#89ff00d9'),
   },
   none: {
-    ...color(theme.colors.color),
+    transition: theme.transitions.create(['background', 'border'], {
+      duration: '1s',
+    }),
+    border: `1px solid ${theme.colors.color}`,
+    background: theme.colors.backgroundColor,
   },
 }));
 

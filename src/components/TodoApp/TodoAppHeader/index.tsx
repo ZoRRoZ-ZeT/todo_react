@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const TodoAppHeader = ({ isTasksExist, isTasksCompleted, addTask }: IProps) => {
-  const [inputValue, setValue] = useState<string>('');
+  const [inputValue, setValue] = useState('');
   const classes = useStyles();
   const handleEnterPressed = useCallback(() => {
     if (inputValue.trim() === '') {

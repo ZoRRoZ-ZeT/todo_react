@@ -1,3 +1,5 @@
+import messages from '../translations/lang.json';
+
 export type ChartData = Array<{
   dataName: string;
   dataValue: number;
@@ -29,3 +31,5 @@ export enum Method {
   PUT = 'PUT',
   DELETE = 'DELETE',
 }
+
+export type MessageType = keyof typeof messages;
