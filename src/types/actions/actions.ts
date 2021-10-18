@@ -1,4 +1,5 @@
 import {
+  addTaskSync,
   addTaskAction,
   deleteMultipleTasksAction,
   deleteTaskAction,
@@ -6,50 +7,14 @@ import {
   reorderTaskAction,
   toggleTasksAction,
   updateTaskAction,
+  updateTaskSync,
+  deleteTaskSync,
+  deleteMultipleTasksSync,
+  toggleTasksSync,
 } from '@store/actions/tasks';
 import { loginAction, logoutAction, registerAction } from '@store/actions/user';
 
-export type IAction<TType extends string, TPayload extends unknown> = {
-  type: TType;
-  payload?: TPayload;
-};
-
-export const createAsyncAction = <
-  TType extends string,
-  RPayload,
-  SPayload,
-  FPayload
->(
-  type: TType
-) => {
-  const ActionRequest = `${type}__REQUEST` as `${TType}__REQUEST`;
-  const ActionSuccess = `${type}__SUCCESS` as `${TType}__SUCCESS`;
-  const ActionFailed = `${type}__FAILED` as `${TType}__FAILED`;
-
-  type RequestType = IAction<`${TType}__REQUEST`, RPayload>;
-  type SuccessType = IAction<`${TType}__SUCCESS`, SPayload>;
-  type FailedType = IAction<`${TType}__FAILED`, FPayload>;
-  return {
-    request: (payload?: RPayload): RequestType => ({
-      type: `${type}__REQUEST`,
-      payload,
-    }),
-    success: (payload?: SPayload): SuccessType => ({
-      type: `${type}__SUCCESS`,
-      payload,
-    }),
-    failed: (payload?: FPayload): FailedType => ({
-      type: `${type}__FAILED`,
-      payload,
-    }),
-    types: {
-      REQUEST: ActionRequest,
-      SUCCESS: ActionSuccess,
-      FAILED: ActionFailed,
-    },
-  };
-};
-type GetActionType<
+type GetAsyncActionType<
   Type extends {
     request: (payload: unknown) => unknown;
     success: (payload: unknown) => unknown;
@@ -61,21 +26,26 @@ type GetActionType<
   failed: ReturnType<Type['failed']>;
 };
 
-type addTaskActionType = GetActionType<typeof addTaskAction>;
-type updateTaskActionType = GetActionType<typeof updateTaskAction>;
-type deleteTaskActionType = GetActionType<typeof deleteTaskAction>;
-type deleteMultipleTasksActionType = GetActionType<
+type addTaskActionType = GetAsyncActionType<typeof addTaskAction>;
+type updateTaskActionType = GetAsyncActionType<typeof updateTaskAction>;
+type deleteTaskActionType = GetAsyncActionType<typeof deleteTaskAction>;
+type deleteMultipleTasksActionType = GetAsyncActionType<
   typeof deleteMultipleTasksAction
 >;
-type toggleTasksActionType = GetActionType<typeof toggleTasksAction>;
-type fetchTaskActionType = GetActionType<typeof fetchTasksAction>;
-type reorderTaskActionType = GetActionType<typeof reorderTaskAction>;
+type toggleTasksActionType = GetAsyncActionType<typeof toggleTasksAction>;
+type fetchTaskActionType = GetAsyncActionType<typeof fetchTasksAction>;
+type reorderTaskActionType = GetAsyncActionType<typeof reorderTaskAction>;
 
-type registerActionType = GetActionType<typeof registerAction>;
-type loginActionType = GetActionType<typeof loginAction>;
-type logoutActionType = GetActionType<typeof logoutAction>;
+type registerActionType = GetAsyncActionType<typeof registerAction>;
+type loginActionType = GetAsyncActionType<typeof loginAction>;
+type logoutActionType = GetAsyncActionType<typeof logoutAction>;
 
 export type SuccessTodoType =
+  | ReturnType<typeof addTaskSync>
+  | ReturnType<typeof updateTaskSync>
+  | ReturnType<typeof deleteTaskSync>
+  | ReturnType<typeof deleteMultipleTasksSync>
+  | ReturnType<typeof toggleTasksSync>
   | addTaskActionType['success']
   | updateTaskActionType['success']
   | deleteTaskActionType['success']

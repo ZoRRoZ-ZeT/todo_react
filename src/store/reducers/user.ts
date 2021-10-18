@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
 import { loginAction, logoutAction, registerAction } from '@store/actions/user';
-import { FailedUserType, SuccessUserType } from '@type/action';
+import { FailedUserType, SuccessUserType } from '@type/actions/actions';
 import { UserState } from '@type/user';
 
 const initialState: UserState = {

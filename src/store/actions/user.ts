@@ -1,4 +1,4 @@
-import { createAsyncAction } from '@type/action';
+import { createAsyncAction } from '@type/actions/creators';
 
 export const registerAction = createAsyncAction<
   'REGISTER',

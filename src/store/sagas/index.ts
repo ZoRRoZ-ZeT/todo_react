@@ -1,4 +1,4 @@
-import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { callApi } from '@apis/todos';
 import {
@@ -15,6 +15,8 @@ import { Method } from '@type/index.types';
 import { Task } from '@type/todo.types';
 
 import store from '../index';
+
+import flow from './socket';
 
 function* registerAsync(action: ReturnType<typeof registerAction.request>) {
   try {
@@ -77,7 +79,7 @@ function* updateTaskAsync(action: ReturnType<typeof updateTaskAction.request>) {
 
 function* deleteTaskAsync(action: ReturnType<typeof deleteTaskAction.request>) {
   try {
-    const task: Task = yield call(callApi, `todos/${action.payload.id}`, {
+    const task: Task = yield call(callApi, `/todos/${action.payload.id}`, {
       method: Method.DELETE,
     });
     yield put(deleteTaskAction.success({ task }));
@@ -182,5 +184,5 @@ function* watchTodoActions() {
 }
 
 export default function* rootSaga() {
-  yield all([watchUserActions(), watchTodoActions()]);
+  yield all([fork(flow), watchUserActions(), watchTodoActions()]);
 }

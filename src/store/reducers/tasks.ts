@@ -9,7 +9,7 @@ import {
   toggleTasksAction,
   updateTaskAction,
 } from '@store/actions/tasks';
-import { FailedTodoType, SuccessTodoType } from '@type/action';
+import { FailedTodoType, SuccessTodoType } from '@type/actions/actions';
 import { TodoState } from '@type/todo.types';
 
 const initialState: TodoState = {
@@ -23,6 +23,7 @@ const reducer: Reducer<TodoState, ActionTodoType> = (
   action: ActionTodoType
 ) => {
   switch (action.type) {
+    case 'ADD_TODO_SYNC':
     case addTaskAction.types.SUCCESS: {
       return {
         list: [
@@ -33,6 +34,7 @@ const reducer: Reducer<TodoState, ActionTodoType> = (
         ],
       };
     }
+    case 'UPDATE_TODO_SYNC':
     case updateTaskAction.types.SUCCESS: {
       return {
         list: [
@@ -42,11 +44,13 @@ const reducer: Reducer<TodoState, ActionTodoType> = (
         ],
       };
     }
+    case 'DELETE_TODO_SYNC':
     case deleteTaskAction.types.SUCCESS: {
       return {
         list: state.list.filter((task) => task.id !== action.payload.task.id),
       };
     }
+    case 'DELETE_MULTIPLE_TODOS_SYNC':
     case deleteMultipleTasksAction.types.SUCCESS: {
       return {
         list: state.list.filter(
@@ -57,6 +61,7 @@ const reducer: Reducer<TodoState, ActionTodoType> = (
         ),
       };
     }
+    case 'TOGGLE_TODOS_SYNC':
     case toggleTasksAction.types.SUCCESS: {
       return {
         list: [

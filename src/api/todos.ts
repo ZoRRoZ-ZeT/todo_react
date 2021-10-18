@@ -12,7 +12,6 @@ export async function callApi<Type>(
     isRetry?: boolean;
   }
 ): Promise<Type> {
-  console.log(window.localStorage.getItem('token'));
   const response = await fetch(`${process.env.API_URL}${url}`, {
     method: Method.GET,
     headers: {
