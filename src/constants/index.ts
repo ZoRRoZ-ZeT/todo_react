@@ -1,4 +1,5 @@
 import { createTheme, Theme } from '@material-ui/core';
+
 import { Theme as ThemeType } from '@type/context';
 import { Priority, Status } from '@type/index.types';
 import { Task } from '@type/todo.types';
@@ -19,8 +20,9 @@ export const mapStatusToFilterPredicate: {
 };
 
 export const mapPath: Record<string, Status> = {
-  '/active': Status.ACTIVE,
-  '/completed': Status.COMPLETED,
+  all: Status.ALL,
+  active: Status.ACTIVE,
+  completed: Status.COMPLETED,
 };
 
 export const mapPrioritiesOrder: Record<Priority, number> = {
@@ -114,7 +116,7 @@ const darkTheme = createTheme({
   },
 });
 
-export const mapThemes: Record<ThemeType, Theme> = {
+export const mapTheme: Record<ThemeType, Theme> = {
   [ThemeType.LIGHT]: lightTheme,
   [ThemeType.DARK]: darkTheme,
 };

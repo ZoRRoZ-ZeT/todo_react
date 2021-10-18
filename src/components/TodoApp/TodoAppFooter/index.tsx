@@ -1,13 +1,16 @@
 import React, { useMemo, useCallback } from 'react';
-import clsx from 'clsx';
-import FilterButton from './FilterButton';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
+
 import { ApplicationState } from '@store/index';
 import { deleteMultipleTasksAction } from '@store/actions/tasks';
 import { Status } from '@type/index.types';
-import Tooltip from '@components/Tooltip';
-import useStyles from './styles';
 import useTranslate from '@hooks/transate';
+import Tooltip from '@components/Tooltip';
+
+import FilterButton from './FilterButton';
+import useStyles from './styles';
 
 interface IProps {
   count: number;
@@ -35,7 +38,6 @@ const TodoAppFooter = ({
   const handleFilterChange = useCallback(
     (value: Status) => {
       onChangeFilter(value);
-      window.history.pushState('', '', `/${value.toLowerCase()}`);
     },
     [onChangeFilter]
   );
@@ -51,24 +53,30 @@ const TodoAppFooter = ({
         {itemsLeft} {t('ITEMS')}
       </span>
       <div className={classes.filters}>
-        <FilterButton
-          onFilterChange={handleFilterChange}
-          filter={Status.ALL}
-          name={t('ALL')}
-          isActive={currentFilter === Status.ALL}
-        />
-        <FilterButton
-          onFilterChange={handleFilterChange}
-          filter={Status.ACTIVE}
-          name={t('ACTIVE')}
-          isActive={currentFilter === Status.ACTIVE}
-        />
-        <FilterButton
-          onFilterChange={handleFilterChange}
-          filter={Status.COMPLETED}
-          name={t('COMPLETED')}
-          isActive={currentFilter === Status.COMPLETED}
-        />
+        <Link to={`/todolist/all`}>
+          <FilterButton
+            onFilterChange={handleFilterChange}
+            filter={Status.ALL}
+            name={t('ALL')}
+            isActive={currentFilter === Status.ALL}
+          />
+        </Link>
+        <Link to={`/todolist/active`}>
+          <FilterButton
+            onFilterChange={handleFilterChange}
+            filter={Status.ACTIVE}
+            name={t('ACTIVE')}
+            isActive={currentFilter === Status.ACTIVE}
+          />
+        </Link>
+        <Link to={`/todolist/completed`}>
+          <FilterButton
+            onFilterChange={handleFilterChange}
+            filter={Status.COMPLETED}
+            name={t('COMPLETED')}
+            isActive={currentFilter === Status.COMPLETED}
+          />
+        </Link>
       </div>
       <div className={classes.clearBox}>
         <Tooltip title={t('CLEAR_COMPLETED_TASKS')}>

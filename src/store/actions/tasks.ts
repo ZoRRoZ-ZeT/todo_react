@@ -1,32 +1,51 @@
-import { createAsyncAction } from '@type/action';
+import { createAsyncAction, IAction } from '@type/actions/creators';
 import { Task } from '@type/todo.types';
 
-export const registerAction = createAsyncAction<
-  'REGISTER',
-  {
-    email: string;
-    password: string;
-  },
-  { response: string },
-  { error: string }
->('REGISTER');
+type addTaskSyncType = IAction<'ADD_TODO_SYNC', { task: Task }>;
+type updateTaskSyncType = IAction<'UPDATE_TODO_SYNC', { task: Task }>;
+type deleteTaskSyncType = IAction<'DELETE_TODO_SYNC', { task: Task }>;
+type deleteMultipleTasksSyncType = IAction<
+  'DELETE_MULTIPLE_TODOS_SYNC',
+  { tasks: Task[] }
+>;
+type toggleTasksSyncType = IAction<'TOGGLE_TODOS_SYNC', { fillValue: boolean }>;
 
-export const loginAction = createAsyncAction<
-  'LOGIN',
-  {
-    email: string;
-    password: string;
+export const addTaskSync = (task: Task): addTaskSyncType => ({
+  type: 'ADD_TODO_SYNC',
+  payload: {
+    task,
   },
-  { response: string },
-  { error: string }
->('LOGIN');
+});
 
-export const logoutAction = createAsyncAction<
-  'LOGOUT',
-  null,
-  null,
-  { error: string }
->('LOGOUT');
+export const updateTaskSync = (task: Task): updateTaskSyncType => ({
+  type: 'UPDATE_TODO_SYNC',
+  payload: {
+    task,
+  },
+});
+
+export const deleteTaskSync = (task: Task): deleteTaskSyncType => ({
+  type: 'DELETE_TODO_SYNC',
+  payload: {
+    task,
+  },
+});
+
+export const deleteMultipleTasksSync = (
+  tasks: Task[]
+): deleteMultipleTasksSyncType => ({
+  type: 'DELETE_MULTIPLE_TODOS_SYNC',
+  payload: {
+    tasks,
+  },
+});
+
+export const toggleTasksSync = (fillValue: boolean): toggleTasksSyncType => ({
+  type: 'TOGGLE_TODOS_SYNC',
+  payload: {
+    fillValue,
+  },
+});
 
 export const addTaskAction = createAsyncAction<
   'ADD_TASK',

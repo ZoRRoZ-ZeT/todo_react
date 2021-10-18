@@ -1,7 +1,9 @@
-import { addTaskAction } from '@store/actions/tasks';
-import { ApplicationState } from '@store/index';
 import React, { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
+
+import { addTaskAction } from '@store/actions/tasks';
+import { ApplicationState } from '@store/index';
+
 import TodoHeaderInput from './TodoHeaderInput/index';
 import Toggler from './Toggler';
 import useStyles from './styles';

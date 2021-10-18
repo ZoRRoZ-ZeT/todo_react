@@ -1,5 +1,6 @@
-import { Theme } from '@type/context';
 import { useState } from 'react';
+
+import { Theme } from '@type/context';
 
 const useTheme = () => {
   const [theme, setTheme] = useState(

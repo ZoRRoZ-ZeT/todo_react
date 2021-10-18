@@ -1,11 +1,13 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import clsx from 'clsx';
-import TodoInput from './TodoInput';
-import Dropdown from './Dropdown/index';
+import { connect } from 'react-redux';
+
+import { deleteTaskAction, updateTaskAction } from '@store/actions/tasks';
 import { Task } from '@type/todo.types';
 import { Priority } from '@type/index.types';
-import { connect } from 'react-redux';
-import { deleteTaskAction, updateTaskAction } from '@store/actions/tasks';
+
+import TodoInput from './TodoInput';
+import Dropdown from './Dropdown/index';
 import useStyles from './styles';
 
 interface IProps {

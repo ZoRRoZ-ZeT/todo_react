@@ -1,20 +1,22 @@
-import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+
 import { callApi } from '@apis/todos';
-import { Method } from '@type/index.types';
-import { Task } from '@type/todo.types';
 import {
   addTaskAction,
   deleteMultipleTasksAction,
   deleteTaskAction,
   fetchTasksAction,
-  loginAction,
-  logoutAction,
-  registerAction,
   reorderTaskAction,
   toggleTasksAction,
   updateTaskAction,
 } from '@store/actions/tasks';
-import store from '..';
+import { loginAction, logoutAction, registerAction } from '@store/actions/user';
+import { Method } from '@type/index.types';
+import { Task } from '@type/todo.types';
+
+import store from '../index';
+
+import flow from './socket';
 
 function* registerAsync(action: ReturnType<typeof registerAction.request>) {
   try {
@@ -36,7 +38,7 @@ function* loginAsync(action: ReturnType<typeof loginAction.request>) {
     });
     yield put(loginAction.success({ response }));
   } catch (error) {
-    yield put(loginAction.failed({ error }));
+    yield put(loginAction.failed({ error: 'Authorization error!' }));
   }
 }
 
@@ -77,7 +79,7 @@ function* updateTaskAsync(action: ReturnType<typeof updateTaskAction.request>) {
 
 function* deleteTaskAsync(action: ReturnType<typeof deleteTaskAction.request>) {
   try {
-    const task: Task = yield call(callApi, `todos/${action.payload.id}`, {
+    const task: Task = yield call(callApi, `/todos/${action.payload.id}`, {
       method: Method.DELETE,
     });
     yield put(deleteTaskAction.success({ task }));
@@ -182,5 +184,5 @@ function* watchTodoActions() {
 }
 
 export default function* rootSaga() {
-  yield all([watchUserActions(), watchTodoActions()]);
+  yield all([fork(flow), watchUserActions(), watchTodoActions()]);
 }

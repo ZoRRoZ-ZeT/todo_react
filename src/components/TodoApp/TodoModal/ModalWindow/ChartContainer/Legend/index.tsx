@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { ChartData } from '@type/index.types';
+
 import useStyles from './styles';
 
 interface IProps {

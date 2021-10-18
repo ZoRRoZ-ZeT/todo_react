@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ChartData, Sector } from 'types/index.types';
+
+import { ChartData, Sector } from '@type/index.types';
+
 import useStyles from './styles';
 
 interface IProps {

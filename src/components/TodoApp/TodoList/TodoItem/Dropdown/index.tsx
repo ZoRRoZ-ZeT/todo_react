@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-
 import clsx from 'clsx';
-import DropdownItem from './DropdownItem';
-import { Priority } from '../../../../../types/index.types';
-import useStyles from './styles';
+
+import { Priority } from '@type/index.types';
 import useTranslate from '@hooks/transate';
+
+import DropdownItem from './DropdownItem';
+import useStyles from './styles';
 
 interface IProps {
   priority: string;
