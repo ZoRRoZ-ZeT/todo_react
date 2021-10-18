@@ -17,18 +17,14 @@ export const addTaskSync = (task: Task): addTaskSyncType => ({
   },
 });
 
-export const updateTaskSync = (
-  task: Task
-): IAction<'UPDATE_TODO_SYNC', { task: Task }> => ({
+export const updateTaskSync = (task: Task): updateTaskSyncType => ({
   type: 'UPDATE_TODO_SYNC',
   payload: {
     task,
   },
 });
 
-export const deleteTaskSync = (
-  task: Task
-): IAction<'DELETE_TODO_SYNC', { task: Task }> => ({
+export const deleteTaskSync = (task: Task): deleteTaskSyncType => ({
   type: 'DELETE_TODO_SYNC',
   payload: {
     task,
@@ -37,16 +33,14 @@ export const deleteTaskSync = (
 
 export const deleteMultipleTasksSync = (
   tasks: Task[]
-): IAction<'DELETE_MULTIPLE_TODOS_SYNC', { tasks: Task[] }> => ({
+): deleteMultipleTasksSyncType => ({
   type: 'DELETE_MULTIPLE_TODOS_SYNC',
   payload: {
     tasks,
   },
 });
 
-export const toggleTasksSync = (
-  fillValue: boolean
-): IAction<'TOGGLE_TODOS_SYNC', { fillValue: boolean }> => ({
+export const toggleTasksSync = (fillValue: boolean): toggleTasksSyncType => ({
   type: 'TOGGLE_TODOS_SYNC',
   payload: {
     fillValue,

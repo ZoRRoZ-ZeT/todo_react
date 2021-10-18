@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import {
-  ActionPattern,
-  call,
-  fork,
-  put,
-  take,
-  takeEvery,
-} from 'redux-saga/effects';
+import { ActionPattern, call, fork, put, take } from 'redux-saga/effects';
 
 import {
   addTaskAction,
